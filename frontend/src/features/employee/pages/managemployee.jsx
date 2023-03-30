@@ -17,6 +17,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import TopHeader from '../ui/seachBar';
 import SearchBar from '../ui/seachBar';
 import EmployeeTable from '../components/employeeTable';
+import Modal from '../../../components/ui/modal';
+import DeleteModal from '../../../components/ui/modal';
 
 
 
@@ -60,15 +62,20 @@ const useStyles=makeStyles({
 const Managemployee = () => {
     const classes=useStyles();
     const [employees,setemployees]=useState([])
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
   return (
     <Box component='div' className={classes.mainContainer}>
         <Box component='div' className={classes.sidebar}>
             <Sidebar/>
         </Box>
         <Box component='div' className={classes.column}>
+            <DeleteModal handleClose={handleClose} handleOpen={handleOpen} open={open}/>
             <Header heading={"Manage Employee"}/>
             <SearchBar setemployees={setemployees}/>
-            <EmployeeTable employees={employees} setemployees={setemployees}/>
+            <EmployeeTable employees={employees} handleOpen={handleOpen} setemployees={setemployees}/>
         </Box>
     </Box>
   )

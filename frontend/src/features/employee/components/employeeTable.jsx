@@ -198,7 +198,7 @@ const useStyles=makeStyles({
   checked: {},
 })
 
-const EmployeeTable = ({employees,setemployees}) => {
+const EmployeeTable = ({employees,setemployees,handleOpen}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
 
@@ -305,7 +305,7 @@ const EmployeeTable = ({employees,setemployees}) => {
                               <img src={edit} className={classes.icons} />
                             </Box>
                           </NavLink>
-                          <Box component='div' className={`${classes.iconDiv} ${classes.deleteIconc}`}>
+                          <Box onClick={handleOpen} component='div' className={`${classes.iconDiv} ${classes.deleteIconc}`}>
                               <img src={deleteIcon} className={classes.icons}/>
                           </Box>
                         </Box>

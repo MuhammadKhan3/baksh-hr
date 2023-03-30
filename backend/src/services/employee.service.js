@@ -255,5 +255,8 @@ const searchEmployees=async (search)=>{
     })
     return employees;
 }
+const deleteEmployee=async ()=>{
 
-module.exports={createEmployee,editEmployee,salaryType,getEmployee,getEmployees,searchEmployees};
+}
+
+module.exports={createEmployee,editEmployee,salaryType,getEmployee,getEmployees,searchEmployees,deleteEmployee};
