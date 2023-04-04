@@ -63,7 +63,7 @@ const getEmployees=async (req,res,next)=>{
 
 const searchEmployees=async(req,res,next)=>{
     const {search}=req.body;
-    console.log(search)
+
     try {
         let response=await Employee.searchEmployees(search);
         await res.json({msg:"Search Employee Successfully",flag:true,employees:response})
@@ -72,7 +72,17 @@ const searchEmployees=async(req,res,next)=>{
     }
 }
 
-module.exports={getEmployees,getEmployee,salaryTypes,createEmployee,editEmployee,searchEmployees}
+const deleteEmployee=async (req,res,next)=>{
+    const {deleteId}=req.body;
+    try {
+        let response=await Employee.deleteEmployee(deleteId);
+        await res.json({msg:"Search Employee Successfully",flag:true})
+    } catch (error) {
+        return Error(req,res,error);
+    }
+}
+
+module.exports={getEmployees,getEmployee,salaryTypes,createEmployee,editEmployee,searchEmployees,deleteEmployee}
 exports.markAttendanceIn=async (req,res,next)=>{
 
 
@@ -98,3 +108,5 @@ exports.markAttendanceOut=async (req,res,next)=>{
          return Error(req,res,error);
     }
 }
+
+

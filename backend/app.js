@@ -83,17 +83,31 @@ EmployeeCompany.belongsTo(Department);
 Designation.hasMany(EmployeeCompany);
 EmployeeCompany.belongsTo(Designation);
 
-User.hasMany(Employee,{foreignKey:'userId'});
-Employee.belongsTo(User,{foreignKey:'userId'});
+User.hasMany(Employee,{foreignKey:'userId',onDelete:'CASCADE'});
+Employee.belongsTo(User,{foreignKey:'userId',as:'user'});
 
-Employee.hasOne(EmployeeCompany);
+Employee
+.hasOne(EmployeeCompany,
+{
+  onDelete: 'CASCADE',
+  hooks:true
+});
 EmployeeCompany.belongsTo(Employee);
 
-Employee.hasOne(EmployeeBank);
+Employee.hasOne(EmployeeBank,{
+  onDelete: 'CASCADE',
+  hooks:true
+
+});
 EmployeeBank.belongsTo(Employee)
 
-User.hasMany(Employee,{foreignKey:'createId'})
-User.belongsTo(Employee,{foreignKey:'createId'})
+User.hasMany(Employee,{
+  foreignKey:'createId'
+})
+Employee.belongsTo(User,{
+  foreignKey:'createId',
+  as:'creator'
+})
 
 
 Bank.hasMany(EmployeeBank,{foreignKey:'bankId'})

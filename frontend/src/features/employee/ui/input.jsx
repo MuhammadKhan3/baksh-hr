@@ -73,6 +73,7 @@ const InputText = (props) => {
         name,
         helperText, 
         handleChange, 
+        ref,
         value, 
         error,
         handleBlur
@@ -96,12 +97,14 @@ const InputText = (props) => {
                 InputProps={{
                     classes:{input: classes.input}
                 }}
-                value={value}
+                defaultValue={value}
+                key={value}
+                // value={value}
+                ref={ref}
                 type='text' 
                 color='primary' 
                 variant='outlined'
-                onChange={handleChange} 
-                onBlur={handleBlur}
+                onBlur={(e)=>{handleBlur(e);handleChange(e)}}
                 name={name}
                 id={name}
                 placeholder={placeholder} 

@@ -1,5 +1,5 @@
 import { Formik, useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 import Header from '../../../components/header/header'
 import Sidebar from '../../../components/sidebar/sidebar'
 import { makeStyles } from '@material-ui/core';
@@ -17,6 +17,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import GetEmployeeThunk from '../../../redux/thunk/fetchEmployeeThunk';
 import { useParams } from "react-router-dom";
 import dayjs from 'dayjs';
+import EditEmployeRight from '../components/editEmployee/EditemployeeRight';
+import EditEmployeeLeft from '../components/editEmployee/EditemployeLeft';
 
 
 const useStyles=makeStyles({
@@ -70,6 +72,9 @@ const EditEmployee = () => {
   const classes=useStyles();
   const dispatch=useDispatch();
   const profilePic=useSelector(state=>state.emp.profilePic);
+  const nameref=createRef();
+
+
   // const accountNumber=useSelector(state=>state.emp.accountNumber);
 
   const bankId=useSelector(state=>state.emp.bankId);
@@ -204,43 +209,45 @@ const EditEmployee = () => {
               authorization: `Bearer ${token}`,
           },
       });
+
       const data=response?.data?.employee;
       console.log(data)
       let {name,password,email,
-             fatherName,profilePhoto,
-             contactOne,contactTwo,
-             dob,
-             employee_company:{
-              managerId,
-              dateofJoining,
-              departmentId, 
-              designationId,
-              // employeeId,
-             },
-             localAddress,
-             kinname,
-             gender,
-             kinPhone,
-             nationality,
-             permanentAddress,
-             martialStatus,
-             relation,
-             employee_bank:{
-              holderName,
-              accountNumber,
-              bankId,
-              branch,
-              salaryType,
-              salary,
-             },
-             emergencyContact,
-             User:{
-              status
-             },
-             bloodGroup,
-            }=data;
+        fatherName,profilePhoto,
+        contactOne,contactTwo,
+        dob,
+        employee_company:{
+         managerId,
+         dateofJoining,
+         departmentId, 
+         designationId,
+        },
+        localAddress,
+        kinname,
+        gender,
+        kinPhone,
+        nationality,
+        permanentAddress,
+        martialStatus,
+        relation,
+        employee_bank:{
+         holderName,
+         accountNumber,
+         bankId,
+         branch,
+         salaryType,
+         salary,
+        },
+        emergencyContact,
+        user:{
+         status
+        },
+        bloodGroup,
+       }=data;
             // console.log(data)
-            console.log(profilePhoto?.filename)
+            // formik.setFieldValue('name',data?.name)
+
+
             formik.setValues({name,email,fatherName,contactOne,contactTwo,
                               localAddress,permanentAddress,nationality,
                               martialStatus,accountholderName:holderName,
@@ -390,7 +397,7 @@ const EditEmployee = () => {
                   component='div'
                   className={classes.employee}
                 >
-                  <EmployeLeft
+                  <EditEmployeeLeft
                     setFieldValue={formik.setFieldValue}
                     errors={formik.errors}
                     handleBlur={formik.handleBlur}
@@ -401,18 +408,18 @@ const EditEmployee = () => {
                     values={formik.values}
                   />
                   <Box component='hr' className={classes.sideBorder}></Box>
-                  <EmployeeRight 
-                  // submitHandler={submitHandler} 
-                    errors={formik.errors}
-                    formik={formik}
-                    handleBlur={formik.handleBlur}
-                    handleChange={formik.handleChange}
-                    handleSubmit={formik.handleSubmit}
-                    isSubmitting={formik.isSubmitting}
-                    isValid={formik.isValid}
-                    touched={formik.touched}
-                    values={formik.values}
-                  />
+                    <EditEmployeRight 
+                    // submitHandler={submitHandler} 
+                      errors={formik.errors}
+                      formik={formik}
+                      handleBlur={formik.handleBlur}
+                      handleChange={formik.handleChange}
+                      handleSubmit={formik.handleSubmit}
+                      isSubmitting={formik.isSubmitting}
+                      isValid={formik.isValid}
+                      touched={formik.touched}
+                      values={formik.values}
+                    />
                 </Box>
 
               </FormControl>

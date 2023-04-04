@@ -79,6 +79,7 @@ const EmployeLeft = ({
   setFieldValue,
   isSubmitting,
   isValid,
+  nameref,
   touched,
   values}) => {
   const dispatch=useDispatch();
@@ -125,6 +126,7 @@ const EmployeLeft = ({
             touched={touched}
             handleChange={handleChange}
             handleBlur={handleBlur} 
+            ref={nameref}
          />
         <InputText 
                  placeholder={'Add Father Name'} 

@@ -202,12 +202,12 @@ const ViewCard = ({employee}) => {
                                 </Box>
                             </Box>
                             <Box className={classes.actionContainer}>
-                                    <NavLink to={`/view-employee/1`}>
+                                    <NavLink to={`/view-employee/${employee?.id}`}>
                                         <Box component='div' className={`${classes.iconDiv} ${classes.eyeIcon}`}>
                                         <img src={eye}  className={classes.icons}/>
                                         </Box>
                                     </NavLink>
-                                    <NavLink to={`/edit-employee/1`}>
+                                    <NavLink to={`/edit-employee/${employee?.id}`}>
                                         <Box component='div' className={`${classes.iconDiv} ${classes.editIcon}`}>
                                         <img src={edit} className={classes.icons} />
                                         </Box>

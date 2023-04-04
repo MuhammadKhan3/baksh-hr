@@ -52,6 +52,9 @@ const useStyles=makeStyles({
 })
 
 
+const menuClickHandler=()=>{
+
+}
 
 const DownMenu = ({classes,icon,label,downArrow,droplabel,tab,settab,path}) => {
   const location = useLocation();
@@ -64,22 +67,24 @@ const DownMenu = ({classes,icon,label,downArrow,droplabel,tab,settab,path}) => {
   const classStyle=useStyles();
 
   const openHandler=(value)=>{
+    console.log(value)
     if(value===tab){
       settab('')
     }else{
       settab(value)
     }
   }
+  
   return (<>
                    <NavLink className={`${classStyle.list}   ${droplabel?.some(arr=>arr.path===currentRoute)===true && classStyle.active}`} to={path}>
-                      <ListItemButton className={classStyle.list} style={{borderRadius:'10px'}}>
+                      <ListItemButton className={classStyle.list} style={{borderRadius:'10px'}} >
                         <Box component='img' src={icon}/>
                           <ListItemText primary={label}/>
                         <Box component='img' src={downArrow} className={tab===label && classStyle.rotate} onClick={()=>{openHandler(label)}}/>
                       </ListItemButton>
                    </NavLink>
 
-                    {droplabel?.length>0 && tab.length>0 &&
+                    {tab===label &&
                           <List className={classStyle.nestedList}> 
                             {droplabel?.map((page)=>{
                               return<NavLink  className={classStyle.childList} to={page.path}>

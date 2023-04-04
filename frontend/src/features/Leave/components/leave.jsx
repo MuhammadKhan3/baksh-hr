@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { InputLabel, Grid, Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import InputText from "../../employee/ui/input";
@@ -6,6 +6,7 @@ import DatePickterUi from "../../../components/ui/datePickter";
 import ForwardArrow from "../ui/forwardArrow";
 
 import BlackButton from "../ui/blackButton";
+import SelectLocalUi from "../../../components/ui/selectLocal";
 
 // Define styles using makeStyles hook
 const useStyles = makeStyles({
@@ -20,6 +21,11 @@ const useStyles = makeStyles({
   },
 });
 
+const Gender=[
+  'male',
+  'female'
+]
+
 export default function AddLeave() {
   const classes = useStyles();
 
@@ -31,6 +37,7 @@ export default function AddLeave() {
 
   // Handle input changes and update state accordingly
   const handleChange = (e) => {
+
     switch (e.target.name) {
       case "employeeName":
         setEmployeeName(e.target.value);
@@ -49,6 +56,10 @@ export default function AddLeave() {
     }
   };
 
+  useEffect(()=>{
+    
+  },[])
+
   return (
     <Box maxWidth={"460px"}>
       <form>
@@ -56,14 +67,19 @@ export default function AddLeave() {
         <Grid container direction={"column"} spacing={2}>
           {/* Employee Name */}
           <Grid item>
-            <InputLabel className={classes.labels}>Employee Name</InputLabel>
-            <InputText
-              placeholder="Employee Name"
-              name="employeeName"
-              value={employeeName}
-              handleChange={handleChange}
-            />
-          </Grid>
+            {/* <InputLabel className={classes.labels}>Employee Name</InputLabel> */}
+            <SelectLocalUi
+                title={'Employee Name'} 
+                data={Gender} 
+                // value={values.gender} 
+                // error={Boolean(touched.gender && errors.gender)} 
+                // helperText={touched.gender && errors.gender}  
+                name="employee" 
+                // touched={touched}
+                // handleChange={handleChange}
+                // handleBlur={handleBlur}
+                placeholder={"Select the Employee"}   
+                classes={classes}/>          </Grid>
 
           {/* Leave Type */}
           <Grid item>
@@ -80,11 +96,11 @@ export default function AddLeave() {
           <Grid item>
             <InputLabel className={classes.labels}>Date</InputLabel>
             <Grid item container direction={"row"} spacing={2}>
-              <Grid item xs={3}>
+              <Grid item xs={5}>
                 {/* Start Date */}
                 <DatePickterUi name="leaveDate" placeholder="Start Date" />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={5}>
                 {/* End Date */}
                 <DatePickterUi name="endDate" placeholder="End Date" />
               </Grid>

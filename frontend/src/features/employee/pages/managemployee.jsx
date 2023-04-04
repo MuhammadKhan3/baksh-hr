@@ -1,5 +1,5 @@
 import { Formik, useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 import Header from '../../../components/header/header'
 import Sidebar from '../../../components/sidebar/sidebar'
 import { makeStyles } from '@material-ui/core';
@@ -17,6 +17,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import TopHeader from '../ui/seachBar';
 import SearchBar from '../ui/seachBar';
 import EmployeeTable from '../components/employeeTable';
+import Modal from '../../../components/ui/modal';
+import DeleteModal from '../../../components/ui/modal';
 
 
 
@@ -60,15 +62,38 @@ const useStyles=makeStyles({
 const Managemployee = () => {
     const classes=useStyles();
     const [employees,setemployees]=useState([])
+    const [open, setOpen] = React.useState(false);
+    const [deleteId, setDeleteId] = React.useState(0);
+    const [cookies] = useCookies(['token']);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const deleteHandler=()=>{
+      const token=cookies.token;
+
+      axios
+      .post(adminApi+'/delete-employee',{
+        deleteId
+      },{
+        headers: {
+          authorization: `Bearer ${token}`,
+        },      })
+      .then((response)=>{
+        if(response?.data?.flag){
+          window.location.reload();
+        }
+      })
+    }
   return (
     <Box component='div' className={classes.mainContainer}>
         <Box component='div' className={classes.sidebar}>
             <Sidebar/>
         </Box>
         <Box component='div' className={classes.column}>
+            <DeleteModal handleClose={handleClose} submitHandler={deleteHandler} handleOpen={handleOpen} open={open}/>
             <Header heading={"Manage Employee"}/>
             <SearchBar setemployees={setemployees}/>
-            <EmployeeTable employees={employees} setemployees={setemployees}/>
+            <EmployeeTable employees={employees} setDelete={setDeleteId} handleOpen={handleOpen} setemployees={setemployees}/>
         </Box>
     </Box>
   )

@@ -97,6 +97,7 @@ const DatePickterUi = ({
           defaultValue={value}
           value={value}
           name={name}
+          // label={name}
           className={classStyle.root}
           placeholder="hi"
           InputProps={{

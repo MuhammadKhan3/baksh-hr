@@ -91,3 +91,5 @@
 {"level":"error","message":"notNull Violation: department.userId cannot be null","timestamp":"2023-03-18T12:14:20.691Z"}
 {"level":"error","message":"notNull Violation: department.userId cannot be null","timestamp":"2023-03-18T12:14:22.136Z"}
 {"level":"error","message":"notNull Violation: department.userId cannot be null","timestamp":"2023-03-18T12:14:23.576Z"}
+{"level":"error","message":"Include unexpected. Element has to be either a Model, an Association or an object.","timestamp":"2023-04-01T20:08:35.174Z"}
+{"level":"error","message":"Include unexpected. Element has to be either a Model, an Association or an object.","timestamp":"2023-04-01T20:08:48.184Z"}

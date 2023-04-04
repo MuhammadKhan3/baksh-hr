@@ -17,6 +17,9 @@ const LoginThunk=(data,navigate,setCookie)=>{
                     expires: tomorrow 
                 })
                 console.log(response?.data?.response?.token)
+                setCookie('role',response?.data?.response?.data?.role,{
+                    expires: tomorrow 
+                })
                 setCookie('permission',response?.data?.response?.data?.permission?.module,{
                     expires: tomorrow 
                 })
