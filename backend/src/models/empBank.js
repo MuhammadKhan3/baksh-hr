@@ -29,6 +29,7 @@ const EmployeeBank = sequelize.define('employee_bank', {
   }
 },{
     timestamps: true,
-    timezone: '+00:00'
+    timezone: '+00:00',
+    paranoid: true
   });
 module.exports = EmployeeBank;

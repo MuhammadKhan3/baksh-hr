@@ -66,7 +66,7 @@ const useStyles=makeStyles({
     }
 })
 
-export default function DeleteModal({open,handleClose,handleOpen}) {
+export default function DeleteModal({open,handleClose,handleOpen,submitHandler}) {
   const classes=useStyles();
 
   return (
@@ -84,7 +84,7 @@ export default function DeleteModal({open,handleClose,handleOpen}) {
           </Typography>
           <Box className={classes.Btns} component='div'>
             <Button variant='contained'   className={classes.cancelBtn} onClick={handleClose}>Cancel</Button>
-            <Button variant='outlined'  className={classes.confirmBtn} >Delete</Button>
+            <Button variant='outlined'  className={classes.confirmBtn} onClick={submitHandler}>Delete</Button>
           </Box>
         </Box>
       </Modal>

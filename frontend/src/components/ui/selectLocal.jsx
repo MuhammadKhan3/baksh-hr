@@ -110,8 +110,8 @@ export default function SelectLocalUi({title,data,handleChange,name,value,error,
           className={classes.root}
           name={name}
           displayEmpty
-          value={value}
           onChange={handleChange}
+          value={value}
           IconComponent={(props)=>(
             <Box {...props} component='div' style={{      
                   width: '32px',
@@ -134,7 +134,7 @@ export default function SelectLocalUi({title,data,handleChange,name,value,error,
             </Box>
 
           )}
-          onBlur={handleBlur}
+          onBlur={(e)=>{handleBlur(e);handleChange(e)}}
           error={error}
           input={<OutlinedInput />}
           MenuProps={MenuProps}

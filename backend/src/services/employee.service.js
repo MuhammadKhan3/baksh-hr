@@ -124,9 +124,9 @@ const createEmployee=async (req,res,
 }
 
 const getEmployee=async (employeeId)=>{
-
-    const employee= await Employee.findOne({where:{id:employeeId},include:[{model:User},{model:EmployeeBank},{model:EmployeeCompany}]})
-    return employee;
+         const employee= await Employee.findOne({where:{id:employeeId},include:[{model:User,as:'user'},{model:EmployeeBank},{model:EmployeeCompany}]})
+        return employee;       
+ 
 }
 
 const editEmployee=async (req,res,
@@ -138,6 +138,8 @@ const editEmployee=async (req,res,
     kinPhone,holderName,accountNumber,bankName,branch,bankCode,
     salaryType,salary,employeeId}
     )=>{
+
+           console.log(status)
 
 
             const employee= await Employee.findOne({where:{id:employeeId}})
@@ -180,7 +182,6 @@ const editEmployee=async (req,res,
             }
         });
 
-        console.log(user)
         user.name=name;
         user.email=email;
         user.status=status;
@@ -232,9 +233,9 @@ const salaryType=async ()=>{
 }
 
 const getEmployees=async ()=>{
-    let response=await Employee.findAll({include:[{model:User,attributes:['status']},{model:EmployeeCompany,attributes:['departmentId','designationId'],include:[{model:Designation,attributes:['designation']},{model:Department,attributes:['department']}]}],attributes:['name','email','id','profilePhoto']});
+    let response=await Employee.findAll({include:[{model:User,as:'user',attributes:['status']},{model:EmployeeCompany,attributes:['departmentId','designationId'],include:[{model:Designation,attributes:['designation']},{model:Department,attributes:['department']}]}],attributes:['name','email','id','profilePhoto']});
     const employees=response.map((data)=>{
-        return {id:data.id,name:data?.name,email:data?.email,profile:data?.profilePhoto?.filename,status:data?.User?.status,department:data?.employee_company?.department?.department,designation:data?.employee_company?.designation?.designation}
+        return {id:data.id,name:data?.name,email:data?.email,profile:data?.profilePhoto?.filename,status:data?.user?.status,department:data?.employee_company?.department?.department,designation:data?.employee_company?.designation?.designation}
     })
     return employees;
 }
@@ -248,15 +249,40 @@ const searchEmployees=async (search)=>{
                 {email:{[Op.like]:"%"+search+"%"}},
               ]
         },
-        include:[{model:User,attributes:['status']},{model:EmployeeCompany,attributes:['departmentId','designationId'],include:[{model:Designation,attributes:['designation']},{model:Department,attributes:['department']}]}],attributes:['name','email','id','profilePhoto']});
+        include:[{model:User,as:'user',attributes:['status']},{model:EmployeeCompany,attributes:['departmentId','designationId'],include:[{model:Designation,attributes:['designation']},{model:Department,attributes:['department']}]}],attributes:['name','email','id','profilePhoto']});
 
     const employees=response.map((data)=>{
-        return {id:data.id,name:data?.name,email:data?.email,profile:data?.profilePhoto?.filename,status:data?.User?.status,department:data?.employee_company?.department?.department,designation:data?.employee_company?.designation?.designation}
+        return {id:data.id,name:data?.name,email:data?.email,profile:data?.profilePhoto?.filename,status:data?.user?.status,department:data?.employee_company?.department?.department,designation:data?.employee_company?.designation?.designation}
     })
     return employees;
 }
-const deleteEmployee=async ()=>{
+const deleteEmployee=async (id)=>{
 
+
+    let employee=await Employee.findByPk(id)
+
+
+    let response=User.destroy({
+        where:{
+            id:employee?.userId,
+        }
+    })
+
+    employee.destroy();
+
+    response=await EmployeeBank.destroy({
+        where:{
+            employeeId:id
+        }
+    })
+
+    response=await EmployeeCompany.destroy({
+        where:{
+            employeeId:id
+        }
+    })
+
+    return response;
 }
 
 module.exports={createEmployee,editEmployee,salaryType,getEmployee,getEmployees,searchEmployees,deleteEmployee};

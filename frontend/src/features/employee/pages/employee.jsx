@@ -352,4 +352,4 @@ const Employee = () => {
   )
 }
 
-export default Employee
+export default React.memo(Employee)

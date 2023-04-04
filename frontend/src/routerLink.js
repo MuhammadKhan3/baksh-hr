@@ -1,19 +1,27 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
-import EditEmployee from './features/employee/pages/editemployee'
-import Managemployee from './features/employee/pages/managemployee'
-import ViewEmployee from './features/employee/pages/viewemployee'
-const Dashboard=React.lazy(() => import('./features/dashboard'))
-const Employee= React.lazy(() => import('./features/employee'))
-const Login= React.lazy(() => import('./features/login'))
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import EditEmployee from "./features/employee/pages/editemployee";
+import Managemployee from "./features/employee/pages/managemployee";
+import ViewEmployee from "./features/employee/pages/viewemployee";
+//Add Leave Component
+import AddLeave from "./features/Leave/pages/AddLeave";
+import { ThemeProvider, createMuiTheme } from "@material-ui/core";
+
+const Dashboard = React.lazy(() => import("./features/dashboard"));
+const Employee = React.lazy(() => import("./features/employee"));
+const Login = React.lazy(() => import("./features/login"));
 
 
+const theme=createMuiTheme({
+typography:{
+  // fontFamily:'Poppins'
+}
+})
 const RouterLink = () => {
   return (
     <>
-     <Routes>
-          
-
+    <ThemeProvider theme={theme}>
+      <Routes>
           <Route path="/dashboard" 
               element={  
               <React.Suspense fallback={<>...</>}>
@@ -49,6 +57,13 @@ const RouterLink = () => {
               </React.Suspense>
               } 
           />
+          <Route path="/daily-attendance" 
+              element={  
+              <React.Suspense fallback={<>Loading...</>}>
+                <Managemployee/>
+              </React.Suspense>
+              } 
+          />
           <Route path="/" 
               element={  
               <React.Suspense fallback={<>...</>}>
@@ -64,10 +79,18 @@ const RouterLink = () => {
               </React.Suspense>
               } 
           />
-    </Routes>      
+        <Route
+          path="/add-leave"
+          element={
+            <React.Suspense fallback={<>...</>}>
+              <AddLeave />
+            </React.Suspense>
+          }
+        />
+      </Routes>
+    </ThemeProvider>
     </>
+  );
+};
 
-  )
-}
-
-export default RouterLink
+export default RouterLink;

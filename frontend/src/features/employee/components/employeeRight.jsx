@@ -96,7 +96,6 @@ const useStyles=makeStyles({
 })
 
 const status=[
-  'pending',
   'active',
   'inactive'
 ]
@@ -163,6 +162,7 @@ const EmployeRight = ({
       </Box>
       <Box className={classes.innerContainer} component='div'>
         <InputNumber
+
              placeholder={'Add Employee ID'} 
               value={values.employeeId} 
               error={Boolean(touched.employeeId && errors.employeeId)} 

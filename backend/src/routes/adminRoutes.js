@@ -70,6 +70,7 @@ router.put('/edit-employee',multerUpload.single('employeePhoto'),EmployeeControl
 router.get('/get-employees',EmployeeController.getEmployees);
 // Search Employees
 router.post('/search-employees',EmployeeController.searchEmployees);
+router.post('/delete-employee',EmployeeController.deleteEmployee);
 
 
 

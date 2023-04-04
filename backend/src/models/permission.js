@@ -7,14 +7,6 @@ const Permission= sequelize.define('permission', {
         autoIncrement: true,
         primaryKey: true
     },
-    module:{
-        type:DataTypes.JSON,
-        allowNull:false,
-    },
-    // status:{
-    //     type:DataTypes.ENUM,
-    //     values: ['active', 'inactive']
-    // }
 },{
     timestamps: true,
     timezone: '+00:00'

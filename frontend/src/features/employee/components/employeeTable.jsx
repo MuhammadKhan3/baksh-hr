@@ -198,7 +198,7 @@ const useStyles=makeStyles({
   checked: {},
 })
 
-const EmployeeTable = ({employees,setemployees,handleOpen}) => {
+const EmployeeTable = ({employees,setemployees,handleOpen,setDelete}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
 
@@ -290,8 +290,7 @@ const EmployeeTable = ({employees,setemployees,handleOpen}) => {
                                     {row.status}
                                 </Typography>
                               </Box>
-                           } 
-
+                           }
                      </TableCell>
                      <TableCell className={classes.tableCell}>
                         <Box className={classes.actionContainer}>
@@ -305,7 +304,7 @@ const EmployeeTable = ({employees,setemployees,handleOpen}) => {
                               <img src={edit} className={classes.icons} />
                             </Box>
                           </NavLink>
-                          <Box onClick={handleOpen} component='div' className={`${classes.iconDiv} ${classes.deleteIconc}`}>
+                          <Box onClick={(e)=>{handleOpen(e);setDelete(row?.id)}} component='div' className={`${classes.iconDiv} ${classes.deleteIconc}`}>
                               <img src={deleteIcon} className={classes.icons}/>
                           </Box>
                         </Box>

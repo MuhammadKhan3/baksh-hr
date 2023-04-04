@@ -15,7 +15,7 @@ const Login=async(req,res,email,password)=>{
         },
         include:{all:true}
     });
-    
+    console.log(user)    
         let verify=await bcrypt.compare(password, user.password);
         const secret=process.env.secretKey;
         const data=await LoginDto(user);
