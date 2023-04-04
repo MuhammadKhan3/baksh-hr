@@ -29,13 +29,14 @@ const RouterLink = () => {
               </React.Suspense>
               } 
           />
-          <Route path="/add-employee" 
+          <Route path="/add-employee"  
               element={  
               <React.Suspense fallback={<>...</>}>
                 <Employee/>
               </React.Suspense>
               } 
           />
+
           <Route path="/edit-employee/:employeeId" 
               element={  
               <React.Suspense fallback={<>Loading...</>}>
@@ -54,12 +55,26 @@ const RouterLink = () => {
               element={  
               <React.Suspense fallback={<>Loading...</>}>
                 <Managemployee/>
+              </React.Suspense>}
+          />
+
+          <Route path="/" 
+              element={  
+              <React.Suspense fallback={<>...</>}>
+                <Login/>
+              </React.Suspense>
+              } 
+          />
+          <Route path="/dashboard" 
+              element={  
+              <React.Suspense fallback={<>...</>}>
+                <Dashboard/>
               </React.Suspense>
               } 
           />
           <Route path="/daily-attendance" 
               element={  
-              <React.Suspense fallback={<>Loading...</>}>
+             <React.Suspense fallback={<>Loading...</>}>
                 <Managemployee/>
               </React.Suspense>
               } 
