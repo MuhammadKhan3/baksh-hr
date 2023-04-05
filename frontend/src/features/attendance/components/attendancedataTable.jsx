@@ -224,7 +224,7 @@ const useStyles=makeStyles({
 const AttendancedataTable = ({attendance,setattendance}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
-
+  const [value,setValue] = useState()
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
