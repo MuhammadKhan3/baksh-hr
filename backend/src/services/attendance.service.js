@@ -1,12 +1,12 @@
 const Attendance = require("../models/attendance")
+const Permission = require("../models/permission")
+const Role = require("../models/role")
 const User = require("../models/user")
 
-const createAttendance=async (req,res,
-    {UserId,name,month,fingerprint,status,year,checkIn,
-        checkOut,createId}
-    )=>{
-        console.log(UserId,name,month,fingerprint,year,checkIn,
-            checkOut,createId)
+const createAttendance=async (req,UserId,name,month,fingerprint,status,year,checkin,
+        checkout,createId)=>{
+        console.log(UserId,name,month,fingerprint,year,checkin,
+            checkout,createId)
         // var dateofbirth= new Date(dob);
 
         let modulejson={
@@ -17,48 +17,36 @@ const createAttendance=async (req,res,
         const permission=await Permission.create({
             module:modulejson,
         })
-        const salt = await bcrypt.genSalt(10);
-        var hash = await bcrypt.hash(password, salt);
-        const user=await User.create({
-            name:name,
-            email:email,
-            password:hash,
-            status:status,
-            roleId:role.id,
-            permissionId:permission.id
-        })
-
-
+        
         const attendance=await Attendance.create({
-            UserId:employeeId,
-            name,
+            UserId:UserId,
+            name:name,
             month:month,
             year:year,
-            checkIn:checkIn,
-            checkOut:checkOut,
+            checkin:checkout,
+            checkout:checkout,
             fingerprint:fingerprint,
             status,
-            userId:user.employeeId,
-            createId:req.user.employeeId,
+            userId:User.userId,
+            createId:req.User.UserId,
         })
         // 
 }
 
 
 
-const editAttendance=async (req,res,
-    {UserId,name,month,fingerprint,status,year,checkIn,
-        checkOut}
+const editAttendance=async (req,UserId,name,month,fingerprint,status,year,checkin,
+        checkout
     )=>{
 
 
-            const attendance= await Attendance.findOne({where:{UserId:employeeId}})
-            attendance.UserId=employeeId;
+            const attendance= await Attendance.findOne({where:{UserId:UserId}})
+            attendance.UserId=UserId;
             attendance.name=name;
             attendance.month=month;
             attendance.year=year;
-            attendance.checkIn=checkIn;
-            attendance.checkOut=checkOut;
+            attendance.checkin=checkin
+            attendance.checkout=checkout;
             attendance.fingerprint=fingerprint;
             attendance.status=status;
 
@@ -70,4 +58,11 @@ const editAttendance=async (req,res,
 
         }
 
-module.exports={createAttendance,editAttendance};
+        const deleteAttendance=async(userId)=>{
+            const attendance=await Attendance.findOne({where:{id:userId}});
+            await attendance.destroy();
+            return attendance;
+        }
+        
+
+module.exports={createAttendance,editAttendance,deleteAttendance};

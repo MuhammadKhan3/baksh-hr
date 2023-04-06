@@ -1,3 +1,4 @@
+const Attendance = require('../models/attendance');
 const Employee=require('../services/employee.service');
 
 const createEmployee=async (req,res,next)=>{
@@ -81,32 +82,83 @@ const deleteEmployee=async (req,res,next)=>{
         return Error(req,res,error);
     }
 }
+//Get Attendance controller
+const viewCurrentlyMarkedAttendance = async(req, res, next)=>{
 
-module.exports={getEmployees,getEmployee,salaryTypes,createEmployee,editEmployee,searchEmployees,deleteEmployee}
-exports.markAttendanceIn=async (req,res,next)=>{
-
-
-    const {timeIn}=req.body.fingerprint;
-
+    const {UserId,month,year}=req.body;
     try {
-        const response=await Employee.markAttendanceIn(req.Checktime.timeIn || fingerprint);
-        res.json({msg:"Attendance mark",flag:true,response:response})
+        let response=await Attendance.viewCurrentlyMarkedAttendance(UserId,month,year);
+         res.json({msg:"view employee attendance",flag:true,employees:response})
     } catch (error) {
-         return Error(req,res,error);
+        return Error(req,res,error);
     }
+    // var attendanceChunks = [];
+
+    // Attendance.find({
+    //     employeeId: req.body._id,
+    //     month: new Date().getMonth() + 1,
+    //     year: new Date().getFullYear()
+    // }).sort({_id: -1}).exec(function getAttendanceSheet(err, docs) {
+    //     var found = 0;
+    //     if (docs.length > 0) {
+    //         found = 1;
+    //     }
+    //     for (var i = 0; i < docs.length; i++) {
+    //         attendanceChunks.push(docs[i]);
+    //     }
+    //     res.render('Employee/viewAttendance', {
+    //         title: 'Attendance Sheet',
+    //         month: new Date().getMonth() + 1,
+    //         csrfToken: req.csrfToken(),
+    //         found: found,
+    //         attendance: attendanceChunks,
+    //         moment: moment,
+    //         userName: req.user.name
+    //     });
+    // });
 }
 
-exports.markAttendanceOut=async (req,res,next)=>{
+//Post attendance controller
+const markEmployeeAttendance= async(req, res, next) =>{
 
-
-    const {timeOut}=req.body.fingerprint;
-
+    const {UserId,month,year}=req.body;
     try {
-        const response=await Employee.markAttendanceOut(req.checktime.timeOut || fingerprint);
-        res.json({msg:"Attendance mark",flag:true,response:response})
+        let response=await Attendance.markEmployeeAttendance(UserId,month,year);
+         res.json({msg:"mark attendance Successfully",flag:true,employees:response})
     } catch (error) {
-         return Error(req,res,error);
+        return Error(req,res,error);
     }
-}
+    //     Attendance.find({
+    //     employeeId: req.user._id,
+    //     month: new Date().getMonth()+ 1,
+    //     date: new Date().getDate(),
+    //     year: new Date().getFullYear()
+    // }, function getAttendanceSheet(err, docs) {
+    //     var found = 0;
+    //     if (docs.length > 0) {
+    //         found = 1;
+    //     }
+    //     else {
+
+    //         var newAttendance = new Attendance();
+    //         newAttendance.employeeId = req.user._id;
+    //         newAttendance.year = new Date().getFullYear();
+    //         newAttendance.month = new Date().getMonth() + 1;
+    //         newAttendance.date = new Date().getDate();
+    //         newAttendance.present = 1;
+    //         newAttendance.save(function saveAttendance(err) {
+    //             if (err) {
+    //                 console.log(err);
+    //             }
+
+    //         });
+    //     }
+    //     res.redirect('/employee/view-attendance-current');
+
+    // });
+};
+
+module.exports={getEmployees,getEmployee,salaryTypes,createEmployee,editEmployee,searchEmployees,deleteEmployee,markEmployeeAttendance,viewCurrentlyMarkedAttendance};
+
 
 

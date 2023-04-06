@@ -32,59 +32,26 @@ exports.signup=async (req,res,next)=>{
 }
 
 // current attendance
-exports.viewCurrentlyMarkedAttendance=async (req,res,next)=>{
+exports.viewCurrentlyMarkedAttendance=async(req,res,next)=>{
 
-  var attendanceChunks = [];
-  Attendance.find({
-    employeeID: req.session.user._id,
-    month: new Date().getMonth() + 1,
-    year: new Date().getFullYear()
-  
-  }).sort({_id: -1}).exec(function getAttendanceSheet(err, docs) {
-  
-  var found = 0;
-  if (docs.length > 0) {
-      found = 1;
+  const {UserId,month,year}=req.body;
+  try {
+      let response=await Attendance.markEmployeeAttendance(UserId,month,year);
+       res.json({msg:"mark employee attendance",flag:true,employees:response})
+  } catch (error) {
+      return Error(req,res,error);
   }
-  for (var i = 0; i < docs.length; i++) {
-      attendanceChunks.push(docs[i]);
-  }
-  res.render('Employee/viewAttendance', {
-      title: 'Attendance Sheet',
-      month: new Date().getMonth() + 1,
-      csrfToken: req.csrfToken(),
-      found: found,
-      attendance: attendanceChunks,
-      moment: moment,
-      userName: req.session.user.name
-  });
-  });
 }
 
 exports.viewAttendanceSheet=async (req,res,next)=>{
-  var attendanceChunks = [];
-  Attendance.find({
-      employeeID: req.session.user._id,
-      month: req.body.month,
-      year: req.body.year
-  }).sort({_id: -1}).exec(function getAttendance(err, docs) {
-      var found = 0;
-      if (docs.length > 0) {
-          found = 1;
-      }
-      for (var i = 0; i < docs.length; i++) {
-          attendanceChunks.push(docs[i]);
-      }
-      res.render('Employee/viewAttendance', {
-          title: 'Attendance Sheet',
-          month: req.body.month,
-          csrfToken: req.csrfToken(),
-          found: found,
-          attendance: attendanceChunks,
-          moment: moment,
-          userName: req.session.user.name
-      });
-  });
+   
+  const {UserId,month,year}=req.body;
+  try {
+      let response=await Attendance.markEmployeeAttendance(UserId,month,year);
+       res.json({msg:"mark employee attendance",flag:true,employees:response})
+  } catch (error) {
+      return Error(req,res,error);
+  }
 }
 
 
@@ -92,7 +59,7 @@ exports.viewAttendanceSheet=async (req,res,next)=>{
 // attendance controller for
 exports.editAttendance=async (req,res,next)=>{
 
-  const {userId}=req.params.employeeId;
+  const {userId}=req.params;
 
   try {
       const response=await Attendance.editAttendance(userId);
@@ -103,7 +70,7 @@ exports.editAttendance=async (req,res,next)=>{
 }
 
 exports.deleteAttendnace=async (req,res,next)=>{
-  const {userId}=req.params.employeeId;
+  const {userId}=req.params;
   try {
       const response= await Attendance.deleteAttendance(userId);
       res.json({msg:"attendance Deleted",flag:true});
