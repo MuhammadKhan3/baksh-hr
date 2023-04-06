@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 // Define the ForwardArrow component with a destructured arrow prop
@@ -24,7 +24,9 @@ export default function ForwardArrow({ arrow }) {
       }}
     >
       {/* Render the arrow icon using the MUI ArrowForwardIosIcon component */}
-      <ArrowForwardIosIcon />
+      <IconButton>
+        <ArrowForwardIosIcon />
+      </IconButton>
     </Box>
   );
 }

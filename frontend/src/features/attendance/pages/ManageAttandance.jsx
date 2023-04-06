@@ -2,11 +2,9 @@ import React from "react";
 import { Box } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import Sidebar from "../../../components/sidebar/sidebar";
-
-import AttendanceDate from "../components/attedanceData";
-import SimpleHeader from "../../Leave/header/simpleHeader";
 import AttendanceHeader from "../ui/attendanceHeader";
 import DepartmentDatePicker from "../components/departmentDatePicker";
+import AttendanceData from "../components/attedanceData";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -30,22 +28,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Attendance() {
+export default function ManageAttandance() {
   const classes = useStyles();
   return (
     <Box component="div" className={classes.mainContainer}>
       <Box component="div" className={classes.sidebar}>
         <Sidebar />
       </Box>
+
       <Box component="div">
-        <AttendanceHeader heading={"Attendance Report"} />
+        <AttendanceHeader heading={"Manage Attendance"} />
+
         <Box>
           <Box component="div" className={classes.employee}>
             <DepartmentDatePicker />
           </Box>
           <Box component="div" className={classes.employee}>
-            {/* <DepartmentDatePicker /> */}
-            <AttendanceDate />
+            <AttendanceData />
           </Box>
         </Box>
       </Box>
