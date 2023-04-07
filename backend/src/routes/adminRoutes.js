@@ -22,7 +22,7 @@ router.post('/create-admin',validUser,adminController.signup);
 // Create Manager
 router.post('/create-manager',
 isAuth,
-(req, res, next) => {Permission.hasPermission(req, res, next, {'employee':'add'})},
+// (req, res, next) => {Permission.hasPermission(req, res, next, {'employee':'add'})},
 multerUpload.single('managerPhoto'),
 validManager,
 managerController.createManager);
@@ -76,8 +76,6 @@ router.post('/delete-employee',EmployeeController.deleteEmployee);
 
 
 router.get('/salaryTypes',EmployeeController.salaryTypes);
-
-
 router.get('/view-attendance-current', adminController.viewCurrentlyMarkedAttendance);
 router.put('/Employee/viewAttendance', adminController.viewAttendanceSheet);
 
