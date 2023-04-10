@@ -3,11 +3,13 @@ import { Route, Routes } from "react-router-dom";
 import EditEmployee from "./features/employee/pages/editemployee";
 import Managemployee from "./features/employee/pages/managemployee";
 import ViewEmployee from "./features/employee/pages/viewemployee";
+import DailyAttendance from "./features/attendance/pages/DailyAttendance";
 //Add Leave Component
 import AddLeave from "./features/Leave/pages/AddLeave";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 import Attendance from "./features/attendance/pages/attendance";
 import ManageAttandance from "./features/attendance/pages/ManageAttandance";
+import Dashboardd from "./features/dashboard/Pages/Dashboardd";
 
 const Dashboard = React.lazy(() => import("./features/dashboard"));
 const Employee = React.lazy(() => import("./features/employee"));
@@ -18,19 +20,29 @@ const theme = createMuiTheme({
     // fontFamily:'Poppins'
   },
 });
+
 const RouterLink = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
         <Routes>
-          <Route
+          {/* <Route
             path="/dashboard"
             element={
               <React.Suspense fallback={<>...</>}>
                 <Dashboard />
               </React.Suspense>
             }
+          /> */}
+          <Route
+            path="/dashboard"
+            element={
+              <React.Suspense fallback={<>...</>}>
+                <Dashboardd />
+              </React.Suspense>
+            }
           />
+          
           <Route
             path="/add-employee"
             element={
@@ -39,7 +51,6 @@ const RouterLink = () => {
               </React.Suspense>
             }
           />
-
           <Route
             path="/edit-employee/:employeeId"
             element={
@@ -64,20 +75,11 @@ const RouterLink = () => {
               </React.Suspense>
             }
           />
-
           <Route
             path="/"
             element={
               <React.Suspense fallback={<>...</>}>
                 <Login />
-              </React.Suspense>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <React.Suspense fallback={<>...</>}>
-                <Dashboard />
               </React.Suspense>
             }
           />
@@ -85,7 +87,9 @@ const RouterLink = () => {
             path="/daily-attendance"
             element={
               <React.Suspense fallback={<>Loading...</>}>
-                <Managemployee />
+                {/* <Attendance/> */}
+                {/* <Dashboard/> */}
+                <DailyAttendance />
               </React.Suspense>
             }
           />
@@ -97,7 +101,6 @@ const RouterLink = () => {
               </React.Suspense>
             }
           />
-
           <Route
             path="/AddAttendance"
             element={

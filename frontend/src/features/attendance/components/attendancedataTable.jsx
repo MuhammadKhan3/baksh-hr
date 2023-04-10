@@ -266,10 +266,8 @@ const useStyles = makeStyles({
 });
 
 const AttendancedataTable = (/*{ attendance, setattendance }*/) => {
-  const [page, setPage] = useState(3);
-  const [rowsPerPage, setRowsPerPage] = useState(6);
-  //Remove attadance from Props and use it below .Causing error
-  const [attendance, setattendance] = React.useState([]);
+  const [page, setPage] = React.useState(3);
+  const [rowsPerPage, setRowsPerPage] = React.useState(6);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -280,7 +278,7 @@ const AttendancedataTable = (/*{ attendance, setattendance }*/) => {
   };
   const classes = useStyles();
   const [cookies] = useCookies(["token"]);
-  const [search, setsearch] = useState("");
+  const [search, setsearch] = React.useState("");
   const [value, setValue] = React.useState(0);
   useEffect(() => {
     const fetchManager = async () => {

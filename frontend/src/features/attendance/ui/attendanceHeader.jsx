@@ -5,8 +5,9 @@ import msg from "../../../images/msg.svg";
 import notification from "../../../images/notification.svg";
 import Avatar from "@mui/material/Avatar";
 import AdminPanel from "./adminPanel";
+
 const useStyles = makeStyles({
-  mainContainer: {
+  mainContainer: ({ width = "75%", marginLeft = "22%" }) => ({
     backgroundColor: "#FFFFFF",
     paddingTop: "1rem",
     paddingLeft: "0rem",
@@ -14,9 +15,9 @@ const useStyles = makeStyles({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
-    width: "75%",
-    marginLeft: "22%",
-  },
+    width,
+    marginLeft,
+  }),
   pageName: {
     fontFamily: "Poppins",
     fontSize: "28px",
@@ -57,8 +58,8 @@ const useStyles = makeStyles({
   },
 });
 
-export default function AttendanceHeader({ heading }) {
-  const classes = useStyles();
+export default function AttendanceHeader({ heading, width, marginLeft }) {
+  const classes = useStyles({ width, marginLeft });
   return (
     <Box component="div" className={classes.mainContainer}>
       <Box component="div" className={classes.pageName}>
