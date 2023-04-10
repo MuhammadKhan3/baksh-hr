@@ -1,76 +1,49 @@
-// current attendance
-exports.getAttendance=async (req,res,next)=>{
+const Attendance = require("../models/attendance");
+const User = require("../models/user");
 
-    var attendanceChunks = [];
-    Attendance.find({
-      employeeID: req.session.user._id,
-      month: new Date().getMonth() + 1,
-      year: new Date().getFullYear()
 
-    }).sort({_id: -1}).exec(function getAttendanceSheet(err, docs) {
+exports.markEmployeeAttendance = async(req, res, next)=>{
 
-    var found = 0;
-    if (docs.length > 0) {
-        found = 1;
+    const {UserId,month,year}=req.body;
+    try {
+        let response=await Attendance.markEmployeeAttendance(UserId,month,year);
+         res.json({msg:"mark employee attendance",flag:true,employees:response})
+    } catch (error) {
+        return Error(req,res,error);
     }
-    for (var i = 0; i < docs.length; i++) {
-        attendanceChunks.push(docs[i]);
-    }
-    res.render('Employee/viewAttendance', {
-        title: 'Attendance Sheet',
-        month: new Date().getMonth() + 1,
-        csrfToken: req.csrfToken(),
-        found: found,
-        attendance: attendanceChunks,
-        moment: moment,
-        userName: req.session.user.name
-    });
-    });
-  }
+    //
 
-  exports.getAttendanceSheet=async (req,res,next)=>{
-    var attendanceChunks = [];
-    Attendance.find({
-        employeeID: req.session.user._id,
-        month: req.body.month,
-        year: req.body.year
-    }).sort({_id: -1}).exec(function getAttendance(err, docs) {
-        var found = 0;
-        if (docs.length > 0) {
-            found = 1;
-        }
-        for (var i = 0; i < docs.length; i++) {
-            attendanceChunks.push(docs[i]);
-        }
-        res.render('Employee/viewAttendance', {
-            title: 'Attendance Sheet',
-            month: req.body.month,
-            csrfToken: req.csrfToken(),
-            found: found,
-            attendance: attendanceChunks,
-            moment: moment,
-            userName: req.session.user.name
-        });
-    });
+}
+
+  exports.getAttendanceSheet= async(req,res,next)=>{
+    const {UserId,month,year}=req.body;
+    try {
+        let response=await Attendance.getAttendanceSheet(UserId,month,year);
+         res.json({msg:"mark employee attendance",flag:true,employees:response})
+    } catch (error) {
+        return Error(req,res,error);
+    }
   }
 
 
 
-  // attendance controller for
+  // attendance controller for edit attendance
   exports.editAttendance=async (req,res,next)=>{
 
-    const {userId}=req.params.employeeId;
-
+    const {userId}=req.params;
+  
     try {
         const response=await Attendance.editAttendance(userId);
         res.json({msg:"Attendance edited",flag:true,response:response})
+            res.json({msg:"edit sucessfully"});
     } catch (error) {
          return Error(req,res,error);
     }
   }
 
+// attendance controller for delete attendance
   exports.deleteAttendnace=async (req,res,next)=>{
-    const {userId}=req.params.employeeId;
+    const {userId}=req.params;
     try {
         const response= await Attendance.deleteAttendance(userId);
         res.json({msg:"attendance Deleted",flag:true});

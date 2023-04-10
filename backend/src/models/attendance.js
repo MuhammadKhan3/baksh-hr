@@ -20,12 +20,12 @@ const Attendance= sequelize.define('attendance', {
         type:DataTypes.INTEGER,
         // allowNull:false
     },
-    checkIn:{
-        type:DataTypes.checkIn,
+    checkin:{
+        type:DataTypes.TIME,
         require: true
     },
-    checkOut:{
-        type:DataTypes.checkOut,
+    checkout:{
+        type:DataTypes.TIME,
     },
     fingerprint:{
         type:DataTypes.STRING,

@@ -6,6 +6,7 @@ const Role = require('./src/models/role');
 const Permission = require('./src/models/permission');
 const bodyParser=require('body-parser');
 const Manager = require('./src/models/manager');
+const LeaveType=require('./src/models/leaveType')
 // .evn file get
 require('dotenv').config();
 
@@ -64,7 +65,7 @@ User.belongsTo(Permission);
 
 
 // Manager Relation with User
-User.hasOne(Manager,{foreignKey:'userId',allowNull:false});
+User.hasOne(Manager,{foreignKey:'userId',as:'managerData',allowNull:false});
 Manager.belongsTo(User,{foreignKey: 'userId'})
 
 User.hasMany(Manager,{foreignKey:'createId'})
@@ -83,7 +84,7 @@ EmployeeCompany.belongsTo(Department);
 Designation.hasMany(EmployeeCompany);
 EmployeeCompany.belongsTo(Designation);
 
-User.hasMany(Employee,{foreignKey:'userId',onDelete:'CASCADE'});
+User.hasOne(Employee,{foreignKey:'userId',as:'employeeData',onDelete:'CASCADE'});
 Employee.belongsTo(User,{foreignKey:'userId',as:'user'});
 
 Employee
@@ -111,7 +112,7 @@ Employee.belongsTo(User,{
 
 
 Bank.hasMany(EmployeeBank,{foreignKey:'bankId'})
-EmployeeBank.hasMany(Bank,{foreignKey:'bankId'})
+EmployeeBank.belongsTo(Bank,{foreignKey:'bankId'})
 
 // My sql database create
 sequelize
