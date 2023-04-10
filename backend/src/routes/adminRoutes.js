@@ -6,7 +6,6 @@ const department=require('../controllers/department.controller')
 const { multerUpload } = require('../middleware/multer');
 const isAuth=require('../middleware/authorize')
 const EmployeeController=require('../controllers/employee.controller');
-const AttendanceController = require('../controllers/attendance.controller');
 const payroll = require ('../controllers/payroll.controller');
 const {getDepartment} =require('../controllers/department.controller');
 
@@ -72,25 +71,12 @@ router.put('/edit-employee',multerUpload.single('employeePhoto'),EmployeeControl
 router.get('/get-employees',EmployeeController.getEmployees);
 // Search Employees
 router.post('/search-employees',EmployeeController.searchEmployees);
-router.post('/delete-employee',EmployeeController.deleteEmployee);
+router.delete('/delete-employee',EmployeeController.deleteEmployee);
 
 
 
 
 router.get('/salaryTypes',EmployeeController.salaryTypes);
-
-//All Attendace routes
-router.post('/attendance/create-attendance',EmployeeController.markEmployeeAttendance);
-router.put('/attendance/edit-attendance/:UserId',AttendanceController.editAttendance);
-router.delete('/delete-attendance/:UserId',AttendanceController.deleteAttendnace);
-
-//Attendace routes for admin
-router.put('/edit-attendance/:UserId',adminController.editAttendance);
-router.delete('/delete-attendance/:UserId',adminController.deleteAttendnace);
-//Attendace routes for Employee
-router.get('/attendance/markeAttendance',EmployeeController.markEmployeeAttendance);
-router.post('/attendance/view-attendance',EmployeeController.viewCurrentlyMarkedAttendance);
-
 
 //Payroll Controllers
 router.put('/edit-payroll:/id', payroll.updatePayroll);
