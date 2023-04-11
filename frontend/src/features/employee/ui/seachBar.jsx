@@ -52,7 +52,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    marginTop:'2%',
+    marginTop:'0%',
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
       backgroundColor: alpha(theme.palette.common.white, 0.25),
@@ -60,7 +60,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     marginRight: theme.spacing(2),
     marginLeft: 0,
     border:'1px solid #E1E1E1',
-    width: '22%',
+    width: '100%',
     height:'40px',
     borderRadius: '10px',
     [theme.breakpoints.up('sm')]: {

@@ -210,6 +210,7 @@ const EmployeLeft = ({
                   error={Boolean(touched.permanentAddress && errors.permanentAddress)} 
                   helperText={touched.permanentAddress && errors.permanentAddress}  
                   name="permanentAddress" 
+                  
                   touched={touched}
                   handleChange={handleChange}
                   handleBlur={handleBlur}    
@@ -221,6 +222,8 @@ const EmployeLeft = ({
                 error={Boolean(touched.nationality && errors.nationality)} 
                 helperText={touched.nationality && errors.nationality}  
                 name="nationality" 
+                placeholder={'Select Nationality'}
+
                 touched={touched}
                 handleChange={handleChange}
                 handleBlur={handleBlur}
@@ -236,6 +239,7 @@ const EmployeLeft = ({
                 helperText={touched.martialStatus && errors.martialStatus}  
                 name="martialStatus" 
                 touched={touched}
+                placeholder={'Select Marital Status'}
                 handleChange={handleChange}
                 handleBlur={handleBlur}
             />

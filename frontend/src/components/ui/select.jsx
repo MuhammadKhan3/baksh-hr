@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Box, makeStyles } from '@material-ui/core';
-import { FormHelperText, Typography } from '@mui/material';
+import { FormHelperText, InputLabel, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import Dropdown from '../../images/employee/drop.svg';
 
@@ -144,6 +144,7 @@ export default function SelectUi({title,data=[],handleChange,name,value,error,he
   //   );
   // };
   console.log(error)
+  const answer=''
   return (
       <FormControl sx={{ width: '100%'}} >
         <Typography component='h4' className={classes.label}>
@@ -154,6 +155,9 @@ export default function SelectUi({title,data=[],handleChange,name,value,error,he
           displayEmpty
           name={name}
           value={value}
+          renderValue={
+            value !== "" ? undefined : () => <div>{placeholder}</div>
+          }
           IconComponent={(props)=>(
             <Box {...props} component='div' style={{      
                   width: '32px',
@@ -178,6 +182,7 @@ export default function SelectUi({title,data=[],handleChange,name,value,error,he
           onBlur={handleBlur}
           onChange={handleChange}
           input={<OutlinedInput />}
+          label={placeholder}
           MenuProps={MenuProps}
           inputProps={{ 'aria-label': 'Without label' }}
           placeholder={placeholder}

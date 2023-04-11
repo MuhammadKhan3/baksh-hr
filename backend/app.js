@@ -117,16 +117,17 @@ EmployeeBank.belongsTo(Bank,{foreignKey:'bankId'})
 
 
 // Users Leaves
-User.hasMany(Leave,{foreignKey:'userId'})
-Leave.belongsTo(User,{foreignKey:'userId'})
+User.hasMany(Leave,{foreignKey:'userId',as:'users'})
+Leave.belongsTo(User,{foreignKey:'userId',as:'users'})
 // My sql database create
 LeaveType.hasMany(Leave,{foreignKey:'leaveTypeId'})
 Leave.belongsTo(LeaveType,{foreignKey:'leaveTypeId'})
 
-User.hasMany(Leave,{foreignKey:'createId'})
+User.hasMany(Leave,{foreignKey:'createId',as:'creator'})
 Leave.belongsTo(User,{foreignKey:'createId'})
 
 
+// 
 sequelize
 .sync({alter:true})
 .then(() => {

@@ -199,7 +199,7 @@ const EmployeRight = ({
             touched={touched}
             handleChange={handleChange}
             handleBlur={handleBlur}
-            placeholder={"Select the Department"}   
+            placeholder={"Select the Designation"}   
         />
 
         <Box className={classes.flexRow}>
@@ -224,7 +224,7 @@ const EmployeRight = ({
                 touched={touched}
                 handleChange={handleChange}
                 handleBlur={handleBlur}
-                placeholder={"Select the Department"}   
+                placeholder={"Select Status"}   
                 data={status} 
                 classes={classes}
               />

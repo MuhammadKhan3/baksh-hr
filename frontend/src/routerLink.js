@@ -9,6 +9,7 @@ import AddLeave from "./features/Leave/pages/AddLeave";
 import LeaveType from "./features/setup/leave/pages/AddLeaveType";
 
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
+import ManageLeave from "./features/Leave/pages/manageLeave";
 
 const Dashboard = React.lazy(() => import("./features/dashboard"));
 const Employee = React.lazy(() => import("./features/employee"));
@@ -96,6 +97,14 @@ const RouterLink = () => {
           element={
             <React.Suspense fallback={<>...</>}>
               <AddLeave />
+            </React.Suspense>
+          }
+        />
+        <Route
+          path="/manage-leave"
+          element={
+            <React.Suspense fallback={<>...</>}>
+              <ManageLeave/>
             </React.Suspense>
           }
         />

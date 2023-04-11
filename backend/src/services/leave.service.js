@@ -6,6 +6,9 @@ const Role = require('../models/role')
 const { Op, Sequelize } = require('sequelize')
 const moment=require('moment')
 const Manager = require('../models/manager')
+const sequelize = require('../untils/db')
+const EmployeeCompany = require('../models/empCompany')
+const Department = require('../models/department')
 
 const creatLeave=async (req,{userId,leaveTypeId,startDate,endDate,reason})=>{
 
@@ -78,4 +81,30 @@ const RemainingLeave=async (userId)=>{
 }
 
 
-module.exports={creatLeave,createLeaveType,getEmployees,LeaveTypes,RemainingLeave}
+const getAllLeaves=()=>{
+
+}
+
+
+const LeavesHr=async ()=>{
+    let leaves=await Leave.findAll({
+        where:{deletedAt:null},
+        include:[
+            {model:LeaveType,attributes:['leaveType']},
+            {model:User,as:'users',
+                    include:[
+                        {model:Employee,as:'employeeData',include:[{model:EmployeeCompany,include:[{model:Department}]}]},
+                        {model:Manager,as:'managerData',attributes:['name']}
+                    ]
+            }
+        ],
+        order:[['createdAt', 'DESC']]
+        // raw:true,
+    });
+
+    return leaves
+
+
+}
+
+module.exports={creatLeave,createLeaveType,getEmployees,LeaveTypes,RemainingLeave,getAllLeaves,LeavesHr}

@@ -22,7 +22,9 @@ const User = sequelize.define('User', {
     allowNull: false
   },
 },{
-  paranoid: true
+  paranoid: true,
+  timestamps: true,
+  timezone: '+00:00'
 });
 
 module.exports = User;

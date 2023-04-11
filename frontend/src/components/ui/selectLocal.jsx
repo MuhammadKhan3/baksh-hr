@@ -138,6 +138,9 @@ export default function SelectLocalUi({title,data,handleChange,name,value,error,
           error={error}
           input={<OutlinedInput />}
           MenuProps={MenuProps}
+          renderValue={
+            value !== "" ? undefined : () => <div>{placeholder}</div>
+          }
           inputProps={{ 'aria-label': 'Without label' }}
         >
            {data.map((list,id) => (

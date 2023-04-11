@@ -21,8 +21,12 @@ const Leave = sequelize.define('leave', {
     },
     reason:{
         type:DataTypes.STRING,
+    },
+    status:{
+        type:DataTypes.STRING,
     }
 },{
+    paranoid: true,
     timestamps: true,
     timezone: '+00:00',
 });
