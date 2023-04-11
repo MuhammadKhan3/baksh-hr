@@ -50,4 +50,14 @@ const RemainingLeave=async (req,res,next)=>{
     }
 }
 
-module.exports={createLeave,createLeaveType,getEmployees,LeaveTypes,RemainingLeave};
+const LeavesHR=async (req,res,next)=>{
+    console.log('leave Hr')
+    try {
+        let response=await leaveService.LeavesHr();
+        await res.json({msg:"Leaves Fetch Successfully",flag:true,response:response})
+    } catch (error) {
+        return Error(req,res,error);
+    }
+}
+
+module.exports={createLeave,createLeaveType,getEmployees,LeaveTypes,RemainingLeave,LeavesHR};

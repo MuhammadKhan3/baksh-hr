@@ -54,6 +54,9 @@ const useStyles=makeStyles({
     display:'flex',
     flexDirection:'column',
     width:'70%'
+  },
+  searchContainer:{
+    width:'22%'
   }
 
 })
@@ -92,7 +95,9 @@ const Managemployee = () => {
         <Box component='div' className={classes.column}>
             <DeleteModal handleClose={handleClose} submitHandler={deleteHandler} handleOpen={handleOpen} open={open}/>
             <Header heading={"Manage Employee"}/>
+            <Box component='div' className={classes.searchContainer}>
             <SearchBar setemployees={setemployees}/>
+            </Box>
             <EmployeeTable employees={employees} setDelete={setDeleteId} handleOpen={handleOpen} setemployees={setemployees}/>
         </Box>
     </Box>

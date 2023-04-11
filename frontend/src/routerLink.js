@@ -9,6 +9,8 @@ import AddLeave from "./features/Leave/pages/AddLeave";
 import LeaveType from "./features/setup/leave/pages/AddLeaveType";
 
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
+import ManageLeave from "./features/Leave/pages/manageLeave";
+
 import Attendance from "./features/attendance/pages/attendance";
 import ManageAttandance from "./features/attendance/pages/ManageAttandance";
 import Dashboardd from "./features/dashboard/Pages/Dashboardd";
@@ -108,6 +110,7 @@ const RouterLink = () => {
               </React.Suspense>
             }
           />
+
           <Route
             path="/add-leave"
             element={
@@ -116,6 +119,14 @@ const RouterLink = () => {
               </React.Suspense>
             }
           />
+          <Route
+            path="/manage-leave"
+            element={
+            <React.Suspense fallback={<>...</>}>
+              <ManageLeave/>
+            </React.Suspense>
+          }
+        />
           <Route
             path="/attendance-report"
             element={
@@ -132,6 +143,14 @@ const RouterLink = () => {
               </React.Suspense>
             }
           />
+          <Route
+            path="/setup/add-leaveType"
+            element={
+              <React.Suspense fallback={<>...</>}>
+                <LeaveType/>
+              </React.Suspense>
+            }
+        />
         </Routes>
       </ThemeProvider>
     </>

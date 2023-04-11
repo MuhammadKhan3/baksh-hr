@@ -94,6 +94,7 @@ const EmployeeBank = ({parentClass,errors,
                      name="bankId" 
                      touched={touched}
                      handleChange={handleChange}
+                     placeholder={"Select Bank"}
                      handleBlur={handleBlur}
                 />
                 <InputText 

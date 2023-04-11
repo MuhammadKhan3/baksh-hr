@@ -180,7 +180,7 @@ const Sidebar = () => {
                 { label: "PayScale", path: "/payscale" },
                 { label: "Shift", path: "/shift" },
                 { label: "Asset", path: "/asset" },
-                { label: "Leave Type", path: "/leave-type" },
+                { label: "Leave Type", path: "/setup/add-leaveType" },
               ]}
               icon={setup}
               classes={classes}

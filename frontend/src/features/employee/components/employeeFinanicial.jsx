@@ -77,7 +77,7 @@ const EmployeeFinancial = ({parentClass,
                     touched={touched}
                     handleChange={handleChange}
                     handleBlur={handleBlur}
-                    placeholder={"Select the Department"}   
+                    placeholder={"Select Salary Type"}   
             />
             <InputNumber 
                 label={'Salary'} 

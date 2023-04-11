@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Box, makeStyles } from '@material-ui/core';
 import { Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import Dropdown from '../../../../images/employee/drop.svg';
+import Dropdown from '../../../../images/employee/down.svg';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

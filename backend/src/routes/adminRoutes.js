@@ -8,11 +8,10 @@ const isAuth=require('../middleware/authorize')
 const EmployeeController=require('../controllers/employee.controller');
 const payroll = require ('../controllers/payroll.controller');
 const {getDepartment} =require('../controllers/department.controller');
-
 const {validRole,validUser,validManager, validEditManager, validEmployee, permission}=require('../validations/validations');
 const { getDesignations } = require('../controllers/department.controller');
 const Permission= require('../validations/permissions');
-const { createLeaveType, getEmployees, LeaveTypes, createLeave, RemainingLeave } = require('../controllers/leave.controller');
+const { createLeaveType, getEmployees, LeaveTypes, createLeave, RemainingLeave, LeavesHR } = require('../controllers/leave.controller');
 
 // Admin Controller
 router.post('/',adminController.createAdmin);
@@ -78,8 +77,22 @@ router.delete('/delete-employee',EmployeeController.deleteEmployee);
 
 
 router.get('/salaryTypes',EmployeeController.salaryTypes);
-router.get('/view-attendance-current', adminController.viewCurrentlyMarkedAttendance);
-router.put('/Employee/viewAttendance', adminController.viewAttendanceSheet);
+// router.get('/view-attendance-current', adminController.viewCurrentlyMarkedAttendance);
+// router.put('/Employee/viewAttendance', adminController.viewAttendanceSheet);
+
+
+// //All Attendace routes
+// router.post('/attendance/create-attendance',EmployeeController.markEmployeeAttendance);
+// router.put('/attendance/edit-attendance/:UserId',AttendanceController.editAttendance);
+// router.delete('/delete-attendance/:UserId',AttendanceController.deleteAttendnace);
+
+// //Attendace routes for admin
+// router.put('/edit-attendance/:UserId',adminController.editAttendance);
+// router.delete('/delete-attendance/:UserId',adminController.deleteAttendnace);
+// //Attendace routes for Employee
+// router.get('/attendance/markeAttendance',EmployeeController.markEmployeeAttendance);
+// router.post('/attendance/view-attendance',EmployeeController.viewCurrentlyMarkedAttendance);
+
 
 //Payroll Controllers
 router.put('/edit-payroll:/id', payroll.updatePayroll);
@@ -94,6 +107,7 @@ router.post('/add-leaveType',isAuth,createLeaveType);
 router.get('/leaveType',isAuth,LeaveTypes)
 router.get('/get-employees-leave',isAuth,getEmployees)
 router.get('/get-remaining-leave/:userId',isAuth,RemainingLeave)
+router.get('/get-leaves-hr',LeavesHR);
 
 
 
