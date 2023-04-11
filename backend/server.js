@@ -1,12 +1,8 @@
-
-const cluster = require('cluster');
-const os = require('os');
-const app = require('./app');
+const cluster = require("cluster");
+const os = require("os");
+const app = require("./app");
 const PORT = process.env.PORT;
-require('dotenv').config()
-
-
-
+require("dotenv").config();
 
 // if (cluster.isMaster) {
 //   // Create a worker for each CPU core
@@ -28,5 +24,7 @@ require('dotenv').config()
 // }
 
 app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT} in worker process ${process.pid}`);
+  console.log(
+    `Server started on port ${PORT} in worker process ${process.pid}`
+  );
 });
