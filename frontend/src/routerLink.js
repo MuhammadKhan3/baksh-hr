@@ -15,12 +15,12 @@ const Dashboard = React.lazy(() => import("./features/dashboard"));
 const Employee = React.lazy(() => import("./features/employee"));
 const Login = React.lazy(() => import("./features/login"));
 
-const theme = createMuiTheme({
-  typography: {
-    // fontFamily:'Poppins'
-  },
-});
 
+const theme=createMuiTheme({
+typography:{
+  // fontFamily:'Poppins'
+}
+})
 const RouterLink = () => {
   return (
     <>
@@ -75,21 +75,17 @@ const RouterLink = () => {
               </React.Suspense>
             }
           />
-          <Route
-            path="/"
-            element={
+          <Route path="/dashboard" 
+              element={  
               <React.Suspense fallback={<>...</>}>
-                <Login />
+                <Dashboard/>
               </React.Suspense>
-            }
+              } 
           />
-          <Route
-            path="/daily-attendance"
-            element={
-              <React.Suspense fallback={<>Loading...</>}>
-                {/* <Attendance/> */}
-                {/* <Dashboard/> */}
-                <DailyAttendance />
+          <Route path="/daily-attendance" 
+              element={  
+             <React.Suspense fallback={<>Loading...</>}>
+                <Managemployee/>
               </React.Suspense>
             }
           />

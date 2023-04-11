@@ -1,3 +1,4 @@
+const Attendance = require('../models/attendance');
 const Employee=require('../services/employee.service');
 
 const createEmployee=async (req,res,next)=>{
@@ -82,31 +83,8 @@ const deleteEmployee=async (req,res,next)=>{
     }
 }
 
-module.exports={getEmployees,getEmployee,salaryTypes,createEmployee,editEmployee,searchEmployees,deleteEmployee}
-exports.markAttendanceIn=async (req,res,next)=>{
 
+module.exports={getEmployees,getEmployee,salaryTypes,createEmployee,editEmployee,searchEmployees,deleteEmployee};
 
-    const {timeIn}=req.body.fingerprint;
-
-    try {
-        const response=await Employee.markAttendanceIn(req.Checktime.timeIn || fingerprint);
-        res.json({msg:"Attendance mark",flag:true,response:response})
-    } catch (error) {
-         return Error(req,res,error);
-    }
-}
-
-exports.markAttendanceOut=async (req,res,next)=>{
-
-
-    const {timeOut}=req.body.fingerprint;
-
-    try {
-        const response=await Employee.markAttendanceOut(req.checktime.timeOut || fingerprint);
-        res.json({msg:"Attendance mark",flag:true,response:response})
-    } catch (error) {
-         return Error(req,res,error);
-    }
-}
 
 

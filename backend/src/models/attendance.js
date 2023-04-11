@@ -3,7 +3,7 @@ const sequelize=require('../untils/db');
 const User = require('./user');
 
 const Attendance= sequelize.define('attendance', {
-    employeeId:{
+    userId:{
         type:DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -20,12 +20,13 @@ const Attendance= sequelize.define('attendance', {
         type:DataTypes.INTEGER,
         // allowNull:false
     },
-    checkIn:{
-        type:DataTypes.checkIn,
+    checkin:{
+        type:DataTypes.DATE,
         require: true
     },
-    checkOut:{
-        type:DataTypes.checkOut,
+    checkout:{
+        type:DataTypes.DATE,
+        require:true
     },
     fingerprint:{
         type:DataTypes.STRING,
@@ -42,7 +43,6 @@ const Attendance= sequelize.define('attendance', {
     }
 },{
     timestamps: true,
-    timezone: '+11:30 am',
     paranoid: true,
       
 });

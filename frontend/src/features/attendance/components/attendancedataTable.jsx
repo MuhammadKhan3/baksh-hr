@@ -265,9 +265,41 @@ const useStyles = makeStyles({
   checked: {},
 });
 
-const AttendancedataTable = (/*{ attendance, setattendance }*/) => {
-  const [page, setPage] = React.useState(3);
+// const AttendanceTable = ({attendance,setattendance}) => {
+//   const [page, setPage] = useState(0);
+//   const [rowsPerPage, setRowsPerPage] = useState(12);
+
+//   const handleChangePage = (event, newPage) => {
+//     setPage(newPage);
+//   };
+
+//   const handleChangeRowsPerPage = (event) => {
+//     setRowsPerPage(parseInt(event.target.value, 10));
+//     setPage(0);
+//   };
+//   const classes=useStyles();
+//   const [cookies] = useCookies(['token']);
+//   const [search,setsearch]=useState('');
+
+//   useEffect(()=>{
+//     const fetchManager=async ()=>{
+//       const token=cookies.token;
+//       const response=await axios.get(adminApi+'/get-attendance',{
+//         headers:{
+//           authorization: `Bearer ${token}`,
+//         }
+//       });
+//       setattendance(response?.data?.attendance)
+//       // console.log('hit',)
+
+//     }
+//     fetchManager();
+//   },[search])
+
+const AttendancedataTable = ({ attendance, setattendance }) => {
+  const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(6);
+  // const [value, setValue] = React.useState();
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
