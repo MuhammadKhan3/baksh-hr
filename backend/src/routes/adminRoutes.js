@@ -12,6 +12,7 @@ const {getDepartment} =require('../controllers/department.controller');
 const {validRole,validUser,validManager, validEditManager, validEmployee, permission}=require('../validations/validations');
 const { getDesignations } = require('../controllers/department.controller');
 const Permission= require('../validations/permissions');
+const { createLeaveType, getEmployees, LeaveTypes, createLeave, RemainingLeave } = require('../controllers/leave.controller');
 
 // Admin Controller
 router.post('/',adminController.createAdmin);
@@ -23,7 +24,7 @@ router.post('/create-admin',validUser,adminController.signup);
 // Create Manager
 router.post('/create-manager',
 isAuth,
-(req, res, next) => {Permission.hasPermission(req, res, next, {'employee':'add'})},
+// (req, res, next) => {Permission.hasPermission(req, res, next, {'employee':'add'})},
 multerUpload.single('managerPhoto'),
 validManager,
 managerController.createManager);
@@ -77,12 +78,22 @@ router.delete('/delete-employee',EmployeeController.deleteEmployee);
 
 
 router.get('/salaryTypes',EmployeeController.salaryTypes);
+router.get('/view-attendance-current', adminController.viewCurrentlyMarkedAttendance);
+router.put('/Employee/viewAttendance', adminController.viewAttendanceSheet);
 
 //Payroll Controllers
 router.put('/edit-payroll:/id', payroll.updatePayroll);
 router.get('/get-payroll', payroll.getPayroll);
 router.post('/create-payroll', payroll.getPayroll);
 router.delete('/delete-payroll:/id', payroll.deletePayroll);
+
+// Leave Controller
+router.post('/add-leave',isAuth,createLeave);
+router.post('/add-leaveType',isAuth,createLeaveType);
+
+router.get('/leaveType',isAuth,LeaveTypes)
+router.get('/get-employees-leave',isAuth,getEmployees)
+router.get('/get-remaining-leave/:userId',isAuth,RemainingLeave)
 
 
 

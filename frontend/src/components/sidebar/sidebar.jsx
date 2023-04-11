@@ -101,7 +101,7 @@ const Sidebar = () => {
                 <DownMenu label={"Reimbursement"} icon={reimbursemment} classes={classes} downArrow={downArrow}/>
                 <DownMenu label={"Holidays"} icon={holiday} classes={classes} downArrow={downArrow}/>
                 <DownMenu label={"Managers"} icon={manager} classes={classes} downArrow={downArrow}/>
-                <DownMenu label={"Setup"} droplabel={[{label:"Company Details",path:'/company-details'},{label:"Department",path:'/department'},{label:"Allowance & Deduction",path:'/allowance'},{label:"PayScale",path:'/payscale'},{label:"Shift",path:'/shift'},{label:"Asset",path:'/asset'},{label:"Leave Type",path:'/leave-type'}]} icon={setup} classes={classes} downArrow={downArrow} tab={tab} settab={settab}/>
+                <DownMenu label={"Setup"} droplabel={[{label:"Company Details",path:'/company-details'},{label:"Department",path:'/department'},{label:"Allowance & Deduction",path:'/allowance'},{label:"PayScale",path:'/payscale'},{label:"Shift",path:'/shift'},{label:"Asset",path:'/asset'},{label:"Leave Type",path:'/setup/add-leaveType'}]} icon={setup} classes={classes} downArrow={downArrow} tab={tab} settab={settab}/>
             </List>
         </Box>
         </Box>

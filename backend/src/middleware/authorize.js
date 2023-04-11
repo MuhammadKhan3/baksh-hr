@@ -5,6 +5,7 @@ const Permission = require('../models/permission');
 
 module.exports=async (req,res,next)=>{
   try {
+       console.log(req?.headers)
         if(!req?.headers?.authorization){
           res.status(401).json({msg:'You are not Valid',flag:false})
         }
