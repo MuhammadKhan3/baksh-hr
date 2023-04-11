@@ -6,7 +6,6 @@ const department=require('../controllers/department.controller')
 const { multerUpload } = require('../middleware/multer');
 const isAuth=require('../middleware/authorize')
 const EmployeeController=require('../controllers/employee.controller');
-const AttendanceController = require('../controllers/attendance.controller');
 const payroll = require ('../controllers/payroll.controller');
 const {getDepartment} =require('../controllers/department.controller');
 const {validRole,validUser,validManager, validEditManager, validEmployee, permission}=require('../validations/validations');
@@ -72,7 +71,7 @@ router.put('/edit-employee',multerUpload.single('employeePhoto'),EmployeeControl
 router.get('/get-employees',EmployeeController.getEmployees);
 // Search Employees
 router.post('/search-employees',EmployeeController.searchEmployees);
-router.post('/delete-employee',EmployeeController.deleteEmployee);
+router.delete('/delete-employee',EmployeeController.deleteEmployee);
 
 
 
@@ -80,6 +79,7 @@ router.post('/delete-employee',EmployeeController.deleteEmployee);
 router.get('/salaryTypes',EmployeeController.salaryTypes);
 // router.get('/view-attendance-current', adminController.viewCurrentlyMarkedAttendance);
 // router.put('/Employee/viewAttendance', adminController.viewAttendanceSheet);
+
 
 // //All Attendace routes
 // router.post('/attendance/create-attendance',EmployeeController.markEmployeeAttendance);
