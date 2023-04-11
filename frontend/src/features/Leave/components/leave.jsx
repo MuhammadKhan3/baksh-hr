@@ -44,17 +44,17 @@ export default function AddLeave() {
   
 
   const validationSchema=yup.object().shape({
-      userId: yup.number().integer().required('User Id is required'),
-      leaveTypeId: yup.number().integer().required('Leave Id is required'),
-      startDate:yup.date().max(new Date()).required('Start Date is required'),
+      userId: yup.string().required('User Id is required'),
+      leaveTypeId: yup.string().required('Leave Id is required'),
+      startDate:yup.date().required('Start Date is required'),
       endDate:yup.date().min(yup.ref('startDate'), 'End date must be after start date'),
       reason:yup.string().required('Reason is required')
   })
 
   const formik =useFormik({
    initialValues:{
-    userId: 0,
-    leaveTypeId:0,
+    userId: '',
+    leaveTypeId:'',
     startDate:'',
     endDate:'',
     reason:''
@@ -62,7 +62,16 @@ export default function AddLeave() {
     validateOnBlur:false,
     validateOnChange:false,
     onSubmit: values => {
-      console.log(values)
+      const token=cookies.token;
+        axios
+        .post(adminApi+'/add-leave',values,{
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response)=>{
+          setEmployees(response?.data?.response)
+        })
     },
     validationSchema
    })
@@ -101,7 +110,7 @@ export default function AddLeave() {
 
   },[])
 
-  console.log(formik.values,formik.errors)
+  console.log(formik.values,formik.errors,formik.touched)
   return (
     <Box maxWidth={"460px"}>
       <form onSubmit={formik.handleSubmit}>
@@ -114,8 +123,8 @@ export default function AddLeave() {
                 // title={'Employee Name'} 
                 data={employees} 
                 // value={values.gender} 
-                // error={Boolean(touched.gender && errors.gender)} 
-                // helperText={touched.gender && errors.gender}  
+                error={Boolean(formik.touched.userId && formik.errors.userId)} 
+                helperText={formik.touched.userId && formik.errors.userId}  
                 name="userId" 
                 // touched={touched}
                 handleChange={formik.handleChange}
@@ -137,7 +146,6 @@ export default function AddLeave() {
                 classes={classes}
             />         
           </Grid>
-
           {/* Date */}
           <Grid item>
             <InputLabel className={classes.labels}>Date</InputLabel>
@@ -178,6 +186,8 @@ export default function AddLeave() {
             <InputText
               placeholder="Add Commment"
               name="reason"
+              error={Boolean(formik.touched.reason && formik.errors.reason)} 
+              helperText={formik.touched.reason && formik.errors.reason}  
               value={reason}
               handleChange={formik.handleChange}
               handleBlur={formik.handleBlur}

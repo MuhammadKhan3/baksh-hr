@@ -2,10 +2,11 @@ const leaveService=require('../services/leave.service');
 
 const createLeave=async (req,res,next)=>{
     const data=req.body;
+    console.log(data,req.user)
 
     try {
-        let response=await leaveService.creatLeave(data);
-        await res.json({msg:"Search Employee Successfully",flag:true,employees:response})
+        let response=await leaveService.creatLeave(req,data);
+        await res.json({msg:"Insert Leave Successfully",flag:true,response:response})
     } catch (error) {
         return Error(req,res,error);
     }
@@ -39,4 +40,14 @@ const LeaveTypes=async (req,res,next)=>{
     }
 }
 
-module.exports={createLeave,createLeaveType,getEmployees,LeaveTypes};
+const RemainingLeave=async (req,res,next)=>{
+    const {userId}=req.params;
+    try {
+        let response=await leaveService.RemainingLeave(userId);
+        await res.json({msg:"Remaining Leaves Fetch Successfully",flag:true,response:response})
+    } catch (error) {
+        return Error(req,res,error);
+    }
+}
+
+module.exports={createLeave,createLeaveType,getEmployees,LeaveTypes,RemainingLeave};

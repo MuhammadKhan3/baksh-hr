@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core";
 import Sidebar from "../../../components/sidebar/sidebar";
 import SimpleHeader from "../header/simpleHeader";
 import AddLeave from "../components/leave";
+import Header from "../../../components/header/header";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -18,6 +19,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     padding: "2rem",
     width: "100%",
+  },
+  module:{
+    width:'75%',
+    marginRight:'2%'
+    
   },
   sideBorder: {
     borderRight: `1px solid ${theme.palette.grey[300]}`,
@@ -34,9 +40,12 @@ export default function Leave() {
       <Box component="div" className={classes.sidebar}>
         <Sidebar />
       </Box>
-      <Box component="div">
-        <SimpleHeader heading="Add Leave" />
+      <Box component="div" className={classes.module}>
+        <Header heading={"Add Leave"}/>
+        {/* <SimpleHeader heading="Add Leave" /> */}
+
         <Box>
+          
           <Box component="div" className={classes.employee}>
             <AddLeave />
           </Box>

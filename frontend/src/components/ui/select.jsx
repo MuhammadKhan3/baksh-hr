@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Box, makeStyles } from '@material-ui/core';
-import { Typography } from '@mui/material';
+import { FormHelperText, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import Dropdown from '../../images/employee/drop.svg';
 
@@ -143,7 +143,7 @@ export default function SelectUi({title,data=[],handleChange,name,value,error,he
   //     typeof value === 'string' ? value.split(',') : value,
   //   );
   // };
-  console.log(value)
+  console.log(error)
   return (
       <FormControl sx={{ width: '100%'}} >
         <Typography component='h4' className={classes.label}>
@@ -193,6 +193,7 @@ export default function SelectUi({title,data=[],handleChange,name,value,error,he
             </MenuItem>
           ))}
         </Select>
+        <FormHelperText error={Boolean(helperText)}>{helperText}</FormHelperText>
       </FormControl>
   );
 }

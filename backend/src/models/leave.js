@@ -1,13 +1,13 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize=require('../untils/db')
 
-const LeaveDetail = sequelize.define('leavedetail', {
+const Leave = sequelize.define('leave', {
     id:{
         type:DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    startData:{
+    startDate:{
         type:DataTypes.DATE,
         allowNull:false
     },
@@ -19,12 +19,11 @@ const LeaveDetail = sequelize.define('leavedetail', {
         type:DataTypes.INTEGER,
         allowNull:false
     },
-    description:{
+    reason:{
         type:DataTypes.STRING,
     }
-    
 },{
     timestamps: true,
     timezone: '+00:00',
 });
-module.exports = LeaveDetail;
+module.exports = Leave;

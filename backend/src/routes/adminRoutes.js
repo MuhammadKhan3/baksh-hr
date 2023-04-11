@@ -13,7 +13,7 @@ const {getDepartment} =require('../controllers/department.controller');
 const {validRole,validUser,validManager, validEditManager, validEmployee, permission}=require('../validations/validations');
 const { getDesignations } = require('../controllers/department.controller');
 const Permission= require('../validations/permissions');
-const { createLeaveType, getEmployees, LeaveTypes } = require('../controllers/leave.controller');
+const { createLeaveType, getEmployees, LeaveTypes, createLeave, RemainingLeave } = require('../controllers/leave.controller');
 
 // Admin Controller
 router.post('/',adminController.createAdmin);
@@ -102,9 +102,13 @@ router.post('/create-payroll', payroll.getPayroll);
 router.delete('/delete-payroll:/id', payroll.deletePayroll);
 
 // Leave Controller
+router.post('/add-leave',isAuth,createLeave);
 router.post('/add-leaveType',isAuth,createLeaveType);
+
 router.get('/leaveType',isAuth,LeaveTypes)
 router.get('/get-employees-leave',isAuth,getEmployees)
+router.get('/get-remaining-leave/:userId',isAuth,RemainingLeave)
+
 
 
 module.exports=router;

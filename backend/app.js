@@ -7,6 +7,7 @@ const Permission = require('./src/models/permission');
 const bodyParser=require('body-parser');
 const Manager = require('./src/models/manager');
 const LeaveType=require('./src/models/leaveType')
+const Leave=require('./src/models/leave')
 // .evn file get
 require('dotenv').config();
 
@@ -114,7 +115,18 @@ Employee.belongsTo(User,{
 Bank.hasMany(EmployeeBank,{foreignKey:'bankId'})
 EmployeeBank.belongsTo(Bank,{foreignKey:'bankId'})
 
+
+// Users Leaves
+User.hasMany(Leave,{foreignKey:'userId'})
+Leave.belongsTo(User,{foreignKey:'userId'})
 // My sql database create
+LeaveType.hasMany(Leave,{foreignKey:'leaveTypeId'})
+Leave.belongsTo(LeaveType,{foreignKey:'leaveTypeId'})
+
+User.hasMany(Leave,{foreignKey:'createId'})
+Leave.belongsTo(User,{foreignKey:'createId'})
+
+
 sequelize
 .sync({alter:true})
 .then(() => {
