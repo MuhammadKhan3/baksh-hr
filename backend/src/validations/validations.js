@@ -215,3 +215,15 @@ exports.validEmployee=[
     next();
   }
 ]
+
+
+
+exports.validSalaryType=[
+  
+  
+  
+  body('leaveType').notEmpty().withMessage('Leave Type is required').isLength({min:3,max:100}),
+  body('creditTypeValue').notEmpty().withMessage('Credit Type is required').isLength({min:3,max:100}),
+  body('creditLeave').notEmpty().isNumeric().withMessage('Credit Leave of Birth is required'),
+  body('description').isLength({min:0,max:2000}).withMessage('Descripiton Less than 2000')
+]

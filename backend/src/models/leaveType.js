@@ -1,29 +1,30 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize=require('../untils/db')
 
-const Leave = sequelize.define('leave', {
+const LeaveType = sequelize.define('leavetype', {
     id:{
         type:DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    startDate:{
-        type:DataTypes.DATE,
+    leaveType:{
+        type:DataTypes.STRING,
         allowNull:false
     },
-    endDate:{
-        type:DataTypes.DATE,
+    creditTypeValue:{
+        type:DataTypes.STRING,
         allowNull:false
     },
-    leaves:{
+    creditLeave:{
         type:DataTypes.INTEGER,
         allowNull:false
     },
-    reason:{
+    description:{
         type:DataTypes.STRING,
     }
+    
 },{
     timestamps: true,
     timezone: '+00:00',
 });
-module.exports = Leave;
+module.exports = LeaveType;

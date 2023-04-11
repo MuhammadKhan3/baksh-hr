@@ -6,6 +6,7 @@ import {Button,Menu,MenuItem, Fade} from '@material-ui/core';
 import { green, purple, red } from '@material-ui/core/colors';
 import { MobileTimePicker } from '@mui/x-date-pickers';
 import DepartmentDropdown from '../components/DepartmentsDropDown';
+import Sidebar from '../../../components/sidebar/sidebar';
 
 
 const useStyles = makeStyles({
@@ -35,6 +36,15 @@ const useStyles = makeStyles({
     textAlign: 'center',
     color: '#333',
     fontWeight: '500',
+  },
+  mainContainer:{
+    display:'flex',
+    flexDirection:'row',
+    width:'100%',
+
+  },
+  sidebar:{
+    width:'25%'
   },
 });
 
@@ -167,14 +177,18 @@ const DailyAttendanceTable = () => {
 
 
   return (
-    <div style={{margin:'auto'}}>
+    <div className={classes.mainContainer}>
+      <Box component='div' className={classes.sidebar}>
+            <Sidebar/>
+      </Box>
+      <div style={{margin:'auto'}}>
       <Typography variant="h3">Daily Attendance</Typography>
       <DepartmentDropdown></DepartmentDropdown>
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-            <TableCell align="center">
+              <TableCell align="center">
                 <Checkbox selected={selectedRows.length === rows.length} onChange={handleHeaderCheckboxChange} />
               </TableCell>
               <TableCell align="center">ID</TableCell>
@@ -249,8 +263,10 @@ const DailyAttendanceTable = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+       </TableContainer>
+      </div>
     </div>
+  
   );
 };
 

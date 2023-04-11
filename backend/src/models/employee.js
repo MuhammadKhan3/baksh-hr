@@ -9,7 +9,6 @@ const Employee = sequelize.define('employee', {
   },
   email:{
     type:DataTypes.STRING,
-    unique:true,
     allowNull:false,
   },
   name:{

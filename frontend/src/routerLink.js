@@ -6,6 +6,8 @@ import ViewEmployee from "./features/employee/pages/viewemployee";
 import DailyAttendance from "./features/attendance/pages/DailyAttendance";
 //Add Leave Component
 import AddLeave from "./features/Leave/pages/AddLeave";
+import LeaveType from "./features/setup/leave/pages/AddLeaveType";
+
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 import Attendance from "./features/attendance/pages/attendance";
 import ManageAttandance from "./features/attendance/pages/ManageAttandance";
@@ -15,12 +17,11 @@ const Dashboard = React.lazy(() => import("./features/dashboard"));
 const Employee = React.lazy(() => import("./features/employee"));
 const Login = React.lazy(() => import("./features/login"));
 
-
-const theme=createMuiTheme({
-typography:{
-  // fontFamily:'Poppins'
-}
-})
+const theme = createMuiTheme({
+  typography: {
+    // fontFamily:'Poppins'
+  },
+});
 const RouterLink = () => {
   return (
     <>
@@ -42,7 +43,7 @@ const RouterLink = () => {
               </React.Suspense>
             }
           />
-          
+
           <Route
             path="/add-employee"
             element={
@@ -75,17 +76,19 @@ const RouterLink = () => {
               </React.Suspense>
             }
           />
-          <Route path="/dashboard" 
-              element={  
+          <Route
+            path="/dashboard"
+            element={
               <React.Suspense fallback={<>...</>}>
-                <Dashboard/>
+                <Dashboard />
               </React.Suspense>
-              } 
+            }
           />
-          <Route path="/daily-attendance" 
-              element={  
-             <React.Suspense fallback={<>Loading...</>}>
-                <Managemployee/>
+          <Route
+            path="/daily-attendance"
+            element={
+              <React.Suspense fallback={<>Loading...</>}>
+                <Managemployee />
               </React.Suspense>
             }
           />

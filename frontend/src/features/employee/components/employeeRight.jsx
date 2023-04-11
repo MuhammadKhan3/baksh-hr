@@ -241,6 +241,18 @@ const EmployeRight = ({
                   placeholder={"Select the Manager"}   
                   classes={classes}
         />
+        <SelectUi title={'Branch Name'} 
+                  data={managers} 
+                  value={values.managerId} 
+                  error={Boolean(touched.branchId && errors.branchId)} 
+                  helperText={touched.branchId && errors.branchId}  
+                  name="branchId" 
+                  touched={touched}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  placeholder={"Select the Branch"}   
+                  classes={classes}
+        />
         {/* <Box className={classes.flexRow}    >
             <SelectUi title={'Nationality'} data={Gender} classes={classes}/>
             <SelectUi title={'Marital Status'} data={Country} classes={classes}/>

@@ -6,6 +6,8 @@ const Role = require('./src/models/role');
 const Permission = require('./src/models/permission');
 const bodyParser=require('body-parser');
 const Manager = require('./src/models/manager');
+const LeaveType=require('./src/models/leaveType')
+const Leave=require('./src/models/leave')
 // .evn file get
 require('dotenv').config();
 
@@ -66,7 +68,7 @@ User.belongsTo(Permission);
 
 
 // Manager Relation with User
-User.hasOne(Manager,{foreignKey:'userId',allowNull:false});
+User.hasOne(Manager,{foreignKey:'userId',as:'managerData',allowNull:false});
 Manager.belongsTo(User,{foreignKey: 'userId'})
 
 User.hasMany(Manager,{foreignKey:'createId'})
@@ -85,7 +87,7 @@ EmployeeCompany.belongsTo(Department);
 Designation.hasMany(EmployeeCompany);
 EmployeeCompany.belongsTo(Designation);
 
-User.hasMany(Employee,{foreignKey:'userId',onDelete:'CASCADE'});
+User.hasOne(Employee,{foreignKey:'userId',as:'employeeData',onDelete:'CASCADE'});
 Employee.belongsTo(User,{foreignKey:'userId',as:'user'});
 
 Employee
@@ -113,9 +115,20 @@ Employee.belongsTo(User,{
 
 
 Bank.hasMany(EmployeeBank,{foreignKey:'bankId'})
-EmployeeBank.hasMany(Bank,{foreignKey:'bankId'})
+EmployeeBank.belongsTo(Bank,{foreignKey:'bankId'})
 
+
+// Users Leaves
+User.hasMany(Leave,{foreignKey:'userId'})
+Leave.belongsTo(User,{foreignKey:'userId'})
 // My sql database create
+LeaveType.hasMany(Leave,{foreignKey:'leaveTypeId'})
+Leave.belongsTo(LeaveType,{foreignKey:'leaveTypeId'})
+
+User.hasMany(Leave,{foreignKey:'createId'})
+Leave.belongsTo(User,{foreignKey:'createId'})
+
+
 sequelize
 .sync({alter:true})
 .then(() => {
