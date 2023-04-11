@@ -2,11 +2,8 @@ import React from "react";
 import { Box } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import Sidebar from "../../../components/sidebar/sidebar";
-
-import AttendanceDate from "../components/attedanceData";
-import SimpleHeader from "../../Leave/header/simpleHeader";
-import AttendanceHeader from "../ui/attendanceHeader";
-import DepartmentDatePicker from "../components/departmentDatePicker";
+import AttendanceHeader from "../../attendance/ui/attendanceHeader";
+import RenderCards from "../components/renderCards";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -20,17 +17,17 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     padding: "0.5rem",
-    width: "100%",
+    // width: "100%",
   },
   sideBorder: {
     borderRight: `1px solid ${theme.palette.grey[300]}`,
     width: 0,
     height: "auto",
-    margin: "0 5vw",
+    // margin: "0 5vw",
   },
 }));
 
-export default function Attendance() {
+export default function Dashboardd() {
   const classes = useStyles();
   return (
     <Box component="div" className={classes.mainContainer}>
@@ -38,14 +35,15 @@ export default function Attendance() {
         <Sidebar />
       </Box>
       <Box component="div">
-        <AttendanceHeader heading={"Attendance Report"} />
+        <AttendanceHeader
+          heading={"Dashboard"}
+          width={"120%"}
+          marginLeft={"0%"}
+        />
+
         <Box>
           <Box component="div" className={classes.employee}>
-            <DepartmentDatePicker />
-          </Box>
-          <Box component="div" className={classes.employee}>
-            {/* <DepartmentDatePicker /> */}
-            <AttendanceDate />
+            <RenderCards />
           </Box>
         </Box>
       </Box>

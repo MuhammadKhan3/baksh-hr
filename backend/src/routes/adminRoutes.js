@@ -9,7 +9,6 @@ const EmployeeController=require('../controllers/employee.controller');
 const AttendanceController = require('../controllers/attendance.controller');
 const payroll = require ('../controllers/payroll.controller');
 const {getDepartment} =require('../controllers/department.controller');
-
 const {validRole,validUser,validManager, validEditManager, validEmployee, permission}=require('../validations/validations');
 const { getDesignations } = require('../controllers/department.controller');
 const Permission= require('../validations/permissions');
@@ -79,20 +78,20 @@ router.post('/delete-employee',EmployeeController.deleteEmployee);
 
 
 router.get('/salaryTypes',EmployeeController.salaryTypes);
-router.get('/view-attendance-current', adminController.viewCurrentlyMarkedAttendance);
-router.put('/Employee/viewAttendance', adminController.viewAttendanceSheet);
+// router.get('/view-attendance-current', adminController.viewCurrentlyMarkedAttendance);
+// router.put('/Employee/viewAttendance', adminController.viewAttendanceSheet);
 
-//All Attendace routes
-router.post('/attendance/create-attendance',EmployeeController.markEmployeeAttendance);
-router.put('/attendance/edit-attendance/:UserId',AttendanceController.editAttendance);
-router.delete('/delete-attendance/:UserId',AttendanceController.deleteAttendnace);
+// //All Attendace routes
+// router.post('/attendance/create-attendance',EmployeeController.markEmployeeAttendance);
+// router.put('/attendance/edit-attendance/:UserId',AttendanceController.editAttendance);
+// router.delete('/delete-attendance/:UserId',AttendanceController.deleteAttendnace);
 
-//Attendace routes for admin
-router.put('/edit-attendance/:UserId',adminController.editAttendance);
-router.delete('/delete-attendance/:UserId',adminController.deleteAttendnace);
-//Attendace routes for Employee
-router.get('/attendance/markeAttendance',EmployeeController.markEmployeeAttendance);
-router.post('/attendance/view-attendance',EmployeeController.viewCurrentlyMarkedAttendance);
+// //Attendace routes for admin
+// router.put('/edit-attendance/:UserId',adminController.editAttendance);
+// router.delete('/delete-attendance/:UserId',adminController.deleteAttendnace);
+// //Attendace routes for Employee
+// router.get('/attendance/markeAttendance',EmployeeController.markEmployeeAttendance);
+// router.post('/attendance/view-attendance',EmployeeController.viewCurrentlyMarkedAttendance);
 
 
 //Payroll Controllers
