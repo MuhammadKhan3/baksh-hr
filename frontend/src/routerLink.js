@@ -14,6 +14,7 @@ import ManageLeave from "./features/Leave/pages/manageLeave";
 import Attendance from "./features/attendance/pages/attendance";
 import ManageAttandance from "./features/attendance/pages/ManageAttandance";
 import Dashboardd from "./features/dashboard/Pages/Dashboardd";
+import CompanyDetails from "./features/setup/company-details/Pages/CompanyDetails";
 
 import PayScale from "./features/payroll/pages/PayScale";
 
@@ -124,11 +125,11 @@ const RouterLink = () => {
           <Route
             path="/manage-leave"
             element={
-            <React.Suspense fallback={<>...</>}>
-              <ManageLeave/>
-            </React.Suspense>
-          }
-        />
+              <React.Suspense fallback={<>...</>}>
+                <ManageLeave />
+              </React.Suspense>
+            }
+          />
           <Route
             path="/attendance-report"
             element={
@@ -149,7 +150,17 @@ const RouterLink = () => {
             path="/setup/add-leaveType"
             element={
               <React.Suspense fallback={<>...</>}>
-                <LeaveType/>
+                <LeaveType />
+              </React.Suspense>
+            }
+          />
+          <Route
+
+            path="/company-details"
+            element={
+              <React.Suspense fallback={<>...</>}>
+                {/* <CompanyDetails /> */}
+                <CompanyDetails />
               </React.Suspense>
             }
           />

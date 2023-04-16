@@ -1,14 +1,13 @@
-import * as React from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { Box, makeStyles } from '@material-ui/core';
-import { Typography } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import Dropdown from '../../images/employee/drop.svg';
-
+import * as React from "react";
+import { Theme, useTheme } from "@mui/material/styles";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { Box, makeStyles } from "@material-ui/core";
+import { Typography } from "@mui/material";
+import { useDispatch } from "react-redux";
+import Dropdown from "../../images/employee/drop.svg";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -21,61 +20,59 @@ const MenuProps = {
   },
 };
 
-
-
-
-
-const useStyles=makeStyles({
-  container:{
-      display:'flex',
-      flexDirection:'column',
-      position:'relative',
-      top:'1.5rem',
-      paddingLeft:'0.8rem',
-      width:'30vw',
-      gap:'20px'
+const useStyles = makeStyles((Theme) => ({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    position: "relative",
+    top: "1.5rem",
+    paddingLeft: "0.8rem",
+    width: "30vw",
+    gap: "20px",
   },
-  personalLabel:{
-      fontFamily: 'Poppins',
-      fontSize: '18px',
-      fontWeight: '400',
-      lineHeight: '27px',
-      letterSpacing: '-0.02em',
-      textAlign: 'left',
-      color:'#C49150',
-
+  personalLabel: {
+    fontFamily: "Poppins",
+    fontSize: "18px",
+    fontWeight: "400",
+    lineHeight: "27px",
+    letterSpacing: "-0.02em",
+    textAlign: "left",
+    color: "#C49150",
   },
   root: {
-    '& .css-10q54uo-MuiSelect-icon':{
-      top:'0.3rem',
-      },
-      '& .css-3qbkez-MuiSelect-icon':{
-        top:'0.3rem',
-      },
-      height:'42px',
-      [`& fieldset`]: {
-          border: '1px solid #E1E1E1',
-        borderRadius: "10px !important",
-      },
-      width:'100%'
+    "& .css-10q54uo-MuiSelect-icon": {
+      top: "0.3rem",
+    },
+    "& .css-3qbkez-MuiSelect-icon": {
+      top: "0.3rem",
+    },
+    height: "42px",
+    [`& fieldset`]: {
+      border: "1px solid #E1E1E1",
+      borderRadius: "10px !important",
+    },
+    width: "100%",
+    [Theme.breakpoints.down("sm")]: {
+      width: "80vw",
+    },
   },
-  flexRow:{
-      display:'flex',
-      width:'100%',
-      flex:1,
+  flexRow: {
+    display: "flex",
+    width: "100%",
+    flex: 1,
   },
-  label:{
-    fontFamily: 'Poppins',
-    fontSize: '10px',
-    fontWeight: '600',
-    lineHeight: '15px',
-    letterSpacing: '-0.02em',
-    textAlign: 'left',
-    color:'#868B90'
-},
-})
+  label: {
+    fontFamily: "Poppins",
+    fontSize: "10px",
+    fontWeight: "600",
+    lineHeight: "15px",
+    letterSpacing: "-0.02em",
+    textAlign: "left",
+    color: "#868B90",
+  },
+}));
 
-function getStyles(name,personName, theme) {
+function getStyles(name, personName, theme) {
   return {
     fontWeight:
       personName.indexOf(name) === -1
@@ -84,9 +81,19 @@ function getStyles(name,personName, theme) {
   };
 }
 
-export default function SelectLocalUi({title,data,handleChange,name,value,error,helperText,handleBlur,placeholder}) {
-  const classes=useStyles();
-  const dispatch=useDispatch();
+export default function SelectLocalUi({
+  title,
+  data,
+  handleChange,
+  name,
+  value,
+  error,
+  helperText,
+  handleBlur,
+  placeholder,
+}) {
+  const classes = useStyles();
+  const dispatch = useDispatch();
   const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
 
@@ -102,59 +109,62 @@ export default function SelectLocalUi({title,data,handleChange,name,value,error,
   // };
 
   return (
-      <FormControl sx={{ width: '100%'}} >
-        <Typography component='h4' className={classes.label}>
-            {title}
-        </Typography>
-        <Select
-          className={classes.root}
-          name={name}
-          displayEmpty
-          onChange={handleChange}
-          value={value}
-          IconComponent={(props)=>(
-            <Box {...props} component='div' style={{      
-                  width: '32px',
-                  height: '32px',
-                  display:'flex',
-                  justifyContent:'center',
-                  alignItems:'center',
-                  background: '#FCFCFC',
-                  borderRadius: '8px',
-            }}>
-             <img    
-             style={{
-              pointerEvents: 'none',
-              height:'6px',
-              widht:'12px',
-             }}
-             src={Dropdown}
+    <FormControl sx={{ width: "100%" }}>
+      <Typography component="h4" className={classes.label}>
+        {title}
+      </Typography>
+      <Select
+        className={classes.root}
+        name={name}
+        displayEmpty
+        onChange={handleChange}
+        value={value}
+        IconComponent={(props) => (
+          <Box
+            {...props}
+            component="div"
+            style={{
+              width: "32px",
+              height: "32px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              background: "#FCFCFC",
+              borderRadius: "8px",
+            }}
+          >
+            <img
+              style={{
+                pointerEvents: "none",
+                height: "6px",
+                widht: "12px",
+              }}
+              src={Dropdown}
+            />
+          </Box>
+        )}
+        onBlur={(e) => {
+          handleBlur(e);
+          handleChange(e);
+        }}
+        error={error}
+        input={<OutlinedInput />}
+        MenuProps={MenuProps}
+        renderValue={value !== "" ? undefined : () => <div>{placeholder}</div>}
+        inputProps={{ "aria-label": "Without label" }}
+      >
+        {data.map((list, id) => (
+          <MenuItem
+            key={id}
+            value={list}
+            style={{ textTransform: "capitalize" }}
 
-             />
-            </Box>
-
-          )}
-          onBlur={(e)=>{handleBlur(e);handleChange(e)}}
-          error={error}
-          input={<OutlinedInput />}
-          MenuProps={MenuProps}
-          renderValue={
-            value !== "" ? undefined : () => <div>{placeholder}</div>
-          }
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-           {data.map((list,id) => (
-            <MenuItem
-              key={id}
-              value={list}
-              style={{textTransform: 'capitalize'}}
-
-              // style={getStyles(list, personName, theme)}
-            >
-              {list}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+            // style={getStyles(list, personName, theme)}
+          >
+            {list}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 }
