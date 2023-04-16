@@ -16,6 +16,8 @@ import ManageAttandance from "./features/attendance/pages/ManageAttandance";
 import Dashboardd from "./features/dashboard/Pages/Dashboardd";
 import CompanyDetails from "./features/setup/company-details/Pages/CompanyDetails";
 
+import PayScale from "./features/payroll/pages/PayScale";
+
 const Dashboard = React.lazy(() => import("./features/dashboard"));
 const Employee = React.lazy(() => import("./features/employee"));
 const Login = React.lazy(() => import("./features/login"));
@@ -79,14 +81,14 @@ const RouterLink = () => {
               </React.Suspense>
             }
           />
-          <Route
+          {/* <Route
             path="/dashboard"
             element={
               <React.Suspense fallback={<>...</>}>
                 <Dashboard />
               </React.Suspense>
             }
-          />
+          /> */}
           <Route
             path="/daily-attendance"
             element={
@@ -153,11 +155,20 @@ const RouterLink = () => {
             }
           />
           <Route
+
             path="/company-details"
             element={
               <React.Suspense fallback={<>...</>}>
                 {/* <CompanyDetails /> */}
                 <CompanyDetails />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path="/payscale"
+            element={
+              <React.Suspense fallback={<>...</>}>
+                <PayScale/>
               </React.Suspense>
             }
           />

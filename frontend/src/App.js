@@ -22,24 +22,25 @@ function App() {
   const classes=useStyles();
   const [cookies]=useCookies(['token']);
   const [user,setuser]=useState({});
-  useEffect(()=>{
+  // useEffect(()=>{
     
-    async function authenticate(){
-      const {token}=cookies;
-      const response=await axios.get(publicApi+'/auth',{
-              headers: {
-                  authorization: `Bearer ${token}`,
-              },
-      })
-      setuser(response?.data)
-    }
-    authenticate();
-  },[])
+  //   async function authenticate(){
+  //     const {token}=cookies;
+  //     const response=await axios.get(publicApi+'/auth',{
+  //             headers: {
+  //                 authorization: `Bearer ${token}`,
+  //             },
+  //     })
+  //     setuser(response?.data)
+  //   }
+  //   authenticate();
+  // },[])
 
 
   return (
     <>
-    <UserContext.Provider value={user}>
+    {/* <UserContext.Provider value={user}> */}
+    <UserContext.Provider>
       <div className='w-full h-full flex'>
         {/* <Login/>  */}
           <RouterLink/>
