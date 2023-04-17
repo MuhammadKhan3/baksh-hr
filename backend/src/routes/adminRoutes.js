@@ -11,7 +11,7 @@ const {getDepartment} =require('../controllers/department.controller');
 const {validRole,validUser,validManager, validEditManager, validEmployee, permission}=require('../validations/validations');
 const { getDesignations } = require('../controllers/department.controller');
 const Permission= require('../validations/permissions');
-const { createLeaveType, getEmployees, LeaveTypes, createLeave, RemainingLeave, LeavesHR } = require('../controllers/leave.controller');
+const { createLeaveType, getEmployees, LeaveTypes, createLeave, RemainingLeave, LeavesEmployee, LeavesManager, LeaveApproval, LeavesEmployeeHR, getLeave, editLeave } = require('../controllers/leave.controller');
 
 // Admin Controller
 router.post('/',adminController.createAdmin);
@@ -69,6 +69,8 @@ router.post('/create-employee',isAuth,multerUpload.single('employeePhoto'),valid
 router.put('/edit-employee',multerUpload.single('employeePhoto'),EmployeeController.editEmployee);
 //Get Employees
 router.get('/get-employees',EmployeeController.getEmployees);
+// Get Manager Employees
+router.get('/get-manager-employees',isAuth,EmployeeController.getManagerEmployees);
 // Search Employees
 router.post('/search-employees',EmployeeController.searchEmployees);
 router.delete('/delete-employee',EmployeeController.deleteEmployee);
@@ -103,12 +105,23 @@ router.delete('/delete-payroll:/id', payroll.deletePayroll);
 // Leave Controller
 router.post('/add-leave',isAuth,createLeave);
 router.post('/add-leaveType',isAuth,createLeaveType);
-
+// Leave Type Get for create leave
 router.get('/leaveType',isAuth,LeaveTypes)
+// Get the employees leave in employee
 router.get('/get-employees-leave',isAuth,getEmployees)
+// Get the Remaining Leaves of employees
 router.get('/get-remaining-leave/:userId',isAuth,RemainingLeave)
-router.get('/get-leaves-hr',LeavesHR);
 
+router.get('/get-leaves-Employees-hr',isAuth,LeavesEmployeeHR);
 
+// Manger get the employees Leave data
+router.get('/get-leaves-employee',isAuth,LeavesEmployee)
+router.get('/get-leaves-manager',isAuth,LeavesManager)
+// Approve Leave by manager
+router.post('/leave-approval',isAuth,LeaveApproval);
+// Get Leave 
+router.get('/leave/:id',isAuth,getLeave)
+// Edit Leave
+router.put('/edit-leave/:id',isAuth,editLeave)
 
 module.exports=router;

@@ -21,10 +21,24 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false
   },
-},{
+  name:{
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+},
+// {
+//   hooks: {
+//     beforeCreate: function(user){
+//         user.name = user.name.toLowerCase();
+//         return user;
+//     }
+//   }
+// },
+{
   paranoid: true,
   timestamps: true,
   timezone: '+00:00'
-});
+}
+);
 
 module.exports = User;

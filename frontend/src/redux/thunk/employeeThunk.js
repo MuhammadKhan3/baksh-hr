@@ -7,7 +7,6 @@ const {publicApi,adminApi}=require('../../axios/axiosData')
 const {departmentsAction,banksAction,salaryTypesAction,managersAction}=employeeAction;
 
 const EmployeeThunk = (token) => {
-    console.log(token)
   return async(dispatch)=>{
             const fetchDepartment=async ()=>{
                 let respone=await  axios.get(adminApi+"/department",{

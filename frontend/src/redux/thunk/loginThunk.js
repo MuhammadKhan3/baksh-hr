@@ -27,7 +27,7 @@ const LoginThunk=(data,navigate,setCookie)=>{
                     expires: tomorrow 
                 })
                 navigate('/dashboard')
-
+                window.location.reload();
                 // cson
                 // const data=respone.json();
             } catch (error) {

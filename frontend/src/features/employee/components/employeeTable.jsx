@@ -330,3 +330,139 @@ const EmployeeTable = ({employees,setemployees,handleOpen,setDelete}) => {
 };
 
 export default EmployeeTable;
+
+
+
+
+
+export const EmployeesTableManager = ({employees,setemployees,handleOpen,setDelete}) => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const classes=useStyles();
+  const [cookies] = useCookies(['token']);
+  const [search,setsearch]=useState('');
+
+  useEffect(()=>{
+    const fetchManager=async ()=>{
+      const token=cookies.token;
+      const response=await axios.get(adminApi+'/get-manager-employees',{
+        headers:{
+          authorization: `Bearer ${token}`,
+        }
+      });
+      console.log(response?.data?.employees)
+      setemployees(response?.data?.employees)
+      // console.log('hit',)
+
+    }
+    fetchManager();
+  },[search])
+
+
+  return (
+    <div className={classes.tableCotainer}>
+      <TableContainer  >
+        <Table>
+          <TableHead>
+            <TableRow className={classes.tableHeader} >
+              {columns.map((column) => (
+                <TableCell className={`${classes.tableCell} ${classes.headerText}`}  key={column.id}>{column.label==='ID' ? <><Checkbox />{column.label}</> :column.label }</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {employees
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row,index) => (
+                <TableRow key={row.id}>
+                    <TableCell className={classes.tableCell}>
+                      <Checkbox   color="primary" 
+                        classes={{
+                          root: classes.root,
+                          checked: classes.checked,
+                        }}
+                      />                      
+                         {index+1}
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      <Box className={classes.avatarContainer}>
+                          <Avatar alt="Remy Sharp" sx={{width:'34px',height:'34px'}} src={url+row?.profile} />
+                          <Box sx={{marginLeft:'8px'}}>
+                            <Typography variant='body1' className={classes.nameContainer}>
+                                {row?.name}
+                            </Typography>
+                            <Typography variant='body1' className={classes.emailType}>
+                                {row?.email}
+                            </Typography>
+                          </Box>
+                      </Box>
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {row?.department}
+                     </TableCell>
+                    <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {row?.designation}
+                     </TableCell>
+                     <TableCell className={classes.tableCell }>
+                     {row?.status?.trim()==='active'
+                           ?
+                            <Box component='div' className={classes.statusContainer}>
+                                    <img src={active} style={{width:'5px'}}/>
+                                    <Typography component='h4' className={classes.status}>
+                                        {row.status}
+                                    </Typography>
+                            </Box>
+                           :
+                            <Box component='div' className={classes.inActiveContainer}>                
+                                <img src={inactive} style={{width:'5px'}}/>
+                                <Typography component='h4' className={classes.status}>
+                                    {row.status}
+                                </Typography>
+                              </Box>
+                           }
+                     </TableCell>
+                     <TableCell className={classes.tableCell}>
+                        <Box className={classes.actionContainer}>
+                          <NavLink to={`/view-employee/${row.id}`}>
+                            <Box component='div' className={`${classes.iconDiv} ${classes.eyeIcon}`}>
+                              <img src={eye}  className={classes.icons}/>
+                            </Box>
+                          </NavLink>
+                          {/* <NavLink to={`/edit-employee/${row.id}`}>
+                            <Box component='div' className={`${classes.iconDiv} ${classes.editIcon}`}>
+                              <img src={edit} className={classes.icons} />
+                            </Box>
+                          </NavLink>
+                          <Box onClick={(e)=>{handleOpen(e);setDelete(row?.id)}} component='div' className={`${classes.iconDiv} ${classes.deleteIconc}`}>
+                              <img src={deleteIcon} className={classes.icons}/>
+                          </Box> */}
+                        </Box>
+                     </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[]}
+        component="div"
+        style={{display:'flex',flexDirection:'flex-start'}}
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        labelDisplayedRows={({ from, to, count }) => {
+                return `Showing ${from} to ${to} of ${count} entries`;
+        }}
+      />
+    </div>
+  );
+};

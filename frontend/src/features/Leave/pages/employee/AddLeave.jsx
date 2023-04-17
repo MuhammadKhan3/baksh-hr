@@ -1,10 +1,10 @@
 import React from "react";
 import { Box } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
-import Sidebar from "../../../components/sidebar/sidebar";
-import SimpleHeader from "../header/simpleHeader";
-import AddLeave from "../components/leave";
-import Header from "../../../components/header/header";
+import Sidebar from "../../../../components/sidebar/sidebar";
+import SimpleHeader from "../../header/simpleHeader";
+import AddLeave, { AddLeaveEmployeeCmp } from "../../components/leave";
+import Header from "../../../../components/header/header";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Leave() {
+export default function AddLeaveEmployee() {
   const classes = useStyles();
   return (
     <Box component="div" className={classes.mainContainer}>
@@ -47,7 +47,7 @@ export default function Leave() {
         <Box>
           
           <Box component="div" className={classes.employee}>
-            <AddLeave />
+            <AddLeaveEmployeeCmp />
           </Box>
         </Box>
       </Box>

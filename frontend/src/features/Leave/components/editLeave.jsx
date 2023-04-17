@@ -13,7 +13,7 @@ import { adminApi } from "../../../axios/axiosData";
 import SelectUi from "../../../components/ui/select";
 import * as yup from 'yup';
 import { useFormik } from "formik";
-import {useNavigate} from "react-router-dom"
+import {useNavigate, useParams} from "react-router-dom"
 import dayjs from "dayjs";
 // Define styles using makeStyles hook
 const useStyles = makeStyles({
@@ -33,7 +33,7 @@ const Gender=[
   'female'
 ]
 
-export default function AddLeave() {
+export default function EditLeaveEmployee({leave}) {
   const classes = useStyles();
   const [cookies]=useCookies(['token'])
   const navigate=useNavigate();  
@@ -44,7 +44,7 @@ export default function AddLeave() {
   const [reason, setReason] = useState("");
   const [employees,setEmployees]=useState([]);
   const [leaveType, setLeaveType] = useState([]);
-  
+  const {leaveId}=useParams();
 
   const validationSchema=yup.object().shape({
       userId: yup.string().required('User Id is required'),
@@ -56,25 +56,26 @@ export default function AddLeave() {
 
   const formik =useFormik({
    initialValues:{
-    userId:0,
-    leaveTypeId:0,
-    startDate:'',
-    endDate:'',
-    reason:''
+    userId:leave?.userId || 0,
+    leaveTypeId:leave?.leaveTypeId || 0,
+    startDate:dayjs(leave?.startDate) || '',
+    endDate:dayjs(leave?.endDate) || '',
+    reason:leave?.reason || ''
    },
    validateOnBlur:false,
    validateOnChange:false,
    enableReinitialize:true,
    onSubmit: values => {
       const token=cookies.token;
+      console.log(values)
         axios
-        .post(adminApi+'/add-leave',values,{
+        .put(adminApi+`/edit-leave/${leaveId}`,values,{
           headers: {
             authorization: `Bearer ${token}`,
           },
         })
         .then((response)=>{
-          navigate('/manage-leave')
+        //   navigate('/manage-leave')
           console.log(response?.data?.response)      
           // setEmployees(response?.data?.response)
 
@@ -164,6 +165,7 @@ export default function AddLeave() {
                 <DatePickterUi 
                      name="startDate" 
                      placeholder="Start Date"
+                     value={formik.values.startDate}
                      error={Boolean(formik.touched.startDate && formik.errors.startDate)} 
                      helperText={formik.touched.startDate && formik.errors.startDate}  
                      handleChange={formik.handleChange}
@@ -176,6 +178,7 @@ export default function AddLeave() {
                 <DatePickterUi 
                        name="endDate" 
                        placeholder="End Date"
+                       value={formik.values.endDate}
                        error={Boolean(formik.touched.endDate && formik.errors.endDate)} 
                        helperText={formik.touched.endDate && formik.errors.endDate}  
                        handleChange={formik.handleChange}
@@ -212,182 +215,7 @@ export default function AddLeave() {
             justifyContent={"flex-end"}
           >
             <Grid item>
-              <BlackButton type={'submit'} label="Submit" />
-            </Grid>
-          </Grid>
-        </Grid>
-      </form>
-    </Box>
-  );
-}
-
-
-
-
-export function AddLeaveEmployeeCmp() {
-  const classes = useStyles();
-  const [cookies]=useCookies(['token'])
-  const navigate=useNavigate();
-  
-
-  // Declare state variables for form inputs
-  const [employeeName, setEmployeeName] = useState("");
-  const [date, setDate] = useState("");
-  const [reason, setReason] = useState("");
-  const [employees,setEmployees]=useState([]);
-  const [leaveType, setLeaveType] = useState([]);
-  
-
-  const validationSchema=yup.object().shape({
-      leaveTypeId: yup.string().required('Leave Id is required'),
-      startDate:yup.date().required('Start Date is required'),
-      endDate:yup.date().min(yup.ref('startDate'), 'End date must be after start date'),
-      reason:yup.string().required('Reason is required')
-  })
-
-  const formik =useFormik({
-   initialValues:{
-    leaveTypeId:'',
-    startDate:'',
-    endDate:'',
-    reason:''
-    },
-    validateOnBlur:false,
-    validateOnChange:false,
-    onSubmit: values => {
-      console.log('hit...')
-      const token=cookies.token;
-      const userId=cookies.userId;
-        axios
-        .post(adminApi+'/add-leave',{...values,userId:userId},{
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response)=>{
-          navigate('/manage-leave')
-          console.log(response?.data?.response)      
-          // setEmployees(response?.data?.response)
-
-        })
-    },
-    validationSchema
-   })
-
-  // Handle input changes and update state accordingly
-  const handleChange = (e) => {
-  };
-
-  useEffect(()=>{
-    const token=cookies.token;
-    const fetchEmployee=()=>{
-      axios
-      .get(adminApi+'/get-employees-leave',{
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response)=>{
-        setEmployees(response?.data?.response)
-      })
-    }
-    fetchEmployee();
-    const fetchLeave=()=>{
-      axios
-      .get(adminApi+'/leaveType',{
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response)=>{
-        console.log(response)
-        setLeaveType(response?.data?.response)
-      })
-    }
-    fetchLeave();
-
-  },[])
-
-  return (
-    <Box maxWidth={"460px"}>
-      <form onSubmit={formik.handleSubmit}>
-        {/* Grid container for form layout */}
-        <Grid container direction={"column"} spacing={2}>
-          {/* Employee Name */}
-          {/* Leave Type */}
-          <Grid item>
-            <InputLabel className={classes.labels}>Leave Type</InputLabel>
-            <SelectUi
-                data={leaveType} 
-                error={Boolean(formik.touched.leaveTypeId && formik.errors.leaveTypeId)} 
-                helperText={formik.touched.leaveTypeId && formik.errors.leaveTypeId}  
-                name="leaveTypeId" 
-                handleChange={formik.handleChange}
-                handleBlur={formik.handleBlur}
-                placeholder={"Select the Employee"}   
-                classes={classes}
-            />         
-          </Grid>
-          {/* Date */}
-          <Grid item>
-            <InputLabel className={classes.labels}>Date</InputLabel>
-            <Grid item container direction={"row"} spacing={2}>
-              <Grid item xs={5}>
-                {/* Start Date */}
-                <DatePickterUi 
-                     name="startDate" 
-                     placeholder="Start Date"
-                     value={formik.values.startDate}
-                     error={Boolean(formik.touched.startDate && formik.errors.startDate)} 
-                     helperText={formik.touched.startDate && formik.errors.startDate}  
-                     handleChange={formik.handleChange}
-                     handleBlur={formik.handleBlur} 
-                     setFieldValue={formik.setFieldValue} 
-                />
-              </Grid>
-              <Grid item xs={5}>
-                {/* End Date */}
-                <DatePickterUi 
-                       name="endDate" 
-                       placeholder="End Date"
-                       value={formik.values.endDate}
-                       error={Boolean(formik.touched.endDate && formik.errors.endDate)} 
-                       helperText={formik.touched.endDate && formik.errors.endDate}  
-                       handleChange={formik.handleChange}
-                       handleBlur={formik.handleBlur} 
-                       setFieldValue={formik.setFieldValue}  
-                />
-              </Grid>
-              <Grid item xs={1}>
-                <ForwardArrow />
-              </Grid>
-            </Grid>
-          </Grid>
-
-          {/* Reason */}
-          <Grid item>
-            <InputLabel className={classes.labels}>Reason</InputLabel>
-            <InputText
-              placeholder="Add Commment"
-              name="reason"
-              error={Boolean(formik.touched.reason && formik.errors.reason)} 
-              helperText={formik.touched.reason && formik.errors.reason}  
-              value={reason}
-              handleChange={formik.handleChange}
-              handleBlur={formik.handleBlur}
-            />
-          </Grid>
-
-          {/* Submit button */}
-          <Grid
-            item
-            container
-            direction={"row"}
-            spacing={2}
-            justifyContent={"flex-end"}
-          >
-            <Grid item>
-              <BlackButton type={'submit'} label="Submit" />
+              <BlackButton type={'submit'} label="Update" />
             </Grid>
           </Grid>
         </Grid>

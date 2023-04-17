@@ -9,27 +9,45 @@ const Manager = require('../models/manager')
 const sequelize = require('../untils/db')
 const EmployeeCompany = require('../models/empCompany')
 const Department = require('../models/department')
+const limit = 6;
 
 const creatLeave=async (req,{userId,leaveTypeId,startDate,endDate,reason})=>{
-
+    console.log(userId,leaveTypeId,startDate,endDate,reason)
     let days = moment(endDate).diff(moment(startDate), 'days', true);
     console.log(days)
 
-    try {
-        const response=await Leave.create({
+
+    const response=await Leave.create({
+        userId,
+        leaveTypeId,
+        startDate,
+        endDate,
+        reason,
+        leaves:days,
+        createId:req.user.id
+    })
+    return response;
+}
+
+const editLeave=async ({userId,leaveTypeId,startDate,endDate,reason},{id})=>{
+    console.log('edit leave')
+    console.log(userId,leaveTypeId,startDate,endDate,reason,id)
+    let days = moment(endDate).diff(moment(startDate), 'days', true);
+
+
+    const response=await Leave.update(
+        {
             userId,
             leaveTypeId,
             startDate,
             endDate,
             reason,
             leaves:days,
-            createId:req.user.id
-        })
-            
-    } catch (error) {
-        console.log(error)        
-    }
-
+        },{
+        where:{
+            id:id,
+        }
+    })
     return response;
 }
 
@@ -86,25 +104,223 @@ const getAllLeaves=()=>{
 }
 
 
-const LeavesHr=async ()=>{
-    let leaves=await Leave.findAll({
-        where:{deletedAt:null},
-        include:[
-            {model:LeaveType,attributes:['leaveType']},
-            {model:User,as:'users',
-                    include:[
-                        {model:Employee,as:'employeeData',include:[{model:EmployeeCompany,include:[{model:Department}]}]},
-                        {model:Manager,as:'managerData',attributes:['name']}
-                    ]
+
+
+
+const LeavesEmployeesHr=async ({page=1,search='',departmentId=0})=>{
+    search=search.toLowerCase();
+    const where={
+        deletedAt:null,
+        status:'approve',
+        '$users.employeeData.employee_company.departmentId$': {[Op.like]:`%${departmentId}%`},
+        [Op.or]: [
+            {
+                reason:{[Op.like]:`%${search}%`}
+            },
+            {
+              '$Users.name$': {
+                [Op.like]: `%${search}%`
+              }
             }
         ],
-        order:[['createdAt', 'DESC']]
-        // raw:true,
+        
+    }
+    
+
+    const include=[
+        {model:LeaveType,attributes:['leaveType']},
+        {model:User,as:'users',
+            include:[
+                    { 
+                        model:Employee,
+                        as:'employeeData',
+                        // attributes:['name'],
+                        include:[{model:EmployeeCompany,include:[{model:Department}]}]
+                    },
+            ]
+        }
+
+                // include:[
+                //     { 
+                //         model:Employee,
+                //         as:'employeeData',
+                //         attributes:['name'],
+                //         include:[{model:EmployeeCompany,include:[{model:Department}]}]
+                //     },
+                //     {   model:Manager,
+                //         as:'managerData', 
+                //         // where:{
+                //         //     name:{[Op.like]:`%${search}%`}
+                //         // },
+                //         attributes:['name'],
+                //     }
+                // ]
+        
+    ];
+
+    const offset = (page - 1) * limit; 
+    
+    let leaves=await Leave.findAll({
+        where:where,
+        include:include,
+    });
+    const count=await Leave.count({
+        where:where,
+        include:include,
     });
 
-    return leaves
+    const totalPages = Math.ceil(count / limit)-1;
+    const totalData=count;
+    return {leaves,totalPages,totalData}
+}
+// const LeavesEmployeesHr=async ({page=1,search='',filter=''},userId)=>{
+//     search=search.toLowerCase();
+//     const where={
+//         deletedAt:null,
+//         status:{[Op.like]:`%${filter}%`},
+//         [Op.or]: [
+//             {
+//                 reason:{[Op.like]:`%${search}%`}
+//             },
+//         ],   
+//     }
+//     const include=[
+//         {model:LeaveType,attributes:['leaveType']},
+//         {model:User,as:'users',
+//             include:[
+//                     { 
+//                         model:Employee,
+//                         as:'employeeData',
+//                         // attributes:['name'],
+//                         include:[{model:EmployeeCompany,include:[{model:Department}]}]
+//                     },
+//             ]
+//         }
+//     ];
+//     const offset = (page - 1) * limit;
+//     let leaves=await Leave.findAll({
+//         where:where,
+//         include:include,
+//         order:[['createdAt','DESC']]
+//     });
+//     const count=await Leave.count({
+//         where:where,
+//         include:include,
+//     });
+//     const totalPages = Math.ceil(count / limit)-1;
+//     const totalData=count;
+//     return {leaves,totalPages,totalData}
+// }
 
+
+
+const LeavesEmployeesManager=async ({page=1,search='',filter=''},userId)=>{
+    console.log(filter)
+    search=search.toLowerCase();
+    const where={
+        deletedAt:null,
+        '$users.employeeData.employee_company.managerId$': userId,
+        status:{[Op.like]:`%${filter}%`},
+        [Op.or]: [
+            {
+                reason:{[Op.like]:`%${search}%`}
+            },
+        ],   
+    }
+    const include=[
+        {model:LeaveType,attributes:['leaveType']},
+        {model:User,as:'users',
+            include:[
+                    { 
+                        model:Employee,
+                        as:'employeeData',
+                        // attributes:['name'],
+                        include:[{model:EmployeeCompany,include:[{model:Department}]}]
+                    },
+            ]
+        }
+    ];
+    const offset = (page - 1) * limit;
+    let leaves=await Leave.findAll({
+        where:where,
+        include:include,
+        order:[['createdAt','DESC']]
+    });
+    const count=await Leave.count({
+        where:where,
+        include:include,
+    });
+    const totalPages = Math.ceil(count / limit)-1;
+    const totalData=count;
+    return {leaves,totalPages,totalData}
+}
+
+const LeavesEmployee=async ({page=1,search='',filter=''},userId=0)=>{
+    search=search.toLowerCase();
+    const where={
+        deletedAt:null,
+        userId:userId,
+        status:{[Op.like]:`%${filter}%`},
+        [Op.or]: [
+            {
+                reason:{[Op.like]:`%${search}%`}
+            },
+            {
+              '$Users.name$': {
+                [Op.like]: `%${search}%`
+              }
+            }
+        ],
+        
+    }
+    const include=[
+        {model:LeaveType,attributes:['leaveType']},
+        {
+            model:User,as:'users',
+            include:[{ 
+                       model:Employee,as:'employeeData',
+                       include:[{model:EmployeeCompany,include:[{model:Department}]}]
+                    }]
+        }
+    ];
+
+    const offset = (page - 1) * limit; 
+    
+    let leaves=await Leave.findAll({
+        where:where,
+        include:include,
+        order:[['createdAt','Desc']],
+        // raw:true,
+        // nest : true 
+    });
+
+    const count=await Leave.count({
+        where:where,
+        include:include,
+    });
+
+    const totalPages = Math.ceil(count / limit)-1;
+    const totalData=count;
+    return {leaves,totalPages,totalData}
+}
+
+const LeaveApproval=async (leaveId,status)=>{
+    console.log(leaveId,status)
+    const leave=await Leave.findOne({where:{id:leaveId}});
+    leave.status=status;
+    leave.save();
+    return leave;
 
 }
 
-module.exports={creatLeave,createLeaveType,getEmployees,LeaveTypes,RemainingLeave,getAllLeaves,LeavesHr}
+const getLeave=async ({id})=>{
+    console.log(id)
+    const leave =await  Leave.findOne({where:{id:id}});
+    return leave;
+}
+
+module.exports={creatLeave,createLeaveType,
+                getEmployees,LeaveTypes,
+                RemainingLeave,getAllLeaves,LeavesEmployee,
+                LeaveApproval,LeavesEmployeesManager,
+                LeavesEmployeesHr,getLeave,editLeave}

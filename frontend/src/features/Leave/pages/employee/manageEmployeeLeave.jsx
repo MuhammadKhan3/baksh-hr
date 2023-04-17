@@ -1,13 +1,15 @@
-import React from "react";
-import { Box } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Modal } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
-import Sidebar from "../../../components/sidebar/sidebar";
-import SimpleHeader from "../header/simpleHeader";
-import AddLeave from "../components/leave";
-import Header from "../../../components/header/header";
-import LeaveTable from "../components/leavesTable";
-import SearchBar from "../../employee/ui/seachBar";
-import SelectUi from "../../../components/ui/select";
+import Sidebar from "../../../../components/sidebar/sidebar";
+
+import Header from "../../../../components/header/header";
+import LeaveTable, { LeaveTableEmployee } from "../../components/leavesTable";
+import SelectUi from "../../../../components/ui/select";
+import SearchBar from "../../ui/searchBar";
+import SelectLocalUi from "../../../../components/ui/selectLocal";
+import DeleteModal, { ModalSafe } from "../../../../components/ui/modals";
+import ModalDanger from "../../../../components/ui/modals";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -48,8 +50,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function ManageLeave() {
+export default function ManageLeaveEmployee() {
   const classes = useStyles();
+  const [search,setSearch]=useState('');
+  const [filter,setfilter]=useState('');
   return (
     <Box component="div" className={classes.mainContainer}>
       <Box component="div" className={classes.sidebar}>
@@ -60,18 +64,23 @@ export default function ManageLeave() {
         {/* <SimpleHeader heading="Add Leave" /> */}
 
         <Box>
-          
           <Box component='div' className={classes.filterContainer}>
              <Box component='div' className={classes.selectContainer}>
-                <SelectUi/>
+                  <SelectLocalUi
+                      data={['approve','reject','applied']} 
+                      value={filter} 
+                      handleChange={(e)=>{setfilter(e.target.value)}}
+                      placeholder={"Select the Filter"}   
+                      
+                    />
              </Box>
              <Box component='div' className={classes.inputContainer}>
-                <SearchBar/>
+                <SearchBar  setSearch={setSearch}/>
              </Box>
           </Box>
           <Box component="div" className={classes.table}>
             {/* <AddLeave /> */}
-            <LeaveTable/>
+            <LeaveTableEmployee filter={filter} search={search}/>
           </Box>
         </Box>
       </Box>

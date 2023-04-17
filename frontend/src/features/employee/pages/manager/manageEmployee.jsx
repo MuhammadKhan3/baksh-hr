@@ -1,24 +1,24 @@
 import { Formik, useFormik } from 'formik';
 import React, { createRef, useEffect, useState } from 'react'
-import Header from '../../../components/header/header'
-import Sidebar from '../../../components/sidebar/sidebar'
+import Header from '../../../../components/header/header'
+import Sidebar from '../../../../components/sidebar/sidebar'
 import { makeStyles } from '@material-ui/core';
 import { Box, Button, FormControl} from '@mui/material'
-import EmployeLeft from '../components/employeLeft';
-import EmployeeRight from '../components/employeeRight';
+import EmployeLeft from '../../components/employeLeft';
+import EmployeeRight from '../../components/employeeRight';
 import { useDispatch, useSelector } from 'react-redux';
-import EmployeeThunk from '../../../redux/thunk/employeeThunk';
+import EmployeeThunk from '../../../../redux/thunk/employeeThunk';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
-import { adminApi } from '../../../axios/axiosData';
+import { adminApi } from '../../../../axios/axiosData';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { DataGrid } from '@mui/x-data-grid';
-import TopHeader from '../ui/seachBar';
-import SearchBar from '../ui/seachBar';
-import EmployeeTable from '../components/employeeTable';
-import Modal from '../../../components/ui/modals';
-import DeleteModal from '../../../components/ui/modals';
+import TopHeader from '../../ui/seachBar';
+import SearchBar from '../../ui/seachBar';
+import EmployeeTable, { EmployeesTableManager } from '../../components/employeeTable';
+import Modal from '../../../../components/ui/modals';
+import DeleteModal from '../../../../components/ui/modals';
 
 
 
@@ -62,7 +62,7 @@ const useStyles=makeStyles({
 })
 
 
-const Managemployee = () => {
+const ManagemployeeManager = () => {
     const classes=useStyles();
     const [employees,setemployees]=useState([])
     const [open, setOpen] = React.useState(false);
@@ -93,15 +93,15 @@ const Managemployee = () => {
             <Sidebar/>
         </Box>
         <Box component='div' className={classes.column}>
-            <DeleteModal title={'DELETE'} handleClose={handleClose} submitHandler={deleteHandler} handleOpen={handleOpen} open={open}/>
+            <DeleteModal handleClose={handleClose} submitHandler={deleteHandler} handleOpen={handleOpen} open={open}/>
             <Header heading={"Manage Employee"}/>
             <Box component='div' className={classes.searchContainer}>
             <SearchBar setemployees={setemployees}/>
             </Box>
-            <EmployeeTable employees={employees} setDelete={setDeleteId} handleOpen={handleOpen} setemployees={setemployees}/>
+            <EmployeesTableManager employees={employees} setDelete={setDeleteId} handleOpen={handleOpen} setemployees={setemployees}/>
         </Box>
     </Box>
   )
 }
 
-export default Managemployee
+export default ManagemployeeManager
