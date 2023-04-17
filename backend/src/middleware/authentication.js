@@ -14,7 +14,12 @@ module.exports=async (req,res,next)=>{
         }
         const token = req.headers.authorization.split(' ')[1];
         const secret= process.env.secretKey;
+        console.log(token)
+        if(token==="undefined"){
+          return res.status(401).json({msg:'Token not exist',flag:false})
+        }
         const decodedToken =await jwt.verify(token, secret);
+        console.log('hitt...',decodedToken)
 
         if(Object.keys(decodedToken).length>0){
           const userId = decodedToken.userId;

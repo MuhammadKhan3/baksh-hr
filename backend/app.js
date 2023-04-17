@@ -15,6 +15,7 @@ const app=express();
 
 // Routes
 const adminRoutes=require('./src/routes/adminRoutes');
+const attendanceRoutes = require ('./src/routes/adminRoutes')
 const Api=require('./src/routes/apiRoutes');
 const Department = require('./src/models/department');
 const Designation = require('./src/models/designation');
@@ -33,7 +34,7 @@ const options={
 app.use(express.static(path.join(__dirname,'./frontend/build')));
 app.use(cors(options))
 app.use(express.json());
-app.use(bodyParser.urlencoded({extended:true}))
+app.use(bodyParser.urlencoded({extended:false}))
 // app.use(express.static(path.join(__dirname,"../frontend/build")))
 // app.use(express.urlencoded())
 app.use('/',express.static(path.join(__dirname,'uploads', 'employees')))
@@ -41,6 +42,7 @@ app.use('/',express.static(path.join(__dirname,'uploads', 'employees')))
 
 
 app.use('/api/admin',adminRoutes)
+app.use('/api/admin', attendanceRoutes);
 app.use('/api',Api)
 
 app.use("*",function(req,res){
