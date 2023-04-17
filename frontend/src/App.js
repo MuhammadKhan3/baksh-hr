@@ -31,6 +31,7 @@ function App() {
                   authorization: `Bearer ${token}`,
               },
       })
+      console.log(response)
       setuser(response?.data)
     }
     authenticate();

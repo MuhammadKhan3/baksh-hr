@@ -61,7 +61,6 @@ const getEmployees=async (req,res,next)=>{
         return Error(req,res,error);
     }
 }
-
 const searchEmployees=async(req,res,next)=>{
     const {search}=req.body;
 
@@ -83,8 +82,15 @@ const deleteEmployee=async (req,res,next)=>{
     }
 }
 
+const getManagerEmployees=async (req,res,next)=>{
+    const managerId=req?.user?.managerData?.id;
+    try {
+        let response=await Employee.GetManagerEmployees(managerId);
+         res.json({msg:"Fetch Employees Successfully",flag:true,employees:response})
+    } catch (error) {
+        return Error(req,res,error);
+    }
+}
 
-module.exports={getEmployees,getEmployee,salaryTypes,createEmployee,editEmployee,searchEmployees,deleteEmployee};
-
-
+module.exports={getEmployees,getEmployee,salaryTypes,createEmployee,editEmployee,searchEmployees,deleteEmployee,getManagerEmployees};
 

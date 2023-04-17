@@ -16,7 +16,7 @@ const Designation = require("../models/designation");
 const Department = require("../models/department");
 const { employeesDto } = require("../dto/dto");
 const { response } = require("express");
-const { Sequelize, Op } = require("sequelize");
+const { Sequelize, Op, where } = require("sequelize");
 
 // const InsertRole=async (roleName)=>{
 //     const response=await Role.create({roleName:roleName});
@@ -285,4 +285,20 @@ const deleteEmployee=async (id)=>{
     return response;
 }
 
-module.exports={createEmployee,editEmployee,salaryType,getEmployee,getEmployees,searchEmployees,deleteEmployee};
+const GetManagerEmployees=async (managerId)=>{
+    console.log(managerId)
+    let response=await Employee
+    .findAll({
+        where:{
+            '$employee_company.managerId$':managerId,
+        },
+        include:[{model:User,as:'user',attributes:['status']},{model:EmployeeCompany,attributes:['departmentId','managerId','designationId'],include:[{model:Designation,attributes:['designation']},{model:Department,attributes:['department']}]}],
+        attributes:['name','email','id','profilePhoto'],
+    });
+    const employees=response.map((data)=>{
+        return {id:data.id,name:data?.name,email:data?.email,profile:data?.profilePhoto?.filename,status:data?.user?.status,department:data?.employee_company?.department?.department,designation:data?.employee_company?.designation?.designation}
+    })
+    return employees;
+}
+
+module.exports={createEmployee,editEmployee,salaryType,getEmployee,getEmployees,searchEmployees,deleteEmployee,GetManagerEmployees};

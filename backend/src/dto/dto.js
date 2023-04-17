@@ -20,7 +20,9 @@ const LoginDto=(data)=>{
         email:data?.email,
         active:data?.status,
         role:data?.role?.roleName,
-        permission:data?.permission
+        permission:data?.permission,
+        managerId:data?.managerData?.id,
+        employeeId:data?.employeeData?.id
     }
 }
 

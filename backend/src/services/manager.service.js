@@ -21,6 +21,7 @@ const createManager=async (req,res,photo,name,phone,email,password,status,module
             try{
                 const user=await User.create({
                         email:email,
+                        name:name,
                         password:hash,
                         permissionId:permission?.id,
                         roleId:roles?.id,

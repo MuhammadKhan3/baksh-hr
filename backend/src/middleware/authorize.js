@@ -5,7 +5,7 @@ const Permission = require('../models/permission');
 
 module.exports=async (req,res,next)=>{
   try {
-       console.log(req?.headers)
+      //  console.log('',req?.headers?.authorization);
         if(!req?.headers?.authorization){
           res.status(401).json({msg:'You are not Valid',flag:false})
         }
@@ -16,9 +16,9 @@ module.exports=async (req,res,next)=>{
         if(Object.keys(decodedToken).length>0){
           const userId = decodedToken.userId;
           const email = decodedToken.email;
-          const response=await User.findOne({where:{[Op.and]:[{id:userId},{email:email}]},include:[Permission]});
+          console.log(userId,email)
+          const response=await User.findOne({where:{[Op.and]:[{id:userId},{email:email}]},include:{all:true}});
           if (response===null) {
-            
               res.status(401).json({msg:'You are not authorize',flag:false})
           } else {
             req.user=response;

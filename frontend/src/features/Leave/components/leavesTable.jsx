@@ -21,6 +21,9 @@ import { adminApi, publicApi, url } from '../../../axios/axiosData';
 import { useCookies } from 'react-cookie';
 import { NavLink } from 'react-router-dom';
 import moment from 'moment'
+import LockIcon from '@mui/icons-material/Lock';
+import DepartmentThunk from '../../../redux/thunk/departmentThunk';
+import { useSelector } from 'react-redux';
 
 
 
@@ -33,7 +36,7 @@ const rows = [
   { id: 1, name: 'ahmaddf', email: "ahmad3273344@gmail.com",department:'marketing',designation:'manager',status:'inactive' },
 ];
 
-const columns = [
+const columnsEmployee = [
   { id: 'id', label: 'ID' },
   { id: 'employee', label: 'Employee' },
   { id: 'department', label: 'Department' },
@@ -41,8 +44,36 @@ const columns = [
   { id: 'duration', label: 'Duration' },
   { id: 'date', label: 'Date' },
   {id:'reason',label:'Reason'},
+  { id: 'status', label: 'Status' },
+];
+
+const columnsManager = [
+  { id: 'id', label: 'ID' },
+  { id: 'employee', label: 'Employee' },
+  { id: 'department', label: 'Department' },
+  { id: 'leaveType', label: 'Leave Type' },
+  { id: 'duration', label: 'Duration' },
+  { id: 'date', label: 'Date' },
+  {id:'reason',label:'Reason'},
+  { id: 'status', label: 'Status' },
   { id: 'action', label: 'Action' },
 ];
+
+
+const columnsHr = [
+  { id: 'id', label: 'ID' },
+  { id: 'employee', label: 'Employee' },
+  { id: 'department', label: 'Department' },
+  { id: 'leaveType', label: 'Leave Type' },
+  { id: 'duration', label: 'Duration' },
+  { id: 'date', label: 'Date' },
+  {id:'reason',label:'Reason'},
+  { id: 'status', label: 'Status' },
+  { id: 'action', label: 'Action' },
+];
+
+
+
 
 const useStyles=makeStyles({
   mainContainer:{
@@ -240,37 +271,48 @@ const useStyles=makeStyles({
   checked: {},
 })
 
-const LeaveTable = ({employees=[],setemployees,handleOpen,setDelete}) => {
+// LeaveTable by default
+export default function LeaveTableHr  ({employees=[],setemployees,handleOpen,setDelete,search,departmentId}) {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [totalPages,setTotalPages]=useState(0);
+  const [totalData,setTotalData]=useState(0);
   const [data,setdata]=useState([]);
+  const [rowsPerPage,setRowsPerPage]=useState(6);
+
+
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    console.log(newPage)
+    setPage(newPage)
+    // setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    // setRowsPerPage(parseInt(event.target.value, 10));
+    // setPage(0);
   };
   const classes=useStyles();
-  const [cookies] = useCookies(['token']);
-  const [search,setsearch]=useState('');
+  const [cookies] = useCookies(['token']);;
 
 
   useEffect(()=>{
     const token=cookies.token;
+    console.log(departmentId)
     axios
-     .get(adminApi+`/get-leaves-hr?key=${search}`,{
+     .get(adminApi+`/get-leaves-Employees-hr?search=${search}&page=${page+1}&departmentId=${departmentId}`,{
         headers:{
             authorization: `Bearer ${token}`,
         }
      })
      .then((response)=>{
-        setdata(response?.data?.response)
+        console.log(response)
+        setdata(response?.data?.response?.leaves);
+        setTotalData(response?.data?.response?.totalData)
+        setTotalPages(response?.data?.response?.totalPages);
+        setPage(0)
      })
-
-  },[search])
+ 
+  },[search,departmentId])
 
 
   return (
@@ -279,7 +321,7 @@ const LeaveTable = ({employees=[],setemployees,handleOpen,setDelete}) => {
         <Table>
           <TableHead>
             <TableRow className={classes.tableHeader} >
-              {columns.map((column) => (
+              {columnsHr.map((column) => (
                 <TableCell className={`${classes.tableCell} ${classes.headerText}`}  key={column.id}>{column.label==='ID' ? <>{column.label}</> :column.label }</TableCell>
               ))}
             </TableRow>
@@ -290,7 +332,7 @@ const LeaveTable = ({employees=[],setemployees,handleOpen,setDelete}) => {
               .map((row,index) => (
                 <TableRow key={row.id}>
                     <TableCell className={classes.tableCell}>
-                         {index+1}
+                         {row?.id}
                     </TableCell>
                     <TableCell className={classes.tableCell}>
                       <Box className={classes.avatarContainer}>
@@ -298,7 +340,7 @@ const LeaveTable = ({employees=[],setemployees,handleOpen,setDelete}) => {
                           <Box sx={{marginLeft:'8px'}}>
                             <Typography variant='body1' className={classes.nameContainer}>
                                 {/* {row?.name} */}
-                                {row?.users?.managerData?.name ? row?.users?.managerData?.name : row?.users?.employeeData?.name}
+                                {row?.users?.name}
                             </Typography>
                             {/* <Typography variant='body1' className={classes.emailType}>
                                 {row?.email}
@@ -308,7 +350,7 @@ const LeaveTable = ({employees=[],setemployees,handleOpen,setDelete}) => {
                      </TableCell>
                      <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
                        {/* {row?.department} */}
-                       marketing
+                       {row?.users?.employeeData?.employee_company?.department?.department}
                      </TableCell>
                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
                         {row?.leavetype?.leaveType}
@@ -322,27 +364,12 @@ const LeaveTable = ({employees=[],setemployees,handleOpen,setDelete}) => {
                      <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
                        {row?.reason}
                      </TableCell>
-                     {/* <TableCell className={classes.tableCell }>
-                     {row?.status?.trim()==='active'
-                           ?
-                            <Box component='div' className={classes.statusContainer}>
-                                    <img src={active} style={{width:'5px'}}/>
-                                    <Typography component='h4' className={classes.status}>
-                                        {row.status}
-                                    </Typography>
-                            </Box>
-                           :
-                            <Box component='div' className={classes.inActiveContainer}>                
-                                <img src={inactive} style={{width:'5px'}}/>
-                                <Typography component='h4' className={classes.status}>
-                                    {row.status}
-                                </Typography>
-                              </Box>
-                           }
-                     </TableCell> */}
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {row?.status}
+                     </TableCell>
                      <TableCell className={classes.tableCell}>
                         <Box className={classes.actionContainer}>
-                          <NavLink to={`/view-employee/${row.id}`}>
+                          {/* <NavLink to={`/view-employee/${row.id}`}>
                             <Box component='div' className={`${classes.approve} ${classes.eyeIcon}`}>
                               <img src={approve}  className={classes.icons}/>
                             </Box>
@@ -351,10 +378,12 @@ const LeaveTable = ({employees=[],setemployees,handleOpen,setDelete}) => {
                             <Box component='div' className={`${classes.reject} ${classes.editIcon}`}>
                               <img src={reject} className={classes.icons} />
                             </Box>
-                          </NavLink>
-                          <Box onClick={(e)=>{handleOpen(e);setDelete(row?.id)}} component='div' className={`${classes.edit} ${classes.deleteIconc}`}>
+                          </NavLink> */}
+                          <NavLink to={`/edit-leave/${row.id}`}>
+                          <Box  component='div' className={`${classes.edit} `}>
                               <img src={edit} className={classes.icons}/>
                           </Box>
+                          </NavLink>                         
                         </Box>
                      </TableCell>
                 </TableRow>
@@ -366,15 +395,274 @@ const LeaveTable = ({employees=[],setemployees,handleOpen,setDelete}) => {
         rowsPerPageOptions={[]}
         component="div"
         style={{display:'flex',flexDirection:'flex-start'}}
-        count={rows.length}
+        onPageChange={handleChangePage}
+        count={data?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         labelDisplayedRows={({ from, to, count }) => {
-                return `Showing ${from} to ${to} of ${count} entries`;
+                return `Showing ${from} to ${to} entries ${count}`;
         }}
       />
     </div>
   );
 };
 
-export default LeaveTable;
+
+
+// Leave Table Employee
+export const LeaveTableEmployee = ({search,filter}) => {
+  const [page, setPage] = useState(0);
+  const [totalPages,setTotalPages]=useState(0);
+  const [totalData,setTotalData]=useState(0);
+  const [data,setdata]=useState([]);
+  const [rowsPerPage,setRowsPerPage]=useState(6)
+  console.log(filter)
+  const handleChangePage = (event, newPage) => {
+    console.log(newPage)
+    setPage(newPage)
+    // setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    // setRowsPerPage(parseInt(event.target.value, 10));
+    // setPage(0);
+  };
+  const classes=useStyles();
+  const [cookies] = useCookies(['token']);;
+
+
+  useEffect(()=>{
+    const token=cookies.token;
+    axios
+     .get(adminApi+`/get-leaves-employee?search=${search}&page=${page+1}&filter=${filter}`,{
+        headers:{
+            authorization: `Bearer ${token}`,
+        }
+     })
+     .then((response)=>{
+        console.log(response)
+        setdata(response?.data?.response?.leaves);
+        setTotalData(response?.data?.response?.totalData)
+        setTotalPages(response?.data?.response?.totalPages);
+        setPage(0)
+     })
+
+  },[search,filter])
+
+
+  return (
+    <div className={classes.tableCotainer}>
+      <TableContainer  >
+        <Table>
+          <TableHead>
+            <TableRow className={classes.tableHeader} >
+              {columnsEmployee.map((column) => (
+                <TableCell className={`${classes.tableCell} ${classes.headerText}`}  key={column.id}>{column.label==='ID' ? <>{column.label}</> :column.label }</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row,index) => (
+                <TableRow key={row.id}>
+                    <TableCell className={classes.tableCell}>
+                         {row?.id}
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      <Box className={classes.avatarContainer}>
+                          {/* <Avatar alt="Remy Sharp" sx={{width:'34px',height:'34px'}} src={url+row?.profile} /> */}
+                          <Box sx={{marginLeft:'8px'}}>
+                            <Typography variant='body1' className={classes.nameContainer}>
+                                {/* {row?.name} */}
+                                {row?.users?.name}
+                            </Typography>
+                            {/* <Typography variant='body1' className={classes.emailType}>
+                                {row?.email}
+                            </Typography> */}
+                          </Box>
+                      </Box>
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {/* {row?.department} */}
+                       {row?.users?.employeeData?.employee_company?.department?.department}
+                     </TableCell>
+                    <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                        {row?.leavetype?.leaveType}
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                        {row?.leaves} Days
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                     {moment(row?.startDate).format('Do MMM')}- {moment(row?.endDate).format('Do MMM')}
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {row?.reason}
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {row?.status}
+                     </TableCell>
+                     {/* <TableCell className={classes.tableCell}>
+                        <Box className={classes.actionContainer}>
+                          <Box onClick={(e)=>{handleOpen(e);setDelete(row?.id)}} component='div' className={`${classes.edit} ${classes.deleteIconc}`}>
+                              <img src={edit} className={classes.icons}/>
+                          </Box>
+                        </Box>
+                     </TableCell> */}
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[]}
+        component="div"
+        style={{display:'flex',flexDirection:'flex-start'}}
+        onChangePage={handleChangePage}
+        count={data?.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        labelDisplayedRows={({ from, to, count }) => {
+                return `Showing ${from} to ${to} entries ${count}`;
+        }}
+      />
+    </div>
+  );
+};
+
+
+export const LeaveTableManagerEmployees= ({search,setApprovalData,filter}) => {
+  const [page, setPage] = useState(0);
+  const [totalPages,setTotalPages]=useState(0);
+  const [totalData,setTotalData]=useState(0);
+  const [data,setdata]=useState([]);
+  const [rowsPerPage,setRowsPerPage]=useState(6)
+
+  const handleChangePage = (event, newPage) => {
+    console.log(newPage)
+    setPage(newPage)
+    // setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    // setRowsPerPage(parseInt(event.target.value, 10));
+    // setPage(0);
+  };
+  const classes=useStyles();
+  const [cookies] = useCookies(['token']);;
+  const token=cookies.token;
+
+
+  useEffect(()=>{
+    
+    axios
+     .get(adminApi+`/get-leaves-manager?search=${search}&page=${page+1}&filter=${filter}`,{
+        headers:{
+            authorization: `Bearer ${token}`,
+        }
+     })
+     .then((response)=>{
+        console.log(response)
+
+        setdata(response?.data?.response?.leaves);
+        setTotalData(response?.data?.response?.totalData)
+        setTotalPages(response?.data?.response?.totalPages);
+        setPage(0)
+     })
+
+  },[search,filter])
+
+
+ 
+
+  return (
+    <div className={classes.tableCotainer}>
+      <TableContainer  >
+        <Table>
+          <TableHead>
+            <TableRow className={classes.tableHeader} >
+              {columnsManager.map((column) => (
+                <TableCell className={`${classes.tableCell} ${classes.headerText}`}  key={column.id}>{column.label==='ID' ? <>{column.label}</> :column.label }</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row,index) => (
+                <TableRow key={row.id}>
+                    <TableCell className={classes.tableCell}>
+                         {row?.id}
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      <Box className={classes.avatarContainer}>
+                          {/* <Avatar alt="Remy Sharp" sx={{width:'34px',height:'34px'}} src={url+row?.profile} /> */}
+                          <Box sx={{marginLeft:'8px'}}>
+                            <Typography variant='body1' className={classes.nameContainer}>
+                                {/* {row?.name} */}
+                                {row?.users?.name}
+                            </Typography>
+                            {/* <Typography variant='body1' className={classes.emailType}>
+                                {row?.email}
+                            </Typography> */}
+                          </Box>
+                      </Box>
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {/* {row?.department} */}
+                       {row?.users?.employeeData?.employee_company?.department?.department}
+                     </TableCell>
+                    <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                        {row?.leavetype?.leaveType}
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                        {row?.leaves} Days
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                     {moment(row?.startDate).format('Do MMM')}- {moment(row?.endDate).format('Do MMM')}
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {row?.reason}
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {row?.status}
+                     </TableCell>
+                     <TableCell className={classes.tableCell}>
+                        <Box className={classes.actionContainer}>
+                          {row?.status==='reject' || row?.status==='approve' ?
+                              <LockIcon sx={{color:'white',borderRadius:'50%',backgroundColor:'#C49150',width:'30px',height:'30px',padding:'3px'}}/>
+                               :
+                              <>
+                                <Box component='div' className={`${classes.approve} ${classes.eyeIcon}`}  onClick={()=>{setApprovalData({status:'approve',leaveId:row?.id})}}>
+                                  <img src={approve}  className={classes.icons}/>
+                                </Box>
+                                <Box component='div' className={`${classes.reject} ${classes.editIcon}`} onClick={()=>{setApprovalData({status:'reject',leaveId:row?.id})}}>
+                                  <img src={reject} className={classes.icons} />
+                                </Box>
+                              </> 
+                          }
+                          {/* <Box onClick={(e)=>{handleOpen(e);setDelete(row?.id)}} component='div' className={`${classes.edit} ${classes.deleteIconc}`}>
+                              <img src={edit} className={classes.icons}/>
+                          </Box> */}
+                        </Box>
+                     </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[]}
+        component="div"
+        style={{display:'flex',flexDirection:'flex-start'}}
+        onChangePage={handleChangePage}
+        count={data?.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        labelDisplayedRows={({ from, to, count }) => {
+                return `Showing ${from} to ${to} entries ${count}`;
+        }}
+      />
+    </div>
+  );
+};

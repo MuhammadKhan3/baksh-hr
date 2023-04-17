@@ -63,10 +63,18 @@ const useStyles=makeStyles({
         background: '#FD5858 !important',
         borderRadius: '10px !important',
         color:'white !important',
+    },
+    safeBtn:{
+      width: '98px !important',
+      height: '40px !important',
+      border:'none !important',
+      background: '#36F57F !important',
+      borderRadius: '10px !important',
+      color:'white !important',
     }
 })
 
-export default function DeleteModal({open,handleClose,handleOpen,submitHandler}) {
+export default function ModalDanger({open,handleClose,handleOpen,submitHandler,title}) {
   const classes=useStyles();
 
   return (
@@ -84,7 +92,33 @@ export default function DeleteModal({open,handleClose,handleOpen,submitHandler})
           </Typography>
           <Box className={classes.Btns} component='div'>
             <Button variant='contained'   className={classes.cancelBtn} onClick={handleClose}>Cancel</Button>
-            <Button variant='outlined'  className={classes.confirmBtn} onClick={submitHandler}>Delete</Button>
+            <Button variant='outlined'  className={classes.confirmBtn} onClick={submitHandler}>{title}</Button>
+          </Box>
+        </Box>
+      </Modal>
+    </div>
+  );
+}
+
+export  function ModalSafe({open,handleClose,handleOpen,submitHandler,title}) {
+  const classes=useStyles();
+
+  return (
+    <div>
+      <Modal
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box component='div' className={classes.container}>
+          <Typography id="keep-mounted-modal-title" className={classes.text} variant="h6" component="h2">
+          Are you sure delete this employee?
+          </Typography>
+          <Box className={classes.Btns} component='div'>
+            <Button variant='contained'   className={classes.cancelBtn} onClick={handleClose}>Cancel</Button>
+            <Button variant='outlined'  className={classes.safeBtn} onClick={submitHandler}>{title}</Button>
           </Box>
         </Box>
       </Modal>

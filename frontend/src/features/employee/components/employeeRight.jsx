@@ -122,7 +122,6 @@ const EmployeRight = ({
     const getDesignation=async ()=>{
       const response=await axios.get(adminApi+`/designation/${values.departmentId}`)
       dispatch(employeeAction.deisgnationsAction(response?.data?.designations))
-      console.log(response)
     }
 
     let timerOne;

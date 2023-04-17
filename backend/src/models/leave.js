@@ -24,6 +24,7 @@ const Leave = sequelize.define('leave', {
     },
     status:{
         type:DataTypes.STRING,
+        defaultValue:'applied'
     }
 },{
     paranoid: true,
