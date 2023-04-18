@@ -17,13 +17,13 @@ import DateIcon from "../../images/employee/drop";
 
 const useStyles = makeStyles({
   label: {
-    fontFamily: "Poppins !important",
-    fontSize: "10px !important",
-    fontWeight: "600",
-    lineHeight: "15px",
-    letterSpacing: "-0.02em",
-    textAlign: "left",
-    color: "#868B90",
+    fontFamily: 'Poppins',
+    fontSize: '10px',
+    fontWeight: '600',
+    lineHeight: '15px',
+    letterSpacing: '-0.02em',
+    textAlign: 'left',
+    color:'#868B90'
   },
   container: {
     display: "flex",
@@ -70,6 +70,7 @@ const DatePickterUi = ({
   classes,
   title,
   value,
+  disabled,
   name,
   handleChange,
   handleBlur,
@@ -95,6 +96,7 @@ const DatePickterUi = ({
             setFieldValue(name, date);
           }}
           defaultValue={value}
+          disabled={disabled===true ? disabled :false}
           value={value}
           name={name}
           // label={name}

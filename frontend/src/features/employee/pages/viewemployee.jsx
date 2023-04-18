@@ -19,6 +19,7 @@ import SearchBar from '../ui/seachBar';
 import EmployeeTable from '../components/employeeTable';
 import ViewCard from '../components/viewCard';
 import ViewDetailList from '../components/viewDetailList';
+import PersonalDetails from '../components/viewDetails';
 
 
 
@@ -56,8 +57,12 @@ const useStyles=makeStyles({
   },
   rightContainer:{
     width:'70%'
+  },
+  bottomDiv:{
+    display:'flex',
+    flexDirection:'row',
+    width:'100%'
   }
-
 })
 
 
@@ -67,8 +72,14 @@ const ViewEmployee = () => {
     const [cookies] = useCookies(['token']);
     const [employee,setemployee]=useState([]);
     const params= useParams();
-
+    const dispatch=useDispatch();
+  
     useEffect(()=>{
+        const fetchFormList=()=>{
+          const token=cookies.token;
+          dispatch(EmployeeThunk(token));    
+        }
+        fetchFormList();
 
         const fetchEmployee=async()=>{
             const {token}=cookies;
@@ -79,10 +90,12 @@ const ViewEmployee = () => {
                     authorization: `Bearer ${token}`,
                 },
             })
+            console.log(response?.data)
             setemployee(response?.data?.employee)
         }
         fetchEmployee();
     },[])
+
 
 
   return (
@@ -93,9 +106,8 @@ const ViewEmployee = () => {
         <Box component='div' className={classes.rightContainer}>
            <Header heading={"View Employee"}/>
            <ViewCard employee={employee}/>
-           <ViewDetailList/>
+           <ViewDetailList employee={employee} />
         </Box>
-
     </Box>
   )
 }

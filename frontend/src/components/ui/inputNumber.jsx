@@ -72,7 +72,8 @@ const InputText = (props) => {
         handleChange, 
         value, 
         error,
-        handleBlur
+        handleBlur,
+        disabled
     }=props
 
   const dispatch=useDispatch();
@@ -90,7 +91,8 @@ const InputText = (props) => {
                color='primary' 
                variant='outlined' 
                placeholder={placeholder} 
-                // value={value}
+               disabled={disabled===true ? disabled:false}
+                value={value}
                 helperText={helperText}  
                 error={error}
                 InputProps={{
