@@ -198,7 +198,7 @@ const useStyles=makeStyles({
   checked: {},
 })
 
-const EmployeeTable = ({employees,setemployees,handleOpen,setDelete}) => {
+const EmployeeTable = ({employees,setemployees,search,handleOpen,setDelete}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
 
@@ -212,19 +212,16 @@ const EmployeeTable = ({employees,setemployees,handleOpen,setDelete}) => {
   };
   const classes=useStyles();
   const [cookies] = useCookies(['token']);
-  const [search,setsearch]=useState('');
 
   useEffect(()=>{
     const fetchManager=async ()=>{
       const token=cookies.token;
-      const response=await axios.get(adminApi+'/get-employees',{
+      const response=await axios.get(adminApi+`/get-employees?search=${search}`,{
         headers:{
           authorization: `Bearer ${token}`,
         }
       });
       setemployees(response?.data?.employees)
-      // console.log('hit',)
-
     }
     fetchManager();
   },[search])
@@ -318,7 +315,7 @@ const EmployeeTable = ({employees,setemployees,handleOpen,setDelete}) => {
         rowsPerPageOptions={[]}
         component="div"
         style={{display:'flex',flexDirection:'flex-start'}}
-        count={rows.length}
+        count={employees.length}
         rowsPerPage={rowsPerPage}
         page={page}
         labelDisplayedRows={({ from, to, count }) => {
@@ -335,7 +332,7 @@ export default EmployeeTable;
 
 
 
-export const EmployeesTableManager = ({employees,setemployees,handleOpen,setDelete}) => {
+export const EmployeesTableManager = ({employees,setemployees,handleOpen,setDelete,search}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
 
@@ -349,22 +346,23 @@ export const EmployeesTableManager = ({employees,setemployees,handleOpen,setDele
   };
   const classes=useStyles();
   const [cookies] = useCookies(['token']);
-  const [search,setsearch]=useState('');
+
 
   useEffect(()=>{
     const fetchManager=async ()=>{
       const token=cookies.token;
-      const response=await axios.get(adminApi+'/get-manager-employees',{
+      const response=await axios.get(adminApi+`/get-manager-employees?search=${search}`,{
         headers:{
           authorization: `Bearer ${token}`,
         }
       });
       console.log(response?.data?.employees)
       setemployees(response?.data?.employees)
-      // console.log('hit',)
-
     }
-    fetchManager();
+    const timer1=setTimeout(fetchManager,1000)
+    return ()=>{
+      clearTimeout(timer1)
+    }
   },[search])
 
 
@@ -456,7 +454,7 @@ export const EmployeesTableManager = ({employees,setemployees,handleOpen,setDele
         rowsPerPageOptions={[]}
         component="div"
         style={{display:'flex',flexDirection:'flex-start'}}
-        count={rows.length}
+        count={employees.length}
         rowsPerPage={rowsPerPage}
         page={page}
         labelDisplayedRows={({ from, to, count }) => {

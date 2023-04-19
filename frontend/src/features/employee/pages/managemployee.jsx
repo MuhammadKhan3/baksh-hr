@@ -70,6 +70,7 @@ const Managemployee = () => {
     const [cookies] = useCookies(['token']);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [search,setSearch]=useState('');
 
     const deleteHandler=()=>{
       const token=cookies.token;
@@ -87,6 +88,7 @@ const Managemployee = () => {
         }
       })
     }
+    
   return (
     <Box component='div' className={classes.mainContainer}>
         <Box component='div' className={classes.sidebar}>
@@ -96,9 +98,9 @@ const Managemployee = () => {
             <DeleteModal title={'DELETE'} handleClose={handleClose} submitHandler={deleteHandler} handleOpen={handleOpen} open={open}/>
             <Header heading={"Manage Employee"}/>
             <Box component='div' className={classes.searchContainer}>
-            <SearchBar setemployees={setemployees}/>
+            <SearchBar setSearch={setSearch} setemployees={setemployees}/>
             </Box>
-            <EmployeeTable employees={employees} setDelete={setDeleteId} handleOpen={handleOpen} setemployees={setemployees}/>
+            <EmployeeTable search={search}  employees={employees} setDelete={setDeleteId} handleOpen={handleOpen} setemployees={setemployees}/>
         </Box>
     </Box>
   )

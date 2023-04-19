@@ -54,8 +54,10 @@ const getEmployee=async (req,res,next)=>{
 }
 
 const getEmployees=async (req,res,next)=>{
+    const search=req.query;
+    console.log(search)
     try {
-        let response=await Employee.getEmployees();
+        let response=await Employee.getEmployees(search);
         await res.json({msg:"Employees List Succefully Fetched",flag:true,employees:response})
     } catch (error) {
         return Error(req,res,error);
@@ -84,8 +86,9 @@ const deleteEmployee=async (req,res,next)=>{
 
 const getManagerEmployees=async (req,res,next)=>{
     const managerId=req?.user?.managerData?.id;
+    const search=req.query;
     try {
-        let response=await Employee.GetManagerEmployees(managerId);
+        let response=await Employee.GetManagerEmployees(managerId,search);
          res.json({msg:"Fetch Employees Successfully",flag:true,employees:response})
     } catch (error) {
         return Error(req,res,error);

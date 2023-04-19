@@ -110,7 +110,7 @@ const EmergencyDetail = ({
                 />
                 <InputNumber 
                     label={'Add Phone Number'}
-                    value={values.emergencyContact} 
+
                     error={Boolean(touched.emergencyContact && errors.emergencyContact)} 
                     helperText={touched.emergencyContact && errors.emergencyContact}  
                     name="emergencyContact" 
@@ -149,7 +149,7 @@ const EmergencyDetail = ({
                      label={'Phone'} 
                      classes={classes} 
                      placeholder={'Add Phone Number'} 
-                     value={values.relationContact} 
+
                      error={Boolean(touched.relationContact && errors.relationContact)} 
                      helperText={touched.relationContact && errors.relationContact}  
                      name="relationContact" 

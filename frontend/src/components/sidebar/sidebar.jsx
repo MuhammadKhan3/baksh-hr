@@ -177,7 +177,7 @@ const Sidebar = () => {
             <DownMenu
               label={"Setup"}
               droplabel={[
-                { label: "Company Details", path: "/company-details" },
+                { label: "Company Details", path: "/setup/company-details" },
                 { label: "Department", path: "/department" },
                 { label: "Allowance & Deduction", path: "/allowance" },
                 { label: "PayScale", path: "/payscale" },
@@ -291,7 +291,7 @@ const Sidebar = () => {
             <DownMenu
               label={"Setup"}
               droplabel={[
-                { label: "Company Details", path: "/company-details" },
+                { label: "Company Details", path: "/setup/company-details" },
                 { label: "Department", path: "/department" },
                 { label: "Allowance & Deduction", path: "/allowance" },
                 { label: "PayScale", path: "/payscale" },
