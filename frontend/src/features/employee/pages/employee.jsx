@@ -134,13 +134,13 @@ const Employee = () => {
        martialStatus:yup.string().required('Martial Status is required'),
        nationality:yup.string().required('Nationality is required'),
        managerId:yup.string().required('Manager is required'),
-       branchId:yup.string().required('Branch Name is required')
+      //  branchId:yup.string().required('Branch Name is required')
   })
   const formik =
    useFormik({
     initialValues:{
       email: '',
-      branchId:'',
+      // branchId:'',
       password:'',
       name:'',
       fatherName:'',

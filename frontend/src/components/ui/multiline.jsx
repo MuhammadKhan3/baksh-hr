@@ -25,7 +25,10 @@ const useStyles=makeStyles({
       borderRadius: "10px !important",
     },
     width:'100%'
-},
+  },
+  container:{
+    width:'100%'
+  }
 })
 const MultiLineText = (props) => {
     const classOwn=useStyles();
@@ -39,16 +42,19 @@ const MultiLineText = (props) => {
       handleChange, 
       value, 
       error,
+      disabled,
       handleBlur
   }=props
 
 
   return (
-    <FormControl >
+    <FormControl className={classOwn.container}>
       <Typography component='h4' className={classOwn.label}>{label}</Typography>
       <OutlinedInput 
               placeholder={placeholder} 
               multiline
+              value={value}
+              disabled={disabled===true ? disabled :false}
               rows={4}
               onBlur={(e)=>{handleBlur(e);handleChange(e)}}
               className={classOwn.root}

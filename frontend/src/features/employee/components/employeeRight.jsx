@@ -163,7 +163,7 @@ const EmployeRight = ({
         <InputNumber
 
              placeholder={'Add Employee ID'} 
-              value={values.employeeId} 
+              // value={values.employeeId} 
               error={Boolean(touched.employeeId && errors.employeeId)} 
               helperText={touched.employeeId && errors.employeeId}  
               name="employeeId" 
@@ -240,7 +240,7 @@ const EmployeRight = ({
                   placeholder={"Select the Manager"}   
                   classes={classes}
         />
-        <SelectUi title={'Branch Name'} 
+        {/* <SelectUi title={'Branch Name'} 
                   data={managers} 
                   value={values.managerId} 
                   error={Boolean(touched.branchId && errors.branchId)} 
@@ -251,7 +251,7 @@ const EmployeRight = ({
                   handleBlur={handleBlur}
                   placeholder={"Select the Branch"}   
                   classes={classes}
-        />
+        /> */}
         {/* <Box className={classes.flexRow}    >
             <SelectUi title={'Nationality'} data={Gender} classes={classes}/>
             <SelectUi title={'Marital Status'} data={Country} classes={classes}/>

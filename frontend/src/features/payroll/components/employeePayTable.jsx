@@ -183,7 +183,9 @@ const EmployeePayTable = ({employeespay,setemployeespay,handleOpen,setDelete}) =
         <Table>
           <TableHead>
             <TableRow className={classes.tableHeader} >
-              {columns.map((column) => (
+              {columns
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((column) => (
                 <TableCell className={`${classes.tableCell} ${classes.headerText}`}  key={column.id}>{column.label==='ID' ? <><Checkbox />{column.label}</> :column.label }</TableCell>
               ))}
             </TableRow>

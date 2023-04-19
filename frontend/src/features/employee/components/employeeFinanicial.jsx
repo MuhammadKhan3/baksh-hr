@@ -82,7 +82,6 @@ const EmployeeFinancial = ({parentClass,
             <InputNumber 
                 label={'Salary'} 
                 classes={classes}  
-                value={values.salary} 
                 error={Boolean(touched.salary && errors.salary)} 
                 helperText={touched.salary && errors.salary}  
                 name="salary" 

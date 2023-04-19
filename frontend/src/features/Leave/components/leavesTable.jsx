@@ -655,7 +655,7 @@ export const LeaveTableManagerEmployees= ({search,setApprovalData,filter}) => {
         rowsPerPageOptions={[]}
         component="div"
         style={{display:'flex',flexDirection:'flex-start'}}
-        onChangePage={handleChangePage}
+        onPageChange={handleChangePage}
         count={data?.length}
         rowsPerPage={rowsPerPage}
         page={page}

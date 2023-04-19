@@ -158,7 +158,6 @@ const EmployeLeft = ({
         <Box className={classes.flexRow}>
           <InputNumber
             label={"Phone 1"}
-            value={values.contactOne}
             error={Boolean(touched.contactOne && errors.contactOne)}
             helperText={touched.contactOne && errors.contactOne}
             name="contactOne"
@@ -171,7 +170,6 @@ const EmployeLeft = ({
 
           <InputNumber
             label={"Phone 2"}
-            value={values.contactTwo}
             error={Boolean(touched.contactTwo && errors.contactTwo)}
             helperText={touched.contactTwo && errors.contactTwo}
             name="contactTwo"
@@ -184,7 +182,6 @@ const EmployeLeft = ({
         </Box>
         <MultiLineText
           label={"Local Address"}
-          value={values.localAddress}
           error={Boolean(touched.localAddress && errors.localAddress)}
           helperText={touched.localAddress && errors.localAddress}
           name="localAddress"

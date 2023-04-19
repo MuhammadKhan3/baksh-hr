@@ -1,12 +1,13 @@
 import { makeStyles, Typography } from '@material-ui/core'
 import { Box } from '@mui/material';
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom';
 import active from '../../../images/employee/active.svg'
 import inactive from '../../../images/employee/inactive.svg'
 import edit from '../../../images/employee/edit.svg'
 import eye from '../../../images/employee/eye.svg'
 import { url } from '../../../axios/axiosData';
+import { UserContext } from '../../../App';
 
 const useStyles=makeStyles({
     mainContainer:{
@@ -165,6 +166,10 @@ const useStyles=makeStyles({
 })
 const ViewCard = ({employee}) => {
     const classes=useStyles();
+    const context=useContext(UserContext);
+    const {role}=context;
+    console.log(context)
+    console.log(employee)
   return (
     <Box className={classes.mainContainer} component='div'>
         <Box className={classes.cardContainer}>
@@ -175,7 +180,7 @@ const ViewCard = ({employee}) => {
                         <Box component='div' className={classes.Leftcontent}>
                             <Box component='div' >
                                 <Box>
-                                    {employee?.User?.status?.trim()==='active'
+                                    {employee?.user?.status?.trim()==='active'
                                         ?
                                         <Box component='div' className={classes.activeContainer}>
                                                     <img src={active} style={{width:'5px'}}/>
@@ -207,11 +212,13 @@ const ViewCard = ({employee}) => {
                                         <img src={eye}  className={classes.icons}/>
                                         </Box>
                                     </NavLink>
+                                    {role==='hr' &&
                                     <NavLink to={`/edit-employee/${employee?.id}`}>
                                         <Box component='div' className={`${classes.iconDiv} ${classes.editIcon}`}>
                                         <img src={edit} className={classes.icons} />
                                         </Box>
                                     </NavLink>
+                                    }
                             </Box>
                         </Box>                        
 

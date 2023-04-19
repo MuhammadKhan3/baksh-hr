@@ -232,8 +232,17 @@ const salaryType=async ()=>{
     return salaries;
 }
 
-const getEmployees=async ()=>{
-    let response=await Employee.findAll({include:[{model:User,as:'user',attributes:['status']},{model:EmployeeCompany,attributes:['departmentId','designationId'],include:[{model:Designation,attributes:['designation']},{model:Department,attributes:['department']}]}],attributes:['name','email','id','profilePhoto']});
+const getEmployees=async ({search})=>{
+    let response=await Employee.findAll({
+    where:
+    {
+        [Op.or]:[
+            {name:{[Op.like]:`%${search}%`}},
+            {email:{[Op.like]:`%${search}%`}},
+            {contactOne:{[Op.like]:`%${search}%`}},
+        ],
+    },
+    include:[{model:User,as:'user',attributes:['status']},{model:EmployeeCompany,attributes:['departmentId','designationId'],include:[{model:Designation,attributes:['designation']},{model:Department,attributes:['department']}]}],attributes:['name','email','id','profilePhoto']});
     const employees=response.map((data)=>{
         return {id:data.id,name:data?.name,email:data?.email,profile:data?.profilePhoto?.filename,status:data?.user?.status,department:data?.employee_company?.department?.department,designation:data?.employee_company?.designation?.designation}
     })
@@ -285,11 +294,16 @@ const deleteEmployee=async (id)=>{
     return response;
 }
 
-const GetManagerEmployees=async (managerId)=>{
-    console.log(managerId)
+const GetManagerEmployees=async (managerId,{search})=>{
+    console.log(search)
     let response=await Employee
     .findAll({
         where:{
+            [Op.or]:[
+                {name:{[Op.like]:`%${search}%`}},
+                {email:{[Op.like]:`%${search}%`}},
+                {contactOne:{[Op.like]:`%${search}%`}},
+            ],
             '$employee_company.managerId$':managerId,
         },
         include:[{model:User,as:'user',attributes:['status']},{model:EmployeeCompany,attributes:['departmentId','managerId','designationId'],include:[{model:Designation,attributes:['designation']},{model:Department,attributes:['department']}]}],

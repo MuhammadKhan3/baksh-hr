@@ -76,7 +76,8 @@ const InputText = (props) => {
         ref,
         value, 
         error,
-        handleBlur
+        handleBlur,
+        disabled
     }=props
   const classes=useStyles();
   const dispatch=useDispatch();
@@ -99,6 +100,7 @@ const InputText = (props) => {
                 }}
                 defaultValue={value}
                 key={value}
+                disabled={disabled===true ? disabled : false}
                 // value={value}
                 ref={ref}
                 type='text' 
