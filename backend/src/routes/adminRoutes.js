@@ -3,7 +3,7 @@ const router=express.Router();
 const adminController=require('../controllers/admin.controller');
 const managerController=require('../controllers/manager.controller');
 const department=require('../controllers/department.controller')
-const { multerUpload } = require('../middleware/multer');
+const { multerUpload, CsvMulterUpload } = require('../middleware/multer');
 const isAuth=require('../middleware/authorize')
 const EmployeeController=require('../controllers/employee.controller');
 const payroll = require ('../controllers/payroll.controller');
@@ -12,6 +12,8 @@ const {validRole,validUser,validManager, validEditManager, validEmployee, permis
 const { getDesignations } = require('../controllers/department.controller');
 const Permission= require('../validations/permissions');
 const { createLeaveType, getEmployees, LeaveTypes, createLeave, RemainingLeave, LeavesEmployee, LeavesManager, LeaveApproval, LeavesEmployeeHR, getLeave, editLeave } = require('../controllers/leave.controller');
+const { createAttendanceCsv } = require('../controllers/attendance.controller');
+const { getAttendance } = require('../controllers/attendance.controller');
 
 // Admin Controller
 router.post('/',adminController.createAdmin);
@@ -79,7 +81,8 @@ router.delete('/delete-employee',EmployeeController.deleteEmployee);
 
 
 router.get('/salaryTypes',EmployeeController.salaryTypes);
-// router.get('/view-attendance-current', adminController.viewCurrentlyMarkedAttendance);
+router.post('/create-attencdance-csv',CsvMulterUpload.single('file'),isAuth,createAttendanceCsv);
+router.get('/get-attendances',getAttendance)
 // router.put('/Employee/viewAttendance', adminController.viewAttendanceSheet);
 
 
