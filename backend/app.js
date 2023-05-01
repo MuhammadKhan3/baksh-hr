@@ -21,9 +21,11 @@ const Department = require('./src/models/department');
 const Designation = require('./src/models/designation');
 const EmployeeCompany = require('./src/models/empCompany');
 const EmployeeBank = require('./src/models/empBank');
+const Attendance  = require('./src/models/attendance');
+
 const Bank=require('./src/models/bank');
 const cors=require('cors')
-const path=require('path')
+const path=require('path');
 
 const version1='v1';
 const options={
@@ -128,7 +130,12 @@ Leave.belongsTo(LeaveType,{foreignKey:'leaveTypeId'})
 User.hasMany(Leave,{foreignKey:'createId',as:'creator'})
 Leave.belongsTo(User,{foreignKey:'createId'})
 
+User.hasMany(Attendance,{foreignKey:'userId',as:'user'})
+Attendance.belongsTo(User,{foreignKey:'userId'})
 
+
+User.hasMany(Attendance,{foreignKey:'attendanceById',as:'attendanceBy'})
+Attendance.belongsTo(User,{foreignKey:'attendanceById',as:'attendanceBy'})
 // 
 sequelize
 .sync({alter:true})

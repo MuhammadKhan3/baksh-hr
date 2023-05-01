@@ -274,9 +274,9 @@ const useStyles=makeStyles({
 // LeaveTable by default
 export default function LeaveTableHr  ({employees=[],setemployees,handleOpen,setDelete,search,departmentId}) {
   const [page, setPage] = useState(0);
+  const [data,setdata]=useState([]);
   const [totalPages,setTotalPages]=useState(0);
   const [totalData,setTotalData]=useState(0);
-  const [data,setdata]=useState([]);
   const [rowsPerPage,setRowsPerPage]=useState(6);
 
 

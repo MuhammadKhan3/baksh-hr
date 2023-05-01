@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Box, Checkbox, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { FiberManualRecord, CancelOutlined, CheckCircleOutlined, RadioButtonUnchecked } from '@material-ui/icons';
@@ -7,6 +7,7 @@ import { green, purple, red } from '@material-ui/core/colors';
 import { MobileTimePicker } from '@mui/x-date-pickers';
 import DepartmentDropdown from '../components/DepartmentsDropDown';
 import Sidebar from '../../../components/sidebar/sidebar';
+import axios from 'axios';
 
 
 const useStyles = makeStyles({
@@ -107,12 +108,12 @@ const rows = [
 
 const statusIcon = (status) => {
   switch (status) {
-    case 'Present':
+    case 'present':
         return <Chip icon={<FiberManualRecord style={{ color: 'green' }} />} label="Present" variant="outlined" />;
     //   return <FiberManualRecord style={{ color: 'green' }} /><b>Present</b>;
-    case 'Absent':
+    case 'absent':
         return <Chip icon={<FiberManualRecord style={{ color: 'red' }} />} label="Absent" variant="outlined" />;
-    case 'None':
+    case 'none':
         return <Chip icon={<FiberManualRecord />} label="None" variant="outlined" />;
     default:
       return null;
@@ -122,7 +123,7 @@ const statusIcon = (status) => {
 const CustomTableCell = ({ row, name, selectedRows, handleRowCheckboxChange }) => {
   const classes = useStyles();
 
-
+  console.log(row,name)
   return (
     <TableCell align="center">
       {name === 'status' ? (
@@ -138,7 +139,7 @@ const CustomTableCell = ({ row, name, selectedRows, handleRowCheckboxChange }) =
 
 const DailyAttendanceTable = () => {
   const classes = useStyles();
-
+  const [attendance,setAttendance]=useState([]);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -156,6 +157,16 @@ const DailyAttendanceTable = () => {
       setSelectedRows([]);
     }
   };
+
+  useEffect(()=>{
+    const fetchAttendance=async ()=>{
+       const response=await axios.get('http://localhost:8000/api/admin/get-attendances')
+       console.log(response?.data)
+        setAttendance(response?.data?.attendance)
+
+    }
+    fetchAttendance();
+  },[])
 
   const handleRowCheckboxChange = (event, row) => {
 
@@ -175,7 +186,7 @@ const DailyAttendanceTable = () => {
     setAnchorEl(null);
   }
 
-
+  console.log(attendance)
   return (
     <div className={classes.mainContainer}>
       <Box component='div' className={classes.sidebar}>
@@ -192,7 +203,7 @@ const DailyAttendanceTable = () => {
                 <Checkbox selected={selectedRows.length === rows.length} onChange={handleHeaderCheckboxChange} />
               </TableCell>
               <TableCell align="center">ID</TableCell>
-              <TableCell align="center">Department</TableCell>
+              {/* <TableCell align="center">Department</TableCell> */}
               <TableCell align="center">Employee</TableCell>
               <TableCell align="center">Attendance By</TableCell>
               <TableCell style={{width: '0vw'}} align="center">Check in</TableCell>
@@ -202,7 +213,7 @@ const DailyAttendanceTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {attendance?.map((row,i) => (
               <TableRow key={row.id}>
                   <CustomTableCell
                       selectedRows={selectedRows}
@@ -210,13 +221,15 @@ const DailyAttendanceTable = () => {
                       row={row}
                       name="checkbox"
                   />
-                  <CustomTableCell row={row} name="id" />
-                <CustomTableCell row={row} name="employee" />
-                <CustomTableCell row={row} name="department" />
+                  <CustomTableCell row={{'id':i+1}} name="id" />
+                {/* <CustomTableCell row={row} name="email" /> */}
+                <CustomTableCell row={row} name="name" />
                 <CustomTableCell row={row} name="attendanceBy" />
                 <TableCell align='right'>
                   <Box sx={{ border:'1px solid black', padding:0, borderRadius: 10, width:100, height: 40, overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                       <MobileTimePicker
+                          value={row?.checkin}
+                          disabled={true}
                           views={['hours', 'minutes']} 
                           onChange={(newValue) => setCheckIn(newValue)}
                           sx={{ width: '100%', padding: 0 }}
@@ -225,7 +238,7 @@ const DailyAttendanceTable = () => {
                 </TableCell>
                 <TableCell align='left'>
                   <Box sx={{ border:'1px solid black', padding:0, borderRadius: 10, width:100, height: 40, overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                      <MobileTimePicker sx={{ borderRadius: '50', width: 100, padding: '0px', overflow: 'hidden' }} onChange={(newValue) => setCheckOut(newValue)} views={['hours', 'minutes']} />        
+                      <MobileTimePicker disabled={true} value={row?.checkout} sx={{ borderRadius: '50', width: 100, padding: '0px', overflow: 'hidden' }} onChange={(newValue) => setCheckOut(newValue)} views={['hours', 'minutes']} />        
                   </Box>
                 </TableCell>
                 <CustomTableCell row={row} name="status" />
@@ -269,5 +282,4 @@ const DailyAttendanceTable = () => {
   
   );
 };
-
 export default DailyAttendanceTable;

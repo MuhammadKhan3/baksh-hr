@@ -1,69 +1,50 @@
+const sequelize = require("sequelize");
 const Attendance = require("../models/attendance")
 const Permission = require("../models/permission")
 const Role = require("../models/role")
 const User = require("../models/user")
+const csv = require('csv-parser');
+const fs = require('fs');
+const path = require('path');
 
-const createAttendance= async(req,userId,name,month,fingerprint,status,year,checkin,checkout,createId)=>{
-        console.log(userId,name,month,fingerprint,year,checkin, checkout,createId)
 
-        const createAttendance=await Attendance.create({checkin});
-        console.log(createAttendance)
-        // var dateofbirth= new Date(dob);
-        //    Attendance.find({
-        //     UserId: req.user._id,
-        //     month: new Date().getMonth()+ 1,
-        //     date: new Date().getDate(),
-        //     year: new Date().getFullYear()
-        // }, function getAttendanceSheet(err, docs) {
-        //     var found = 0;
-        //     if (docs.length > 0) {
-        //         found = 1;
-        //     }
-        //     else {
-    
-        //         var newAttendance = new Attendance();
-        //         newAttendance.userId = req.user._id;
-        //         newAttendance.year = new Date().getFullYear();
-        //         newAttendance.month = new Date().getMonth() + 1;
-        //         newAttendance.date = new Date().getDate();
-        //         newAttendance.present = 1;
-        //         newAttendance.save(function saveAttendance(err) {
-        //             if (err) {
-        //                 console.log(err);
-        //             }
-    
-        //         });
-        //     }
-        //     res.redirect('/view-attendance-current');
-    
-        // });
+const createAttendance=(file,admin)=>{
+    console.log('hit...')
+
+    const filePath = path.join(__dirname, `../../uploads/attendance/${file.filename}`);
+    count=0
+    fs.createReadStream(filePath)
+    .pipe(csv())
+    .on('data', async (row) => {
+        console.log(row)
+            const user=await User.findOne({where:{email:row?.email}})
+            Attendance.create({
+                name:user.name,
+                checkin:row.checkin,
+                checkout:row.checkout,
+                userId:user?.id,
+                status:row?.status,
+                attendanceById:admin?.id
+            })
+        })
+        .on('end', () => {
+
+            return "Ok"
+            // done reading the file
+        });        
+
+
 }
 
-const getAttendance=(req, res, next)=>{
-    var attendanceChunks = [];
+const getAttendance=async(req, res, next)=>{
 
-    Attendance.find({
-        userId: req.params._id,
-        month: new Date().getMonth() + 1,
-        year: new Date().getFullYear()
-    }).sort({_id: -1}).exec(function getAttendanceSheet(err, docs) {
-        var found = 0;
-        if (docs.length > 0) {
-            found = 1;
-        }
-        for (var i = 0; i < docs.length; i++) {
-            attendanceChunks.push(docs[i]);
-        }
-        res.render('Attendance/viewAttendance', {
-            title: 'Attendance Sheet',
-            month: new Date().getMonth() + 1,
-            csrfToken: req.csrfToken(),
-            found: found,
-            attendance: attendanceChunks,
-            moment: moment,
-            userName: req.body.name
-        });
+    let Attendace=await Attendance.findAll({
+        include:{model:User,as:'attendanceBy',attributes:['name']}
     });
+    Attendace=await Attendace.map((data)=>{
+        return {name:data['name'],email:data['email'],attendanceBy:data?.attendanceBy?.name,checkin:data?.checkin,checkout:data?.checkout,status:data?.status}
+    })
+    return Attendace;
 }
 
 

@@ -103,3 +103,11 @@
 {"level":"error","message":"Unknown column 'User.deletedAt' in 'where clause'","timestamp":"2023-04-14T09:44:36.225Z"}
 {"level":"error","message":"Unknown column 'User.deletedAt' in 'where clause'","timestamp":"2023-04-14T09:44:48.614Z"}
 {"level":"error","message":"Unknown column 'User.deletedAt' in 'where clause'","timestamp":"2023-04-14T09:45:10.368Z"}
+{"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-04-29T13:20:25.022Z"}
+{"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-04-29T13:20:48.591Z"}
+{"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-04-29T13:20:54.030Z"}
+{"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-05-01T10:20:28.464Z"}
+{"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-05-01T10:20:42.777Z"}
+{"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-05-01T10:21:33.946Z"}
+{"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-05-01T10:22:49.913Z"}
+{"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-05-01T10:26:41.011Z"}

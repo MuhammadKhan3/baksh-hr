@@ -1,19 +1,23 @@
 const { error } = require("winston");
-const Attendance = require("../models/attendance");
+const Attendance = require("../services/attendance.service");
 const User = require("../models/user");
 
 //@desc get attendance
 //@route GET /api/admin
 //@access private
-const getAttendance = async(req, res, next)=>{
-     const {checkin, checkout} = req.body
+const createAttendanceCsv= async (req,res,next)=>{
     try {
-      if(!checkin || checkout){
-        res.status(400)
-        throw new Error ('please add time')
-      }
-        const response=await Attendance.createAttendance(req,res,checkin);
-         res.json({msg:"mark employee attendance",flag:true,employees:response})
+        let response=await Attendance.createAttendance(req.file,req.user);
+         res.json({msg:"Mark Employee Csv attendance",flag:true,Attendance:response})
+    } catch (error) {
+        return Error(req,res,error);
+    }
+}
+
+const getAttendance = async(req, res, next)=>{
+    try {
+        const response=await Attendance.getAttendance();
+        res.json({msg:"Fetch  Attendance Succefully",flag:true,attendance:response})
     } catch (error) {
         return Error(req,res,error);
     }
@@ -71,4 +75,4 @@ const getAttendance = async(req, res, next)=>{
 
   }
 
-  module.exports ={getAttendance,setAttendance,updateAttendance,deleteAttendnace}
+  module.exports ={getAttendance,setAttendance,updateAttendance,deleteAttendnace,createAttendanceCsv}
