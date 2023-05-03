@@ -39,6 +39,15 @@ const getAttendance = async(req, res, next)=>{
     // }
   }
 
+const AttendaceReport=async (req,res,next)=>{
+  try {
+    const response=await Attendance.attencdanceReport();
+    res.json({msg:"Fetch  Attendance Report Succefully",flag:true,attendance:response})
+} catch (error) {
+    return Error(req,res,error);
+}
+}
+
 
     //@desc update attendance
     //@route UPDATE /api/:id
@@ -74,5 +83,9 @@ const getAttendance = async(req, res, next)=>{
     // }
 
   }
+  const attendanceSchedule=async (req,res,next)=>{
+    const attencdance=await Attendance.attendanceSchedule()
+    res.json({attencdance:attencdance})
+  }
 
-  module.exports ={getAttendance,setAttendance,updateAttendance,deleteAttendnace,createAttendanceCsv}
+  module.exports ={getAttendance,setAttendance,updateAttendance,deleteAttendnace,createAttendanceCsv,AttendaceReport,attendanceSchedule}

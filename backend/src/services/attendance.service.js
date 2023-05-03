@@ -6,11 +6,15 @@ const User = require("../models/user")
 const csv = require('csv-parser');
 const fs = require('fs');
 const path = require('path');
+const moment=require('moment')
+const date=new Date()
+const cron = require('node-cron');
+
 
 
 const createAttendance=(file,admin)=>{
-    console.log('hit...')
 
+    console.log('hit....')
     const filePath = path.join(__dirname, `../../uploads/attendance/${file.filename}`);
     count=0
     fs.createReadStream(filePath)
@@ -36,7 +40,7 @@ const createAttendance=(file,admin)=>{
 
 }
 
-const getAttendance=async(req, res, next)=>{
+const getAttendance=async()=>{
 
     let Attendace=await Attendance.findAll({
         include:{model:User,as:'attendanceBy',attributes:['name']}
@@ -47,6 +51,54 @@ const getAttendance=async(req, res, next)=>{
     return Attendace;
 }
 
+const attencdanceReport=async(checkin=date)=>{
+    month=moment(checkin).format('MM')
+    year=moment(checkin).format('YYYY')
+    day=moment(checkin).day(1).format('DD')
+
+    console.log(day,month,year)
+
+    try {
+        let Attendace=await User.findAll({
+            include:[
+                {
+                    model:Role,
+
+                    where:{
+                        // roleName:'manager',
+                        [sequelize.Op.or]:[{roleName:'manager'},{roleName:'employee'}]
+                    }
+                },
+                {
+                    model:Attendance,
+                    required: false,
+                    as:'attendances',
+                    // attributes:[sequelize.fn("COUNT", sequelize.col("id"))],
+                    where:{
+                        // checkin:{
+                            [sequelize.Op.and]: [
+                                sequelize.where(sequelize.fn('MONTH', sequelize.col('checkin')), month),
+                                sequelize.where(sequelize.fn('YEAR', sequelize.col('checkin')), year),
+                                sequelize.where(sequelize.fn('DAY', sequelize.col('checkin')), {
+                                    [sequelize.Op.gte]: day
+                                  }),
+        
+                            ],        
+                        // }
+                    }
+        
+                }
+            ],
+
+        });
+    
+        return Attendace;
+    
+    } catch (error) {
+        console.log(error)        
+    }
+
+}
 
 
 const editAttendance=async (req,userId,name,month,fingerprint,status,year,checkin,checkout)=>{
@@ -73,7 +125,54 @@ const editAttendance=async (req,userId,name,month,fingerprint,status,year,checki
             const attendance=await Attendance.findOne({where:{id:userId}});
             await attendance.destroy();
             return attendance;
-        }
-        
+}
 
-module.exports={createAttendance,getAttendance,editAttendance,deleteAttendance};
+const attendanceSchedule=async ()=>{
+    const checkin=date;
+    month=moment(checkin).format('MM')
+    year=moment(checkin).format('YYYY')
+    day=moment(checkin).format('DD')
+    console.log('schdule',day)
+
+    const Users=await User.findAll({
+        include:[{
+            model:Role,
+            where:{
+                [sequelize.Op.or]:[{roleName:'manager'},{roleName:'employee'}]
+            }
+        }]
+    })
+    const today = moment().format('YYYY-MM-DD'); // Get today's date formatted as YYYY-MM-DD
+
+    for (const user of Users) {
+        console.log(user.id)
+            const attendance=await Attendance.findOne({
+            where:{
+                    userId:user.id,
+                    checkin:today,
+                // [sequelize.Op.and]: [
+                //         sequelize.where(sequelize.fn('MONTH', sequelize.col('checkin')), month),
+                //     sequelize.where(sequelize.fn('YEAR', sequelize.col('checkin')), year),
+                //     sequelize.where(sequelize.fn('DAY', sequelize.col('checkin')),day),
+        
+                //     ],        
+                }
+            })
+            const checkin = moment().set({hour: 0, minute: 0, second: 0, millisecond: 0});
+            if(attendance===null){
+                Attendance.create({
+                    name:user.name,
+                    checkin:checkin,
+                    checkout:null,
+                    userId:user?.id,
+                    status:'absent',
+                    attendanceById:null
+                })
+            }
+    }
+    return Users;
+}
+  
+
+
+module.exports={createAttendance,getAttendance,editAttendance,deleteAttendance,attencdanceReport,attendanceSchedule};

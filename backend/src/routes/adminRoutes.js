@@ -12,7 +12,7 @@ const {validRole,validUser,validManager, validEditManager, validEmployee, permis
 const { getDesignations } = require('../controllers/department.controller');
 const Permission= require('../validations/permissions');
 const { createLeaveType, getEmployees, LeaveTypes, createLeave, RemainingLeave, LeavesEmployee, LeavesManager, LeaveApproval, LeavesEmployeeHR, getLeave, editLeave } = require('../controllers/leave.controller');
-const { createAttendanceCsv } = require('../controllers/attendance.controller');
+const { createAttendanceCsv, AttendaceReport, attendanceSchedule } = require('../controllers/attendance.controller');
 const { getAttendance } = require('../controllers/attendance.controller');
 
 // Admin Controller
@@ -83,6 +83,9 @@ router.delete('/delete-employee',EmployeeController.deleteEmployee);
 router.get('/salaryTypes',EmployeeController.salaryTypes);
 router.post('/create-attencdance-csv',CsvMulterUpload.single('file'),isAuth,createAttendanceCsv);
 router.get('/get-attendances',getAttendance)
+router.get('/attendance-report',AttendaceReport)
+router.get('/attendance-schedule',attendanceSchedule)
+
 // router.put('/Employee/viewAttendance', adminController.viewAttendanceSheet);
 
 

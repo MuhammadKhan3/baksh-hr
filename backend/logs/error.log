@@ -111,3 +111,5 @@
 {"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-05-01T10:21:33.946Z"}
 {"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-05-01T10:22:49.913Z"}
 {"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-05-01T10:26:41.011Z"}
+{"level":"error","message":"Unknown column 'managerData.departmentId' in 'field list'","timestamp":"2023-05-03T11:21:24.778Z"}
+{"level":"error","message":"Unknown column 'managerData.departmentId' in 'field list'","timestamp":"2023-05-03T11:22:35.565Z"}

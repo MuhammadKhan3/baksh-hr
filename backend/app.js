@@ -8,6 +8,8 @@ const bodyParser=require('body-parser');
 const Manager = require('./src/models/manager');
 const LeaveType=require('./src/models/leaveType')
 const Leave=require('./src/models/leave')
+const cron = require('node-cron');
+
 // .evn file get
 require('dotenv').config();
 
@@ -26,6 +28,7 @@ const Attendance  = require('./src/models/attendance');
 const Bank=require('./src/models/bank');
 const cors=require('cors')
 const path=require('path');
+const { attendanceSchedule } = require('./src/services/attendance.service');
 
 const version1='v1';
 const options={
@@ -75,6 +78,9 @@ Manager.belongsTo(User,{foreignKey: 'userId'})
 
 User.hasMany(Manager,{foreignKey:'createId'})
 Manager.belongsTo(User,{foreignKey: 'createId'})
+
+// Department.hasMany(Manager,{foreignKey:'departmentId'})
+// Manager.belongsTo(User,{foreignKey: 'departmentId'})
 
 
 User.hasMany(Department,{foreignKey:'userId'});
@@ -130,13 +136,19 @@ Leave.belongsTo(LeaveType,{foreignKey:'leaveTypeId'})
 User.hasMany(Leave,{foreignKey:'createId',as:'creator'})
 Leave.belongsTo(User,{foreignKey:'createId'})
 
-User.hasMany(Attendance,{foreignKey:'userId',as:'user'})
+User.hasMany(Attendance,{foreignKey:'userId',as:'attendances'})
 Attendance.belongsTo(User,{foreignKey:'userId'})
 
 
 User.hasMany(Attendance,{foreignKey:'attendanceById',as:'attendanceBy'})
 Attendance.belongsTo(User,{foreignKey:'attendanceById',as:'attendanceBy'})
-// 
+
+
+cron.schedule('0 12 * * *',attendanceSchedule);
+
+// cron.start();
+
+
 sequelize
 .sync({alter:true})
 .then(() => {
