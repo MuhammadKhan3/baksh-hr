@@ -10,6 +10,9 @@ import Checkbox from "@mui/material/Checkbox";
 import { Box, Container } from "@mui/system";
 import { TablePagination } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import moment from "moment";
+import axios from "axios";
+import { adminApi } from "../../../axios/axiosData";
 
 const useStyles = makeStyles({
   id_box: {
@@ -345,11 +348,40 @@ const rows = [
   ),
 ];
 
+
+const attendanceSplit=(status,classes)=>{
+  const statusSub=status.substring(0, 1)
+  return <TableCell className={classes.tableCell}>
+               <Box className={classes.username}>{statusSub}</Box>
+          </TableCell>
+}
 export default function AttendanceData() {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const classes = useStyles();
   const [page, setPage] = React.useState(3);
+  const [attendance,setAttendance]=React.useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(6);
+  const date=new Date()
+  const days=moment(date, 'YYYY-MM').day()
+  console.log(days)
+
+
+  React.useEffect(()=>{
+    const attendanceHandler=async ()=>{
+      const response=await axios.get(adminApi+'/attendance-report')
+      setAttendance(response?.data?.attendance)
+    }
+    attendanceHandler();
+  },[])
+
+  const getDayName = (dayNum) => {
+    const dayName = moment().day(dayNum).format('dddd');
+    return dayName;
+  };
+  console.log()
+
+
+
   return (
     <Box>
       <TableContainer
@@ -378,8 +410,31 @@ export default function AttendanceData() {
                 <Box className={classes.font_style}>Employee</Box>
               </TableCell>
               <TableCell className={classes.tableCell}></TableCell>
-              <TableCell className={classes.tableCell}>
-                <Box className={classes.font_style}>01</Box>
+              {Array(days).fill([1]).map((data,i)=>{
+                  {console.log('10')}
+                  return(
+                    <>
+                     {getDayName(i+1)==='Sunday' ?
+                      <TableCell
+                           className={`${classes.decreaseGap} ${classes.tableCell}`}
+                      >
+                        <Box
+                          className={`${classes.font_style} ${classes.sunday_style}`}
+                        >
+                          {i+1}
+                        </Box>
+                      </TableCell>
+                      :
+                      <TableCell className={classes.tableCell}>
+                        <Box className={classes.font_style}>{i+1}</Box>
+                      </TableCell>              
+                      }
+                    </>
+                  )
+                })
+              }
+              {/* <TableCell className={classes.tableCell}>
+                    <Box className={classes.font_style}>01</Box>
               </TableCell>
               <TableCell className={classes.tableCell}>
                 <Box className={classes.font_style}>02</Box>
@@ -457,7 +512,7 @@ export default function AttendanceData() {
                 className={`${classes.decreaseGap} ${classes.tableCell}`}
               >
                 <Box className={classes.font_style}>18</Box>
-              </TableCell>
+              </TableCell> */}
 
               <TableCell className={classes.tableCell}>
                 <Box className={classes.font_style}>
@@ -478,7 +533,7 @@ export default function AttendanceData() {
           </TableHead>
 
           <TableBody>
-            {rows.map((row) => (
+            {attendance.map((row) => (
               ///Row One Start
               <TableRow key={row.name}>
                 <TableCell className={classes.tableCell}>
@@ -493,13 +548,11 @@ export default function AttendanceData() {
 
                 <TableCell></TableCell>
 
-                <TableCell className={classes.tableCell}>
-                  <Box className={classes.present_box}>
-                    <Box className={classes.present_P}>{row.One}</Box>
-                  </Box>
-                </TableCell>
-
-                <TableCell className={classes.tableCell}>
+                {row?.attendances?.map(({status})=>{
+                  return  attendanceSplit(status,classes)
+                })}
+                
+                {/*<TableCell className={classes.tableCell}>
                   <Box className={classes.present_box}>
                     <Box className={classes.present_P}>{row.One}</Box>
                   </Box>
@@ -592,7 +645,7 @@ export default function AttendanceData() {
                   <Box className={classes.AttendanceManager}>
                     <Box className={classes.total_Leaves}>{row.Seventeen}</Box>
                   </Box>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>
