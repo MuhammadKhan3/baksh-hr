@@ -93,3 +93,6 @@
 {"level":"error","message":"notNull Violation: department.userId cannot be null","timestamp":"2023-03-18T12:14:23.576Z"}
 {"level":"error","message":"Include unexpected. Element has to be either a Model, an Association or an object.","timestamp":"2023-04-01T20:08:35.174Z"}
 {"level":"error","message":"Include unexpected. Element has to be either a Model, an Association or an object.","timestamp":"2023-04-01T20:08:48.184Z"}
+{"level":"error","message":"Unknown column 'name' in 'field list'","timestamp":"2023-04-18T05:37:57.105Z"}
+{"level":"error","message":"Unknown column 'name' in 'field list'","timestamp":"2023-04-18T05:54:09.724Z"}
+{"level":"error","message":"Unknown column 'name' in 'field list'","timestamp":"2023-04-18T06:49:26.763Z"}

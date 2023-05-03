@@ -15,6 +15,8 @@ import Attendance from "./features/attendance/pages/attendance";
 import ManageAttandance from "./features/attendance/pages/ManageAttandance";
 import Dashboardd from "./features/dashboard/Pages/Dashboardd";
 import CompanyDetails from "./features/setup/company-details/Pages/CompanyDetails";
+import AddManager from "./features/manager/Pages/AddManager";
+import ManageManager from "./features/manager/Pages/ManageManager";
 
 const Dashboard = React.lazy(() => import("./features/dashboard"));
 const Employee = React.lazy(() => import("./features/employee"));
@@ -158,6 +160,23 @@ const RouterLink = () => {
               <React.Suspense fallback={<>...</>}>
                 {/* <CompanyDetails /> */}
                 <CompanyDetails />
+              </React.Suspense>
+            }
+          />
+
+          <Route
+            path="/add-manager"
+            element={
+              <React.Suspense fallback={<>...</>}>
+                <AddManager />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path="/manage-manager"
+            element={
+              <React.Suspense fallback={<>...</>}>
+                <ManageManager />
               </React.Suspense>
             }
           />

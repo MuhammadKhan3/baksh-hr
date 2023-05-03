@@ -22,9 +22,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     width: "100%",
   },
-  module:{
-    width:'75%',
-    marginRight:'2%',
+  module: {
+    width: "75%",
+    marginRight: "2%",
     // display:'flex',
     // flexDirection:'column'
   },
@@ -34,18 +34,18 @@ const useStyles = makeStyles((theme) => ({
     height: "auto",
     margin: "0 5vw",
   },
-  filterContainer:{
-    display:'flex',
-    flexDirection:'row',
-    justifyContent:'space-between',
-    alignItems:'flex-start'
+  filterContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
   },
-  selectContainer:{
-    width:'30%'
+  selectContainer: {
+    width: "30%",
   },
-  inputContainer:{
+  inputContainer: {
     // width:'100%'
-  }
+  },
 }));
 
 export default function ManageLeave() {
@@ -56,22 +56,21 @@ export default function ManageLeave() {
         <Sidebar />
       </Box>
       <Box component="div" className={classes.module}>
-        <Header heading={"Manage Leave"}/>
+        <Header heading={"Manage Leave"} />
         {/* <SimpleHeader heading="Add Leave" /> */}
 
         <Box>
-          
-          <Box component='div' className={classes.filterContainer}>
-             <Box component='div' className={classes.selectContainer}>
-                <SelectUi/>
-             </Box>
-             <Box component='div' className={classes.inputContainer}>
-                <SearchBar/>
-             </Box>
+          <Box component="div" className={classes.filterContainer}>
+            <Box component="div" className={classes.selectContainer}>
+              <SelectUi />
+            </Box>
+            <Box component="div" className={classes.inputContainer}>
+              <SearchBar />
+            </Box>
           </Box>
           <Box component="div" className={classes.table}>
             {/* <AddLeave /> */}
-            <LeaveTable/>
+            <LeaveTable />
           </Box>
         </Box>
       </Box>

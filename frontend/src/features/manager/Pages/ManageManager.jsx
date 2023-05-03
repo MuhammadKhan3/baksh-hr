@@ -1,24 +1,14 @@
-import { Formik, useFormik } from "formik";
-import React, { createRef, useEffect, useState } from "react";
-import Header from "../../../components/header/header";
+import React, { useState } from "react";
 import Sidebar from "../../../components/sidebar/sidebar";
 import { makeStyles } from "@material-ui/core";
-import { Box, Button, FormControl } from "@mui/material";
-import EmployeLeft from "../components/employeLeft";
-import EmployeeRight from "../components/employeeRight";
-import { useDispatch, useSelector } from "react-redux";
-import EmployeeThunk from "../../../redux/thunk/employeeThunk";
+import { Box } from "@mui/material";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { adminApi } from "../../../axios/axiosData";
-import { useNavigate } from "react-router-dom";
-import * as yup from "yup";
-import { DataGrid } from "@mui/x-data-grid";
-import TopHeader from "../ui/seachBar";
-import SearchBar from "../ui/seachBar";
-import EmployeeTable from "../components/employeeTable";
-import Modal from "../../../components/ui/modal";
 import DeleteModal from "../../../components/ui/modal";
+import SearchBar from "../../employee/ui/seachBar";
+import EmployeeTable from "../../employee/components/employeeTable";
+import AttendanceHeader from "../../attendance/ui/attendanceHeader";
 
 const useStyles = makeStyles({
   mainContainer: {
@@ -35,7 +25,7 @@ const useStyles = makeStyles({
     padding: "2rem",
     width: "100%",
   },
-  // #E1E1E1
+
   sideBorder: {
     borderRight: "1px solid #E1E1E1;",
     width: "0px",
@@ -43,21 +33,21 @@ const useStyles = makeStyles({
     margin: "0 5vw",
   },
   formikDiv: {
-    // display:'flex',
-    // flexDirection:'row',
     width: "100%",
   },
   column: {
     display: "flex",
     flexDirection: "column",
     width: "70%",
+    gap: "1.5rem",
   },
+
   searchContainer: {
     width: "22%",
   },
 });
 
-const Managemployee = () => {
+const ManageManager = () => {
   const classes = useStyles();
   const [employees, setemployees] = useState([]);
   const [open, setOpen] = React.useState(false);
@@ -99,7 +89,12 @@ const Managemployee = () => {
           handleOpen={handleOpen}
           open={open}
         />
-        <Header heading={"Manage Employee"} />
+        <AttendanceHeader
+          heading={"Manage Manager"}
+          width={"105%"}
+          marginLeft={"0%"}
+        />
+
         <Box component="div" className={classes.searchContainer}>
           <SearchBar setemployees={setemployees} />
         </Box>
@@ -114,4 +109,4 @@ const Managemployee = () => {
   );
 };
 
-export default Managemployee;
+export default ManageManager;
