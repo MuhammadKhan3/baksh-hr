@@ -22,6 +22,8 @@ import ManagemployeeManager from "./features/employee/pages/manager/manageEmploy
 import DailyAttendanceTable from "./features/attendance/pages/DailyAttendance";
 import EditLeaveHr from "./features/Leave/pages/hr/editLeave";
 import CompanyDetails from "./features/setup/company-details/Pages/CompanyDetails";
+import AddManager from "./features/manager/Pages/AddManager";
+import ManageManager from "./features/manager/Pages/ManageManager";
 
 const Dashboard = React.lazy(() => import("./features/dashboard"));
 const Employee = React.lazy(() => import("./features/employee"));
@@ -297,6 +299,25 @@ const RouterLink = () => {
                 </React.Suspense>
               }
             />
+            <Route
+              path="/add-manager"
+              element={
+                <React.Suspense fallback={<>...</>}>
+                  <AddManager/>
+                </React.Suspense>
+              }
+            />
+            <Route
+              path="/manage-manager"
+              element={
+                <React.Suspense fallback={<>...</>}>
+                  <ManageManager/>
+                </React.Suspense>
+              }
+            />
+
+
+
             <Route
               path="/setup/add-leaveType"
               element={
