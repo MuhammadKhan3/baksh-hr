@@ -1,7 +1,7 @@
 import React from "react";
 import CompanyRight from "../ui/companyRight";
 import { Button, makeStyles } from "@material-ui/core";
-import BlackButton from "../../leave/ui/blackButton";
+import BlackButton from "../ui/button";
 import { Theme } from "@mui/material";
 
 const useStyles = makeStyles((Theme) => ({
@@ -18,14 +18,29 @@ const useStyles = makeStyles((Theme) => ({
     },
   },
 }));
-export default function RenderingComponentRight() {
+export default function RenderingComponentRight({offices,setOffices}) {
   const classes = useStyles();
+  const AddofficeHandler=()=>{
+    setOffices((state)=>{
+      return [...state,{
+        id:offices.length+1,
+        address:'',
+        country:'',
+        city:'',
+        userId:'',
+        officeCode:''
+
+      }]
+    })
+  }
   return (
     <div>
-      <CompanyRight office="Office #1" />
-      <CompanyRight office="Office #2" />
+      {offices.map((data,i)=>{
+        return <CompanyRight data={data} id={data?.id} offices={offices} setOffices={setOffices} office="Office #1" />
+      })}
+      {/* <CompanyRight office="Office #2" /> */}
       <div className={classes.buttonStyling}>
-        <BlackButton label="Add More" />
+        <BlackButton label="Add More" onClick={AddofficeHandler}/>
       </div>
     </div>
   );

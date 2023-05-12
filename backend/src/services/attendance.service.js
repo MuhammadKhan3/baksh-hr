@@ -9,6 +9,10 @@ const path = require('path');
 const moment=require('moment')
 const date=new Date()
 const cron = require('node-cron');
+const Employee = require("../models/employee");
+const EmployeeCompany = require("../models/empCompany");
+const Department = require("../models/department");
+const Manager = require("../models/manager");
 
 
 
@@ -51,19 +55,54 @@ const getAttendance=async()=>{
     return Attendace;
 }
 
-const attencdanceReport=async(checkin=date)=>{
-    month=moment(checkin).format('MM')
-    year=moment(checkin).format('YYYY')
-    day=moment(checkin).day(1).format('DD')
+const attencdanceReport=async(id,{department='',search='',startDate,endDate})=>{
+    const start = startDate==='null' ? date : startDate;
+    const end = endDate==='null' ? date : endDate;
+    
+    
+    const month=moment(start).format('MM')
+    const  year=moment(start).format('YYYY')
+    const day=startDate==='null' ? moment(start).day(1).format('DD') : moment(start).format('DD')
+    console.log(startDate==='null',moment(start).day(1).format('DD'))
+    const endMonth=moment(end).format('MM')
+    const endYear=moment(end).format('YYYY')
+    const endDay=moment(end).format('DD')
 
-    console.log(day,month,year)
+    const diffInDays = startDate=='null' ? endDay :moment(end).diff(moment(start), 'days')+1;    
+    let where={};
+    if(search.length>0){
+         where={
+            [sequelize.Op.or]: { 
+                '$employeeData.name$':{[sequelize.Op.like]:`%${search}%`},
+                '$managerData.name$':{[sequelize.Op.like]:`%${search}%`},
+                     
+            },
+        }
+    }else{
+        where={
+                [sequelize.Op.or]:{
+                    '$employeeData.employee_company.department.department$': {[sequelize.Op.like]:`%${department}%`},
+                    '$managerData.department.department$': {[sequelize.Op.like]:`%${department}%`},
+                }
+        }
+    }
 
     try {
         let Attendace=await User.findAll({
+            where:where,
             include:[
                 {
+                    model:Manager,
+                    as:'managerData',
+                    include:[{model:Department}]
+                },
+                {
+                    model:Employee,
+                    as:'employeeData',
+                    include:[{model:EmployeeCompany,include:[{model:Department}]}]
+                },
+                {
                     model:Role,
-
                     where:{
                         // roleName:'manager',
                         [sequelize.Op.or]:[{roleName:'manager'},{roleName:'employee'}]
@@ -73,16 +112,34 @@ const attencdanceReport=async(checkin=date)=>{
                     model:Attendance,
                     required: false,
                     as:'attendances',
+                    
                     // attributes:[sequelize.fn("COUNT", sequelize.col("id"))],
                     where:{
                         // checkin:{
                             [sequelize.Op.and]: [
-                                sequelize.where(sequelize.fn('MONTH', sequelize.col('checkin')), month),
-                                sequelize.where(sequelize.fn('YEAR', sequelize.col('checkin')), year),
+                                sequelize.where(sequelize.fn('MONTH', sequelize.col('checkin')), {
+                                    [sequelize.Op.gte]:month
+                                }),
+                                
+                                sequelize.where(sequelize.fn('YEAR', sequelize.col('checkin')), {
+                                    [sequelize.Op.gte]:year
+                                }),
+                                
                                 sequelize.where(sequelize.fn('DAY', sequelize.col('checkin')), {
-                                    [sequelize.Op.gte]: day
-                                  }),
-        
+                                    [sequelize.Op.gte]: 01
+                                }),
+                                
+                                sequelize.where(sequelize.fn('MONTH', sequelize.col('checkin')), {
+                                    [sequelize.Op.lte]:endMonth
+                                }),
+                                
+                                sequelize.where(sequelize.fn('YEAR', sequelize.col('checkin')), {
+                                    [sequelize.Op.lte]:endYear 
+                                }),
+                                
+                                sequelize.where(sequelize.fn('DAY', sequelize.col('checkin')), {
+                                      [sequelize.Op.lte]: endDay
+                                }),
                             ],        
                         // }
                     }
@@ -92,7 +149,7 @@ const attencdanceReport=async(checkin=date)=>{
 
         });
     
-        return Attendace;
+        return {Attendace:Attendace,days:diffInDays};
     
     } catch (error) {
         console.log(error)        

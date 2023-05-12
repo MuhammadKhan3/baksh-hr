@@ -47,6 +47,20 @@ const useStyles = makeStyles({
   sidebar:{
     width:'25%'
   },
+  impBtn:{
+    backgroundColor:'#2C2F32',
+    width: '97px',
+    height: '40px',
+    padding: '8px 14px',
+    borderRadius:'10px',
+    color:'white'
+  },
+  flexRow:{
+    display:'flex',
+    justifyContent:'space-between',
+    alignItems:'center',
+    textAlign:'center'
+  }
 });
 
 const rows = [
@@ -104,6 +118,7 @@ const rows = [
     checkOut: '5:30 PM',
     status: 'None',
   },
+  
 ];
 
 const statusIcon = (status) => {
@@ -186,7 +201,21 @@ const DailyAttendanceTable = () => {
     setAnchorEl(null);
   }
 
-  console.log(attendance)
+  const importFilehandler=async (e)=>{
+    // console.log()
+    const file=e.target.files[0]
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/admin/create-attencdance-csv",
+        formData
+      );
+      console.log(res);
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
   return (
     <div className={classes.mainContainer}>
       <Box component='div' className={classes.sidebar}>
@@ -194,7 +223,13 @@ const DailyAttendanceTable = () => {
       </Box>
       <div style={{margin:'auto'}}>
       <Typography variant="h3">Daily Attendance</Typography>
-      <DepartmentDropdown></DepartmentDropdown>
+      <div className={classes.flexRow}>
+        <DepartmentDropdown></DepartmentDropdown>
+        <label htmlFor='file'>
+          <a type='button' className={classes.impBtn}>Import</a>
+        </label>
+        <input type='file' name='file' id='file' hidden  onChange={importFilehandler}/>
+      </div>
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table stickyHeader>
           <TableHead>

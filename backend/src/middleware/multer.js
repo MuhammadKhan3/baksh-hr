@@ -49,6 +49,17 @@ const Multer = multer.diskStorage({
     }
   });
 
+  const companyMulter = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, './uploads/company');
+    },
+    filename: function(req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, uniqueSuffix + file.originalname);
+    }
+  });
+
+
   const multerUpload = multer({
     limits: { fileSize: 1024 * 1024 *5 }, // Limit file size to 1MB
     fileFilter: imageFilter, 
@@ -61,5 +72,10 @@ const Multer = multer.diskStorage({
     storage:CsvMulter
   })
 
+  const companyUpload=multer({
+    limits:{fileSize:1024*1024*5},
+    fileFilter:imageFilter,
+    storage:companyMulter
+  })
 
-module.exports={multerUpload,CsvMulterUpload}
+module.exports={multerUpload,CsvMulterUpload,companyUpload}

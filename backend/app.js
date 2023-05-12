@@ -29,6 +29,8 @@ const Bank=require('./src/models/bank');
 const cors=require('cors')
 const path=require('path');
 const { attendanceSchedule } = require('./src/services/attendance.service');
+const companyDetails = require('./src/models/companyDetails');
+const Offices = require('./src/models/offices');
 
 const version1='v1';
 const options={
@@ -79,8 +81,8 @@ Manager.belongsTo(User,{foreignKey: 'userId'})
 User.hasMany(Manager,{foreignKey:'createId'})
 Manager.belongsTo(User,{foreignKey: 'createId'})
 
-// Department.hasMany(Manager,{foreignKey:'departmentId'})
-// Manager.belongsTo(User,{foreignKey: 'departmentId'})
+Department.hasMany(Manager)
+Manager.belongsTo(Department)
 
 
 User.hasMany(Department,{foreignKey:'userId'});
@@ -122,26 +124,32 @@ Employee.belongsTo(User,{
 })
 
 
-Bank.hasMany(EmployeeBank,{foreignKey:'bankId'})
-EmployeeBank.belongsTo(Bank,{foreignKey:'bankId'})
+Bank.hasMany(EmployeeBank,{foreignKey:'bankId'});
+EmployeeBank.belongsTo(Bank,{foreignKey:'bankId'});
 
 
 // Users Leaves
-User.hasMany(Leave,{foreignKey:'userId',as:'users'})
-Leave.belongsTo(User,{foreignKey:'userId',as:'users'})
+User.hasMany(Leave,{foreignKey:'userId',as:'users'});
+Leave.belongsTo(User,{foreignKey:'userId',as:'users'});
 // My sql database create
-LeaveType.hasMany(Leave,{foreignKey:'leaveTypeId'})
-Leave.belongsTo(LeaveType,{foreignKey:'leaveTypeId'})
+LeaveType.hasMany(Leave,{foreignKey:'leaveTypeId'});
+Leave.belongsTo(LeaveType,{foreignKey:'leaveTypeId'});
 
-User.hasMany(Leave,{foreignKey:'createId',as:'creator'})
-Leave.belongsTo(User,{foreignKey:'createId'})
+User.hasMany(Leave,{foreignKey:'createId',as:'creator'});
+Leave.belongsTo(User,{foreignKey:'createId'});
 
-User.hasMany(Attendance,{foreignKey:'userId',as:'attendances'})
-Attendance.belongsTo(User,{foreignKey:'userId'})
+User.hasMany(Attendance,{foreignKey:'userId',as:'attendances'});
+Attendance.belongsTo(User,{foreignKey:'userId'});
 
 
-User.hasMany(Attendance,{foreignKey:'attendanceById',as:'attendanceBy'})
-Attendance.belongsTo(User,{foreignKey:'attendanceById',as:'attendanceBy'})
+User.hasMany(Attendance,{foreignKey:'attendanceById',as:'attendanceBy'});
+Attendance.belongsTo(User,{foreignKey:'attendanceById',as:'attendanceBy'});
+
+companyDetails.hasMany(Offices,{foreignKey:'companyId',as:'companyBy'})
+Offices.belongsTo(companyDetails,{foreignKey:'companyId',as:'companyBy'});
+
+User.hasOne(Offices,{foreignKey:'userId'})
+Offices.belongsTo(User,{foreignKey:'userId'})
 
 
 cron.schedule('0 12 * * *',attendanceSchedule);

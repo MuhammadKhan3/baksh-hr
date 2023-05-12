@@ -7,6 +7,7 @@ import AttendanceDate from "../components/attedanceData";
 import SimpleHeader from "../../Leave/header/simpleHeader";
 import AttendanceHeader from "../ui/attendanceHeader";
 import DepartmentDatePicker from "../components/departmentDatePicker";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Attendance() {
   const classes = useStyles();
+
   return (
     <Box component="div" className={classes.mainContainer}>
       <Box component="div" className={classes.sidebar}>

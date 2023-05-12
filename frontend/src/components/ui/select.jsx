@@ -124,7 +124,7 @@ function getStyles(name,personName, theme) {
   };
 }
 
-export default function SelectUi({title,data=[],handleChange,name,value,error,helperText,handleBlur,placeholder}) {
+export default function SelectUi({id,title,data=[],handleChange,name,value,error,helperText,handleBlur,placeholder}) {
   const classes=useStyles();
   const dispatch=useDispatch();
   const theme = useTheme();
@@ -143,7 +143,7 @@ export default function SelectUi({title,data=[],handleChange,name,value,error,he
   //     typeof value === 'string' ? value.split(',') : value,
   //   );
   // };
-  console.log(error)
+  console.log(id)
   const answer=''
   return (
       <FormControl sx={{ width: '100%'}} >
@@ -186,10 +186,12 @@ export default function SelectUi({title,data=[],handleChange,name,value,error,he
           MenuProps={MenuProps}
           inputProps={{ 'aria-label': 'Without label' }}
           placeholder={placeholder}
+          id={id}
         >
           {data.map((list,id) => (
             <MenuItem
               key={id}
+              id={id}
               value={list.id}
               style={{textTransform: 'capitalize'}}
               // style={getStyles(list.label, personName, theme)}

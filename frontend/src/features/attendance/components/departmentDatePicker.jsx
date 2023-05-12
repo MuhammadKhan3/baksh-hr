@@ -4,9 +4,11 @@ import { makeStyles } from "@mui/styles";
 
 import { InputLabel } from "@mui/material";
 import { Box } from "@mui/system";
-import DatePickterUi from "../../../components/ui/datePickter";
+import DatePickterUi from "../ui/datePicker";
 import ForwardArrow from "../../Leave/ui/forwardArrow";
 import SearchBar from "../../employee/ui/seachBar";
+import { useDispatch, useSelector } from "react-redux";
+import { userActions } from "../../../redux/slice/userSlice";
 const useStyles = makeStyles({
   labels: {
     fontFamily: "Poppins !important",
@@ -36,6 +38,25 @@ const useStyles = makeStyles({
 
 export default function DepartmentDatePicker() {
   const classes = useStyles();
+  const dispatch=useDispatch();
+  const search=useSelector(state=>state.user.search);
+  const date=useSelector(state=>state.user.date);
+
+  const startDateHandler=(date)=>{
+    console.log(date)
+    dispatch(userActions.startDate(date))
+  }
+  const endDateHandler=(date)=>{
+    // console.log(e.target.value)
+    dispatch(userActions.endDate(date))
+  }
+
+  const dateHandler=()=>{
+    dispatch(userActions.setDateSearch(!date))
+    
+  }
+
+  // const
   return (
     <Box sx={{ marginLeft: "22.5%" }}>
       <Box className={classes.container}>
@@ -51,22 +72,22 @@ export default function DepartmentDatePicker() {
               <Box>
                 {/* Start Date */}
                 {/* <DatePickterUi name="leaveDate" placeholder="Start Date" /> */}
-                <DatePickterUi title="Start Date" name="selectedDate" />
+                <DatePickterUi title="Start Date" name="selectedDate" onChange={startDateHandler} />
               </Box>
               <Box>
                 {/* End Date */}
-                <DatePickterUi title="End Date" name="selectedDate" />
+                <DatePickterUi title="End Date" name="selectedDate"  onChange={endDateHandler}/>
                 {/* <DatePickterUi name="endDate" placeholder="End Date" /> */}
               </Box>
               <Box>
-                <ForwardArrow />
+                <ForwardArrow onClick={dateHandler}/>
               </Box>
             </Box>
           </Box>
         </Box>
         <Box>
           <Box>
-            <SearchBar width={"85%"} />
+            <SearchBar setSearch={(value)=>{dispatch(userActions.setSearch(value))}} width={"85%"} />
           </Box>
         </Box>
       </Box>

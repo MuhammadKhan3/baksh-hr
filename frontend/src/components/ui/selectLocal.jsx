@@ -92,6 +92,7 @@ export default function SelectLocalUi({
   helperText,
   handleBlur,
   placeholder,
+  id
 }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -115,6 +116,7 @@ export default function SelectLocalUi({
         {title}
       </Typography>
       <Select
+        id={id}
         className={classes.root}
         name={name}
         displayEmpty
@@ -155,9 +157,10 @@ export default function SelectLocalUi({
         renderValue={value !== "" ? undefined : () => <div>{placeholder}</div>}
         inputProps={{ "aria-label": "Without label" }}
       >
-        {data?.map((list, id) => (
+        {data?.map((list, i) => (
           <MenuItem
-            key={id}
+            key={i}
+            id={id}
             value={list}
             style={{ textTransform: "capitalize" }}
 

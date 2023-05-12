@@ -3,7 +3,7 @@ import { Box, IconButton } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 // Define the ForwardArrow component with a destructured arrow prop
-export default function ForwardArrow({ arrow }) {
+export default function ForwardArrow({ arrow ,onClick}) {
   return (
     // Use the MUI Box component to create a container for the arrow icon
     <Box
@@ -22,6 +22,7 @@ export default function ForwardArrow({ arrow }) {
         justifyContent: "center",
         alignItems: "center",
       }}
+      onClick={onClick}
     >
       {/* Render the arrow icon using the MUI ArrowForwardIosIcon component */}
       <IconButton>

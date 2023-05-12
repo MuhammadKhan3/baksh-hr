@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { makeStyles } from "@material-ui/core";
 import { Box, Typography } from "@mui/material";
@@ -7,8 +7,10 @@ import { Box, Typography } from "@mui/material";
 import FileInput from "../../../../components/ui/fileInput";
 // import { useDispatch, useSelector } from "react-redux";
 import { employeeAction } from "../../../../redux/slice/employeeSlice";
-import InputText from "../../../employee/ui/editEmployee/input";
+import InputText from "../../../employee/ui/input";
 import InputNumber from "../../../employee/ui/editEmployee/inputNumber";
+import { setPicture } from "../../../../redux/slice/companySlice";
+import { useSelector } from "react-redux";
 
 const { country } = require("../../../employee/components/country");
 
@@ -57,25 +59,67 @@ const useStyles = makeStyles({
     transform: "rotate(180)",
   },
 });
-export default function ComponentLeft() {
+export default function ComponentLeft({
+  values,
+  errors,
+  handleChange,
+  handleBlur,
+  touched
+}) {
   const classes = useStyles();
+  const picture=useSelector(state=>state?.company?.picture);
+
 
   return (
     <Box className={classes.container} component="div">
       <Box className={classes.innerContainer} component="div">
         <FileInput
           label={"Upload Logo"}
-          setState={employeeAction.profileAction}
+          setState={setPicture}
+          state={picture}
         />
         <InputText
           placeholder={"Company Name"}
           title={"Company Name"}
-          name="name"
-        />
-        <InputNumber placeholder={"Add Phone"} label={"Add Phone"} />
+          name="companyName"
+          error={Boolean(touched.companyName && errors.companyName)}
+          helperText={touched.companyName && errors.companyName}
+          handleBlur={handleBlur}
+          value={values.companyName}
+          handleChange={handleChange}
 
-        <InputText title={"Email"} placeholder={"Add Email"} />
-        <InputText title={"Website URL"} placeholder={"Add website URL"} />
+        />
+        <InputNumber 
+               placeholder={"Add Phone"} 
+               label={"Add Phone"} 
+               name={'phone'} 
+               value={values.phone}
+               helperText={touched.phone && errors.phone}
+               error={Boolean(touched.phone && errors.phone)}
+               handleBlur={handleBlur}
+               handleChange={handleChange}
+        />
+
+        <InputText 
+           title={"Email"} 
+           placeholder={"Add Email"} 
+           name={'email'}
+           value={values.email}
+           helperText={touched.email && errors.email}
+           error={Boolean(touched.email && errors.email)}
+           handleBlur={handleBlur}
+           handleChange={handleChange}
+        />
+        <InputText 
+            title={"Website URL"} 
+            placeholder={"Add website URL"} 
+            name={'websiteUrl'}
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            value={values.websiteUrl}
+           helperText={touched.websiteUrl && errors.websiteUrl}
+            error={Boolean(touched.websiteUrl && errors.websiteUrl)}
+        />
       </Box>
     </Box>
   );
