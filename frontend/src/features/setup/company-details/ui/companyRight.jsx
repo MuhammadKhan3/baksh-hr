@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Theme } from "@mui/material";
 import InputNumber from "../../../employee/ui/editEmployee/inputNumber";
 import MultiLineText from "../../../employee/ui/editEmployee/multiline";
-import SelectLocalUi from "../../../../components/ui/selectLocal";
+import SelectLocalUi from "../ui/selectLocal";
 import PropTypes from "prop-types";
 import { country } from "../../../employee/components/country";
 
 import { makeStyles } from "@material-ui/core";
+import SelectUi from "../ui/select";
+import axios from "axios";
+import { adminApi } from "../../../../axios/axiosData";
+import InputText from "../../../../components/ui/inputtext";
 
 const useStyles = makeStyles((Theme) => ({
   container: {
@@ -53,36 +57,98 @@ const useStyles = makeStyles((Theme) => ({
 const status = ["active", "inactive"];
 const city = ["Islambad", "Peshawar", "Quetta", "Karachi"];
 
-const CompanyRight = ({ office }) => {
+const CompanyRight = ({ office,offices,data,id,setOffices }) => {
   const classes = useStyles();
+  const [Hrs,setHrs]=useState([]);
+ 
+  const onChangeHandler=(e)=>{
+    
+    const {value,name,id}=e.target;
+    // console.log(value,name,id)
+    setOffices(
+      offices.map(item => 
+          item.id === parseInt(id) 
+          ? {...item, [name]:value}
+          : item 
+    ))
+  }
 
+  const onChangeSelect=(e)=>{    
+    let {value,name}=e.target;
+    const splitValue=value.split('-');
+    value=splitValue[0]
+    const id=splitValue[1];
+    setOffices(
+      offices.map(item => 
+          item.id === parseInt(id) 
+          ? {...item, [name]:value}
+          : item 
+    ))
+  }
+
+  useEffect(()=>{
+    const FetchHandler=async ()=>{
+      const response=await axios.get(adminApi+'/get-Hr')
+      setHrs(response?.data?.hrs)
+      console.log(data)
+    }
+    FetchHandler()
+  },[])
   return (
-    <Box className={classes.container} component="div">
+    <Box id="company" key={1} value className={classes.container} component="div">
       <Box component="div">
         <Typography component="h1" className={classes.personalLabel}>
           {office}:
         </Typography>
       </Box>
-      <Box className={classes.innerContainer} component="div">
-        <InputNumber
-          placeholder={"Add Employee ID"}
-          name="employeeId"
-          label={"Empolyee Id"}
+      <Box id={id} className={classes.innerContainer} component="div">
+        <SelectUi
+                data={Hrs} 
+                name="userId"
+                id={id}
+                handleChange={onChangeSelect}
+                handleBlur={onChangeSelect}
+                placeholder={"Select the Hr"}   
+                classes={classes}
         />
-
-        <MultiLineText label={"Address"} placeholder={"Add Address"} />
+        <Box component='div' style={{display:'flex',flexDirection:'column'}}>
+        <label>Office Code</label>                    
+        <InputText
+          id={id}
+          name={'officeCode'}
+          changeHandler={onChangeHandler}
+          placeholder={"office Code"}
+        />
+  
+        </Box>      
+        <MultiLineText 
+             label={"Address"}
+             name="address"
+             id={id}
+             handleBlur={onChangeHandler}
+             handleChange={onChangeHandler}
+             placeholder={"Add Address"} 
+        />
         <Box className={classes.flexRow}>
           <SelectLocalUi
             title={"Country"}
-            helperText={"Country"}
-            name="Country"
+            id={id}
+            handleBlur={onChangeSelect}
+            handleChange={onChangeSelect}
+
+            // helperText={"Country"}
+            name="country"
             placeholder={"Select Country"}
             data={country}
           />
           <SelectLocalUi
             title={"City"}
-            helperText={"Country"}
-            name="Country"
+            id={id}
+            handleBlur={onChangeSelect}
+            handleChange={onChangeSelect}
+
+            // helperText={"Country"}
+            name="city"
             placeholder={"Select City"}
             data={city}
           />

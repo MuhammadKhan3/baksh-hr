@@ -13,6 +13,9 @@ import { makeStyles } from "@mui/styles";
 import moment from "moment";
 import axios from "axios";
 import { adminApi } from "../../../axios/axiosData";
+import { useDispatch, useSelector } from "react-redux";
+import DepartmentThunk from "../../../redux/thunk/departmentThunk";
+import { useCookies } from "react-cookie";
 
 const useStyles = makeStyles({
   id_box: {
@@ -355,32 +358,56 @@ const attendanceSplit=(status,classes)=>{
                <Box className={classes.username}>{statusSub}</Box>
           </TableCell>
 }
+
+const AttendanceCount=(status,data)=>{
+  let count=0;
+  data.forEach((element) => {
+    if(element?.status==status){
+      count++;
+    }
+  });
+  return count;
+
+}
 export default function AttendanceData() {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const classes = useStyles();
   const [page, setPage] = React.useState(3);
+  const [days,setdays]=React.useState(0);
+  const [cookies] = useCookies(['token']);
   const [attendance,setAttendance]=React.useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(6);
-  const date=new Date()
-  const days=moment(date, 'YYYY-MM').day()
-  console.log(days)
+  const departments=useSelector(state=>state.emp.departments);
+  const department=useSelector(state=>state.user.department);
+  const startDate=useSelector(state=>state.user.startDate);
+  const endDate=useSelector(state=>state.user.endDate);
+  const dateSearch=useSelector(state=>state.user.date);
 
+  const search=useSelector(state=>state.user.search);
+  const dispatch=useDispatch();
+  const date=new Date()
 
   React.useEffect(()=>{
+    const {token}=cookies
+    dispatch(DepartmentThunk(token))
     const attendanceHandler=async ()=>{
-      const response=await axios.get(adminApi+'/attendance-report')
-      setAttendance(response?.data?.attendance)
+      const response=await axios.get(adminApi+`/attendance-report?department=${department}&search=${search}&startDate=${startDate}&endDate=${endDate}`)
+      console.log(response)
+
+      setAttendance(response?.data?.attendance?.Attendace)
+      setdays(response?.data?.attendance?.days)
     }
     attendanceHandler();
-  },[])
+  },[department,search,dateSearch])
 
   const getDayName = (dayNum) => {
     const dayName = moment().day(dayNum).format('dddd');
     return dayName;
   };
-  console.log()
 
 
+
+  console.log(moment().format('d'))
 
   return (
     <Box>
@@ -410,7 +437,8 @@ export default function AttendanceData() {
                 <Box className={classes.font_style}>Employee</Box>
               </TableCell>
               <TableCell className={classes.tableCell}></TableCell>
-              {Array(days).fill([1]).map((data,i)=>{
+              {console.log(days)}
+              {days>0 && Array(parseInt(days)).fill([1]).map((data,i)=>{
                   {console.log('10')}
                   return(
                     <>
@@ -533,9 +561,10 @@ export default function AttendanceData() {
           </TableHead>
 
           <TableBody>
-            {attendance.map((row) => (
+            {console.log(attendance)}
+            {attendance?.length>0 && attendance.map((row) => (
               ///Row One Start
-              <TableRow key={row.name}>
+              <TableRow key={row.id}>
                 <TableCell className={classes.tableCell}>
                   <Checkbox label="ID" />
                 </TableCell>
@@ -548,8 +577,18 @@ export default function AttendanceData() {
 
                 <TableCell></TableCell>
 
-                {row?.attendances?.map(({status})=>{
+                {console.log(row?.attendances?.length)}
+
+                {days>0 && row?.attendances?.length>0 && row?.attendances?.map(({status})=>{
                   return  attendanceSplit(status,classes)
+                })} 
+                {console.log(days>0 && row?.attendances?.length &&  parseInt(days-row?.attendances?.length))}
+                {days>0 && Array(days-row?.attendances?.length).fill([1]).map((i)=>{
+                    return<TableCell className={classes.tableCell} key={i}>
+                      <Box className={classes.present_box}>
+                        <Box className={classes.present_P}>NA</Box>
+                      </Box>
+                    </TableCell>
                 })}
                 
                 {/*<TableCell className={classes.tableCell}>
@@ -629,23 +668,24 @@ export default function AttendanceData() {
                   </Box>
                 </TableCell>
 
-                <TableCell></TableCell>
+                <TableCell></TableCell>*/}
 
                 <TableCell className={classes.tableCell}>
                   <Box className={classes.AttendanceManager}>
-                    <Box className={classes.total_Present}>{row.Fifteen}</Box>
+                    <Box className={classes.total_Present}>{AttendanceCount('present',row?.attendances)}</Box>
                   </Box>
                 </TableCell>
                 <TableCell className={classes.tableCell}>
                   <Box className={classes.AttendanceManager}>
-                    <Box className={classes.total_Absent}>{row.Sixteen}</Box>
+                    <Box className={classes.total_Absent}>{AttendanceCount('absent',row?.attendances)}</Box>
                   </Box>
                 </TableCell>
                 <TableCell className={classes.tableCell}>
                   <Box className={classes.AttendanceManager}>
-                    <Box className={classes.total_Leaves}>{row.Seventeen}</Box>
+                    <Box className={classes.total_Leaves}>{AttendanceCount('leave',row?.attendances)}</Box>
                   </Box>
-                </TableCell> */}
+                </TableCell>
+
               </TableRow>
             ))}
           </TableBody>

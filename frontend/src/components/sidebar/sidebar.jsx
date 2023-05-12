@@ -284,10 +284,18 @@ const Sidebar = () => {
             />
             <DownMenu
               label={"Managers"}
+              droplabel={[
+                { label: "Add Manager", path: "/add-manager" },
+                { label: "Manage Manager", path: "/manage-manager" },
+              ]}
+              
+              tab={tab}
+              settab={settab}              
               icon={manager}
               classes={classes}
               downArrow={downArrow}
             />
+ 
             <DownMenu
               label={"Setup"}
               droplabel={[
@@ -345,6 +353,7 @@ const Sidebar = () => {
                 { label: "Add Leave", path: "/add-leave" },
                 { label: "Manage Leave", path: "/manage-leave" },
               ]}
+              
               icon={leave}
               classes={classes}
               downArrow={downArrow}

@@ -88,7 +88,7 @@ const FileInput = ({ setState, state, value, label }) => {
             />
           ) : (
             <>
-              <Box component="img" src={file} className={classes.fileLogo} />
+            <Box component="img" src={file} className={classes.fileLogo} />
               <p className={classes.filedescription}>
                 Drop a file or browse a file to upload
               </p>

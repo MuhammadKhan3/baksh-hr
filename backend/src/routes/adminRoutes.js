@@ -3,7 +3,7 @@ const router=express.Router();
 const adminController=require('../controllers/admin.controller');
 const managerController=require('../controllers/manager.controller');
 const department=require('../controllers/department.controller')
-const { multerUpload, CsvMulterUpload } = require('../middleware/multer');
+const { multerUpload, CsvMulterUpload, companyUpload } = require('../middleware/multer');
 const isAuth=require('../middleware/authorize')
 const EmployeeController=require('../controllers/employee.controller');
 const payroll = require ('../controllers/payroll.controller');
@@ -14,7 +14,9 @@ const Permission= require('../validations/permissions');
 const { createLeaveType, getEmployees, LeaveTypes, createLeave, RemainingLeave, LeavesEmployee, LeavesManager, LeaveApproval, LeavesEmployeeHR, getLeave, editLeave } = require('../controllers/leave.controller');
 const { createAttendanceCsv, AttendaceReport, attendanceSchedule } = require('../controllers/attendance.controller');
 const { getAttendance } = require('../controllers/attendance.controller');
-
+const companyController = require('../controllers/company.controller');
+// const { createCompany } = require('../services/company.service');
+const {getHr,createCompany} =require('../controllers/company.controller')
 // Admin Controller
 router.post('/',adminController.createAdmin);
 router.post('/insert-role',validRole,adminController.insertRole);
@@ -81,7 +83,7 @@ router.delete('/delete-employee',EmployeeController.deleteEmployee);
 
 
 router.get('/salaryTypes',EmployeeController.salaryTypes);
-router.post('/create-attencdance-csv',CsvMulterUpload.single('file'),isAuth,createAttendanceCsv);
+router.post('/create-attencdance-csv',CsvMulterUpload.single('file'),createAttendanceCsv);
 router.get('/get-attendances',getAttendance)
 router.get('/attendance-report',AttendaceReport)
 router.get('/attendance-schedule',attendanceSchedule)
@@ -129,5 +131,8 @@ router.post('/leave-approval',isAuth,LeaveApproval);
 router.get('/leave/:id',isAuth,getLeave)
 // Edit Leave
 router.put('/edit-leave/:id',isAuth,editLeave)
+
+router.post('/create-company',companyUpload.single('picture'),createCompany);
+router.get('/get-Hr',getHr);
 
 module.exports=router;

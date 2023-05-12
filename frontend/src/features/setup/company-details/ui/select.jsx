@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Box, makeStyles } from '@material-ui/core';
 import { FormHelperText, InputLabel, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import Dropdown from '../../images/employee/drop.svg';
+import Dropdown from "../../../../images/employee/drop.svg";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -188,11 +188,10 @@ export default function SelectUi({id,title,data=[],handleChange,name,value,error
           placeholder={placeholder}
           id={id}
         >
-          {data.map((list,id) => (
+          {data.map((list,i) => (
             <MenuItem
-              key={id}
-              id={id}
-              value={list.id}
+              key={i}
+              value={list.id+"-"+id}
               style={{textTransform: 'capitalize'}}
               // style={getStyles(list.label, personName, theme)}
             >

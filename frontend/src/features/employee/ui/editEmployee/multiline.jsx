@@ -48,6 +48,7 @@ const MultiLineText = (props) => {
     value,
     error,
     handleBlur,
+    id
   } = props;
 
   return (
@@ -59,6 +60,7 @@ const MultiLineText = (props) => {
         placeholder={placeholder}
         multiline
         rows={4}
+        id={id}
         onBlur={handleBlur}
         onChange={handleChange}
         value={value}

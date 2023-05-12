@@ -40,8 +40,9 @@ const getAttendance = async(req, res, next)=>{
   }
 
 const AttendaceReport=async (req,res,next)=>{
+  
   try {
-    const response=await Attendance.attencdanceReport();
+    const response=await Attendance.attencdanceReport(0,req.query);
     res.json({msg:"Fetch  Attendance Report Succefully",flag:true,attendance:response})
 } catch (error) {
     return Error(req,res,error);

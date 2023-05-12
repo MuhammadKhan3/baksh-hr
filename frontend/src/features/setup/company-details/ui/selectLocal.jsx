@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { Box, makeStyles } from "@material-ui/core";
 import { Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
-import Dropdown from "../../images/employee/drop.svg";
+import Dropdown from "../../../../images/employee/drop.svg";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -116,7 +116,6 @@ export default function SelectLocalUi({
         {title}
       </Typography>
       <Select
-        id={id}
         className={classes.root}
         name={name}
         displayEmpty
@@ -160,8 +159,7 @@ export default function SelectLocalUi({
         {data?.map((list, i) => (
           <MenuItem
             key={i}
-            id={id}
-            value={list}
+            value={list+"-"+id}
             style={{ textTransform: "capitalize" }}
 
             // style={getStyles(list, personName, theme)}

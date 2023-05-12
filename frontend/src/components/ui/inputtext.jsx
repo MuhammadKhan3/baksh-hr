@@ -32,10 +32,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const InputText = ({label,name,changeHandler}) => {
+const InputText = ({label,name,changeHandler,id}) => {
   const classes = useStyles();
   return (
-    <TextField size='small' className={`${classes.root}`}  id="outlined-basic" label={label} variant="outlined" onChange={changeHandler} name={name} />
+    <TextField size='small' className={`${classes.root}`} id={id}   label={label} variant="outlined" onChange={changeHandler} name={name} />
   )
 }
 
