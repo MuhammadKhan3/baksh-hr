@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 
 const data={
-    picture:''
+    picture:'',offices:[]
 }
 
 const CompanySlice = createSlice({
@@ -12,9 +12,12 @@ const CompanySlice = createSlice({
     setPicture:(state,action)=>{
       state.picture=action.payload;
     },
+    setOffices:(state,action)=>{
+      state.offices=action.payload;
+    }
   }
 });
-export const {setPicture}=CompanySlice.actions;
+export const {setPicture,setOffices}=CompanySlice.actions;
 
 
 export default CompanySlice;

@@ -24,6 +24,8 @@ import EditLeaveHr from "./features/Leave/pages/hr/editLeave";
 import CompanyDetails from "./features/setup/company-details/Pages/CompanyDetails";
 import AddManager from "./features/manager/Pages/AddManager";
 import ManageManager from "./features/manager/Pages/ManageManager";
+import EditManager from "./features/manager/Pages/editManager";
+import PayrollScale from "./features/payroll/pages/PayScale";
 
 const Dashboard = React.lazy(() => import("./features/dashboard"));
 const Employee = React.lazy(() => import("./features/employee"));
@@ -312,6 +314,23 @@ const RouterLink = () => {
               element={
                 <React.Suspense fallback={<>...</>}>
                   <ManageManager/>
+                </React.Suspense>
+              }
+            />
+            <Route
+              path="/edit-manager/:userId"
+              element={
+                <React.Suspense fallback={<>...</>}>
+                  <EditManager/>
+                </React.Suspense>
+              }
+            />
+
+            <Route
+              path="/payroll"
+              element={
+                <React.Suspense fallback={<>...</>}>
+                  <PayrollScale/>
                 </React.Suspense>
               }
             />

@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../../components/sidebar/sidebar";
 import { makeStyles } from "@material-ui/core";
-import { Box } from "@mui/material";
+import { Box, FormControl } from "@mui/material";
 import AddManagerLeft from "../compnents/addManagerLeft";
 import AddManagerRight from "../compnents/addManagerRight";
 import AttendanceHeader from "../../attendance/ui/attendanceHeader";
 import BlackButton from "../../Leave/ui/blackButton";
+import { useDispatch, useSelector } from "react-redux";
+import FetchOfficeThunk from "../../../redux/thunk/fetchOfficesThunk";
+import * as Yup from 'yup';
+import { Formik } from "formik";
+import axios from "axios";
+import { adminApi } from "../../../axios/axiosData";
+import { useCookies } from "react-cookie";
+import DepartmentThunk from "../../../redux/thunk/departmentThunk";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -71,7 +80,51 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddManager = () => {
+  const navigate=useNavigate();
+  const dispach=useDispatch();
+  const offices=useSelector(state=>state?.company?.offices);
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const picture=useSelector(state=>state?.company?.picture);
+
+  const {token}=cookies;
   const classes = useStyles();
+  
+  const initialValues={
+    name:'',
+    phone:'',
+    email:'',
+    password:'',
+    status:'',
+    officeId:'',
+    departmentId:''
+  }
+
+  const validationSchema=Yup.object({
+    name: Yup.string()
+      .max(15, 'Must be 15 characters or less')
+      .required('Required'),
+    phone: Yup.string()
+      .max(20, 'Must be 20 characters or less')
+      .min(10,'Minimum Character 10')
+      .required('Required'),
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Required'),
+    password: Yup.string()
+      .required('Required')
+      .max(20,"password maximum length is 20"),
+    status: Yup.string()
+      .required('Required')
+      .max(20,"Status length is 20"),  
+    officeId:Yup.string().required("Office Code is required"),
+    departmentId:Yup.string().required("Department Id is required")
+  })
+  
+
+  useEffect(()=>{
+    dispach(DepartmentThunk(token))
+    dispach(FetchOfficeThunk())
+  },[])
   return (
     <Box component="div" className={classes.mainContainer}>
       <Box component="div" className={classes.sidebar}>
@@ -83,18 +136,57 @@ const AddManager = () => {
           width={"100%"}
           marginLeft={"0%"}
         />
-        <>
-          <Box component="div" className={classes.employee}>
-            <AddManagerLeft />
-            <Box component="hr" className={classes.sideBorder}></Box>
-            <AddManagerRight />
-          </Box>
+        <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={async(values)=>{
+              const formdata=new FormData();  
+              formdata.append('managerPhoto',picture)
+              formdata.append('name',values?.name)
+              formdata.append('phone',values?.phone);
+              formdata.append('email',values?.email);
+              formdata.append('password',values?.password);
+              formdata.append('status',values?.status);
+              formdata.append('officeId',values?.officeId);
+              formdata.append('departmentId',values?.departmentId);
 
-          <Box className={classes.btnBox}>
-            <BlackButton label="Save" fontWeight={500} />
-          </Box>
-          <Box component="hr" className={classes.border}></Box>
-        </>
+              const response=await axios.post(adminApi+'/create-manager',formdata,{
+                headers: {
+                  authorization: `Bearer ${token}`,
+                },
+              })
+              console.log(response)
+              console.log(response?.data?.flag,typeof(response?.data?.flag))
+              if(response?.data?.flag===true){
+                navigate('/manage-manager')
+              }
+
+            }}          
+        >
+        {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting
+          })=>(
+          <form onSubmit={handleSubmit}>
+            <FormControl>
+              <Box component="div" className={classes.employee}>
+                <AddManagerLeft touched={touched} offices={offices} handleSubmit={handleSubmit} handleBlur={handleBlur} handleChange={handleChange} errors={errors} values={values}/>
+                <Box component="hr" className={classes.sideBorder}></Box>
+                {/* <AddManagerRight /> */}
+              </Box>
+              <Box className={classes.btnBox}>
+                <BlackButton label="Save" fontWeight={500} onSubmit={handleSubmit}/>
+              </Box>
+              <Box component="hr" className={classes.border}></Box>
+            </FormControl>
+           </form>
+          )}
+        </Formik>
       </Box>
     </Box>
   );

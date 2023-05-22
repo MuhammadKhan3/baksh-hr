@@ -45,6 +45,10 @@ app.use(bodyParser.urlencoded({extended:false}))
 // app.use(express.static(path.join(__dirname,"../frontend/build")))
 // app.use(express.urlencoded())
 app.use('/',express.static(path.join(__dirname,'uploads', 'employees')))
+app.use('/',express.static(path.join(__dirname,'uploads', 'company')))
+app.use('/',express.static(path.join(__dirname,'uploads', 'managers')))
+
+
 
 
 
@@ -75,8 +79,8 @@ User.belongsTo(Permission);
 
 
 // Manager Relation with User
-User.hasOne(Manager,{foreignKey:'userId',as:'managerData',allowNull:false});
-Manager.belongsTo(User,{foreignKey: 'userId'})
+User.hasOne(Manager,{foreignKey:'userId',as:'managerData',onDelete:'CASCADE',allowNull:false});
+Manager.belongsTo(User,{foreignKey: 'userId',as:'userData'})
 
 User.hasMany(Manager,{foreignKey:'createId'})
 Manager.belongsTo(User,{foreignKey: 'createId'})
@@ -97,7 +101,7 @@ EmployeeCompany.belongsTo(Department);
 Designation.hasMany(EmployeeCompany);
 EmployeeCompany.belongsTo(Designation);
 
-User.hasOne(Employee,{foreignKey:'userId',as:'employeeData',onDelete:'CASCADE'});
+User.hasOne(Employee,{foreignKey:'userId',as:'employeeData'});
 Employee.belongsTo(User,{foreignKey:'userId',as:'user'});
 
 Employee
@@ -148,13 +152,15 @@ Attendance.belongsTo(User,{foreignKey:'attendanceById',as:'attendanceBy'});
 companyDetails.hasMany(Offices,{foreignKey:'companyId',as:'companyBy'})
 Offices.belongsTo(companyDetails,{foreignKey:'companyId',as:'companyBy'});
 
-User.hasOne(Offices,{foreignKey:'userId'})
+User.hasOne(Offices,{foreignKey:'userId',as:'office'})
 Offices.belongsTo(User,{foreignKey:'userId'})
+
+Offices.hasOne(Manager,{foreignKey:'officeId'})
+Manager.belongsTo(Offices)
 
 
 cron.schedule('0 12 * * *',attendanceSchedule);
 
-// cron.start();
 
 
 sequelize

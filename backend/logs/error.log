@@ -113,3 +113,19 @@
 {"level":"error","message":"Column 'user.id' in field list is ambiguous","timestamp":"2023-05-01T10:26:41.011Z"}
 {"level":"error","message":"Unknown column 'managerData.departmentId' in 'field list'","timestamp":"2023-05-03T11:21:24.778Z"}
 {"level":"error","message":"Unknown column 'managerData.departmentId' in 'field list'","timestamp":"2023-05-03T11:22:35.565Z"}
+{"level":"error","message":"officeCode is not defined","timestamp":"2023-05-17T17:27:15.088Z"}
+{"level":"error","message":"officeCode is not defined","timestamp":"2023-05-17T17:31:53.658Z"}
+{"level":"error","message":"userId is not defined","timestamp":"2023-05-17T17:55:20.827Z"}
+{"level":"error","message":"userId is not defined","timestamp":"2023-05-17T17:56:25.602Z"}
+{"level":"error","message":"departmentId is not defined","timestamp":"2023-05-20T20:05:42.795Z"}
+{"level":"error","message":"departmentId is not defined","timestamp":"2023-05-20T20:06:52.379Z"}
+{"level":"error","message":"response is not defined","timestamp":"2023-05-22T16:37:53.574Z"}
+{"level":"error","message":"response is not defined","timestamp":"2023-05-22T16:38:14.614Z"}
+{"level":"error","message":"Truncated incorrect INTEGER value: 'undefined'","timestamp":"2023-05-22T16:57:23.570Z"}
+{"level":"error","message":"response is not defined","timestamp":"2023-05-22T17:20:17.329Z"}
+{"level":"error","message":"response is not defined","timestamp":"2023-05-22T17:20:26.942Z"}
+{"level":"error","message":"response is not defined","timestamp":"2023-05-22T17:23:15.392Z"}
+{"level":"error","message":"user.map is not a function","timestamp":"2023-05-22T18:39:48.370Z"}
+{"level":"error","message":"data?.password.subsubstring is not a function","timestamp":"2023-05-22T18:56:48.795Z"}
+{"level":"error","message":"data?.password.subsubstring is not a function","timestamp":"2023-05-22T18:57:00.623Z"}
+{"level":"error","message":"WHERE parameter \"id\" has invalid \"undefined\" value","timestamp":"2023-05-22T19:33:06.145Z"}

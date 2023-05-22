@@ -154,7 +154,8 @@ export default function SelectUi({id,title,data=[],handleChange,name,value,error
           className={`${classes.root} ${classes.select}`}
           displayEmpty
           name={name}
-          value={value}
+          value={value+"-"+id}
+          defaultValue={value+"-"+id}
           renderValue={
             value !== "" ? undefined : () => <div>{placeholder}</div>
           }

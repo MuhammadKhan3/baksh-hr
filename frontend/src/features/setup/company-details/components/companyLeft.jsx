@@ -63,13 +63,14 @@ export default function ComponentLeft({
   values,
   errors,
   handleChange,
+  pictureUrl,
   handleBlur,
   touched
 }) {
   const classes = useStyles();
   const picture=useSelector(state=>state?.company?.picture);
 
-
+  console.log(pictureUrl)
   return (
     <Box className={classes.container} component="div">
       <Box className={classes.innerContainer} component="div">
@@ -77,6 +78,7 @@ export default function ComponentLeft({
           label={"Upload Logo"}
           setState={setPicture}
           state={picture}
+          value={pictureUrl}
         />
         <InputText
           placeholder={"Company Name"}

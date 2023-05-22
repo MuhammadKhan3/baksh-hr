@@ -69,6 +69,10 @@ const FileInput = ({ setState, state, value, label }) => {
   const HandleChange = (e) => {
     dispatch(setState(e.target.files[0]));
   };
+
+  const hasImage=state && state instanceof File;
+  console.log(hasImage)
+
   return (
     <Box component="div" className={classes.container}>
       <input
@@ -80,10 +84,10 @@ const FileInput = ({ setState, state, value, label }) => {
       />
       <label htmlFor="profile">
         <Box component="div" className={classes.file}>
-          {state || value ? (
+          {hasImage || value?.length>0 ? (
             <Box
               component="img"
-              src={value?.length > 0 ? url + value : URL.createObjectURL(state)}
+              src={hasImage ?  URL.createObjectURL(state) : url + value }
               className={classes.fileLogo}
             />
           ) : (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../../components/sidebar/sidebar";
 import { makeStyles } from "@material-ui/core";
 import { Box } from "@mui/material";
@@ -9,6 +9,8 @@ import DeleteModal from "../../../components/ui/modals";
 import SearchBar from "../../employee/ui/seachBar";
 import EmployeeTable from "../../employee/components/employeeTable";
 import AttendanceHeader from "../../attendance/ui/attendanceHeader";
+import { FetchManager} from "../../../helpers";
+import ManagerTable from "../compnents/managerTable";
 
 const useStyles = makeStyles({
   mainContainer: {
@@ -55,16 +57,17 @@ const ManageManager = () => {
   const [cookies] = useCookies(["token"]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [search,setSearch]=useState('');
+  // const [cookies] = useCookies(["token"]);
+  const {token}=cookies
 
   const deleteHandler = () => {
-    const token = cookies.token;
+  
+    // const token = cookies.token;
 
     axios
-      .post(
-        adminApi + "/delete-employee",
-        {
-          deleteId,
-        },
+      .delete(
+        adminApi + `/delete-manager/${deleteId}`,
         {
           headers: {
             authorization: `Bearer ${token}`,
@@ -77,6 +80,7 @@ const ManageManager = () => {
         }
       });
   };
+
   return (
     <Box component="div" className={classes.mainContainer}>
       <Box component="div" className={classes.sidebar}>
@@ -88,6 +92,7 @@ const ManageManager = () => {
           submitHandler={deleteHandler}
           handleOpen={handleOpen}
           open={open}
+          title={'Delete'}
         />
         <AttendanceHeader
           heading={"Manage Manager"}
@@ -96,13 +101,15 @@ const ManageManager = () => {
         />
 
         <Box component="div" className={classes.searchContainer}>
-          <SearchBar setemployees={setemployees} />
+          <SearchBar setSearch={setSearch} />
         </Box>
-        <EmployeeTable
+        <ManagerTable
+
           employees={employees}
+          setemployees={setemployees}
           setDelete={setDeleteId}
           handleOpen={handleOpen}
-          setemployees={setemployees}
+          search={search}
         />
       </Box>
     </Box>

@@ -37,5 +37,18 @@ const employeesDto=(data)=>{
     }
 }
 
-
-module.exports={insertRoleDto,signupDto,LoginDto,employeesDto}
+const managerDto=async (data)=>{
+    console.log(data?.managerData?.phone,data?.managerData?.photo)
+    return {
+        id:data?.id,
+        name:data?.name,
+        phone:data?.managerData?.phone,
+        email:data?.managerData?.email,
+        password:data?.password.slice(0,20),
+        status:data?.managerData?.status,
+        officeId:data?.managerData?.officeId,
+        departmentId:data?.managerData?.departmentId,
+        picture:data?.managerData?.photo
+    }
+}
+module.exports={insertRoleDto,signupDto,LoginDto,employeesDto,managerDto}

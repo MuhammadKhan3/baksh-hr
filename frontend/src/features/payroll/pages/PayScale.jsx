@@ -9,7 +9,7 @@ import axios from 'axios';
 import { adminApi } from '../../../axios/axiosData';
 import SearchBar from '../ui/seachBar';
 import EmployeePayTable from '../components/employeePayTable';
-import DeleteModal from '../../../components/ui/modal';
+import DeleteModal from '../../../components/ui/modals';
 import SearchandAddContainer from '../ui/Seacrhandbutton';
 
 

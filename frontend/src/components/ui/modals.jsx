@@ -4,6 +4,20 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { makeStyles } from '@material-ui/core';
+import styled, { keyframes } from 'styled-components';
+
+const slideDown = keyframes`
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
+
+const AnimatedContainer = styled.div`
+  animation: ${slideDown} 0.3s ease-in-out;
+`;
 
 
 const useStyles=makeStyles({
@@ -78,14 +92,15 @@ export default function ModalDanger({open,handleClose,handleOpen,submitHandler,t
   const classes=useStyles();
 
   return (
-    <div>
-      <Modal
+    
+    <Modal
         keepMounted
         open={open}
         onClose={handleClose}
         aria-labelledby="keep-mounted-modal-title"
         aria-describedby="keep-mounted-modal-description"
-      >
+        >
+        <AnimatedContainer>
         <Box component='div' className={classes.container}>
           <Typography id="keep-mounted-modal-title" className={classes.text} variant="h6" component="h2">
           Are you sure delete this employee?
@@ -95,8 +110,8 @@ export default function ModalDanger({open,handleClose,handleOpen,submitHandler,t
             <Button variant='outlined'  className={classes.confirmBtn} onClick={submitHandler}>{title}</Button>
           </Box>
         </Box>
+    </AnimatedContainer>
       </Modal>
-    </div>
   );
 }
 
@@ -104,7 +119,7 @@ export  function ModalSafe({open,handleClose,handleOpen,submitHandler,title}) {
   const classes=useStyles();
 
   return (
-    <div>
+    <AnimatedContainer>
       <Modal
         keepMounted
         open={open}
@@ -122,6 +137,6 @@ export  function ModalSafe({open,handleClose,handleOpen,submitHandler,title}) {
           </Box>
         </Box>
       </Modal>
-    </div>
+    </AnimatedContainer>
   );
 }

@@ -29,14 +29,12 @@ router.post('/create-manager',
 isAuth,
 // (req, res, next) => {Permission.hasPermission(req, res, next, {'employee':'add'})},
 multerUpload.single('managerPhoto'),
-validManager,
+// validManager,
 managerController.createManager);
 // Edit Manager
 
 
-router.put('/create-manager',isAuth,
-(req, res, next) => {Permission.hasPermission(req, res, next, {'employee':'edit'})},
-multerUpload.single('managerPhoto'),validEditManager,managerController.editManager);
+router.put('/edit-manager/:userId',isAuth,multerUpload.single('managerPhoto'),managerController.editManager);
 // Get the Bulk of Managers
 router.post('/get-managers',
 isAuth,
@@ -44,7 +42,6 @@ managerController.getManagers);
 // Get the Single Manager
 router.get('/get-manager/:userId',
 isAuth,
-(req, res, next) => {Permission.hasPermission(req, res, next, {'employee':'view'})},
 managerController.getManager);
 
 // Get Manager list for drop down
@@ -134,5 +131,8 @@ router.put('/edit-leave/:id',isAuth,editLeave)
 
 router.post('/create-company',companyUpload.single('picture'),createCompany);
 router.get('/get-Hr',getHr);
+router.get('/get-offices',companyController.GetOffices);
+router.get('/get-company',companyController.GetCompany);
+
 
 module.exports=router;

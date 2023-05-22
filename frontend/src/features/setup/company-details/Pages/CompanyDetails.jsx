@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, makeStyles } from "@material-ui/core";
 import { Box, FormControl } from "@mui/material";
 import Sidebar from "../../../../components/sidebar/sidebar";
@@ -80,7 +80,13 @@ const useStyles = makeStyles((theme) => ({
 export default function CompanyDetails() {
   const classes = useStyles();
   const picture=useSelector(state=>state?.company?.picture);
-
+  const [pictureUrl,setpictureUrl]=useState('');
+  const [company,setCompany]=useState({
+    companyName:'',
+    phone:'',
+    email:'',
+    websiteUrl:'',
+  });
   const [offices,setOffices]=React.useState([{
     id:1,
     address:'',
@@ -90,14 +96,7 @@ export default function CompanyDetails() {
     officeCode:''
   }])
 
-  console.log('offices',offices)
-
-  const initialValues={
-    companyName:'',
-    phone:'',
-    email:'',
-    websiteUrl:'',
-  }
+  // const initialValues=
   const validationSchema=Yup.object({
     companyName: Yup.string()
       .max(15, 'Must be 15 characters or less')
@@ -112,8 +111,33 @@ export default function CompanyDetails() {
     websiteUrl: Yup.string()
       .required('Required')
       .max(40,"website url less than 40")  
-    })
+  })
 
+
+  useEffect(()=>{
+    const fetchCompany=async ()=>{
+      const response=await axios.get(adminApi+'/get-company');
+      const office=response?.data?.compaines?.companyBy;
+      const company=response?.data?.compaines;
+      if(Object.keys(company)?.length>0){
+
+          setpictureUrl(company?.picture)
+          localStorage.setItem('companyId',company?.id)
+          setCompany({
+            companyName:company?.companyName,
+            phone:company?.phone,
+            email:company?.email,
+            websiteUrl:company?.websiteUrl,
+          })
+         if(office.length>0){
+            setOffices(office)
+         }
+      }
+
+
+    }
+    fetchCompany();
+  },[])
   return (
     <Box component="div" className={classes.mainContainer}>
       <Box component="div" className={classes.sidebar}>
@@ -128,27 +152,29 @@ export default function CompanyDetails() {
         />
         <Tab />
         <Formik
-         initialValues={initialValues}
+         initialValues={company}
          validationSchema={validationSchema}
          onSubmit={async(values)=>{
           const formdata=new FormData()
+          const companyId=localStorage.getItem('companyId')
+          formdata.append('companyId',companyId);
           formdata.append('companyName',values?.companyName);
           formdata.append('email',values?.email);
           formdata.append('phone',values?.phone);
           formdata.append('url',values?.websiteUrl)
           formdata.append('picture',picture)
-          offices.forEach((data,i)=>{
-            console.log(data["country"])
 
+          offices.forEach((data,i)=>{
             formdata.append(`offices[${i}][address]`, data["address"]);
             formdata.append(`offices[${i}][country]`, data["country"]);
             formdata.append(`offices[${i}][city]`, data["city"]);
             formdata.append(`offices[${i}][userId]`, data["userId"]);
+            formdata.append(`offices[${i}][id]`, data["id"]);
             formdata.append(`offices[${i}][officeCode]`, data["officeCode"]);
           })
 
           const response=await axios.post(adminApi+'/create-company',formdata)
-          console.log(response)
+          window.location.reload();
           
         }}
         enableReinitialize={true}
@@ -165,7 +191,7 @@ export default function CompanyDetails() {
           <form onSubmit={handleSubmit}>
             <FormControl>
                 <Box component="div" className={classes.employee}>
-                  <ComponentLeft values={values} touched={touched} handleBlur={handleBlur} errors={errors} handleChange={handleChange}/>
+                  <ComponentLeft values={values} pictureUrl={pictureUrl} touched={touched} handleBlur={handleBlur} errors={errors} handleChange={handleChange}/>
                 <Box component="hr" className={classes.sideBorder}></Box>
                 <RenderingComponentRight office={"Office #1"} offices={offices} setOffices={setOffices} />
                 </Box>

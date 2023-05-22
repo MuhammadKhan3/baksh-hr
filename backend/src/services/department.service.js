@@ -16,7 +16,10 @@ const create=async (req,department,designation)=>{
 
 const get=async ()=>{
     const deparment= await Department.findAll({
-        attributes: ['id', ['department', 'label']] 
+        attributes: ['id', ['department', 'label']],
+        order: [
+            ['id', 'asc'],
+        ] 
     });        
     return deparment;
 }

@@ -13,7 +13,7 @@ const Manager= sequelize.define('manager', {
         allowNull:false
     },
     photo:{
-        type:DataTypes.JSON,
+        type:DataTypes.STRING,
         allowNull:false
     },
     phone:{

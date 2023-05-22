@@ -106,6 +106,7 @@ const CompanyRight = ({ office,offices,data,id,setOffices }) => {
                 data={Hrs} 
                 name="userId"
                 id={id}
+                value={data?.userId}
                 handleChange={onChangeSelect}
                 handleBlur={onChangeSelect}
                 placeholder={"Select the Hr"}   
@@ -116,6 +117,7 @@ const CompanyRight = ({ office,offices,data,id,setOffices }) => {
         <InputText
           id={id}
           name={'officeCode'}
+          value={data?.officeCode}
           changeHandler={onChangeHandler}
           placeholder={"office Code"}
         />
@@ -125,6 +127,7 @@ const CompanyRight = ({ office,offices,data,id,setOffices }) => {
              label={"Address"}
              name="address"
              id={id}
+             value={data?.address}
              handleBlur={onChangeHandler}
              handleChange={onChangeHandler}
              placeholder={"Add Address"} 
@@ -135,7 +138,7 @@ const CompanyRight = ({ office,offices,data,id,setOffices }) => {
             id={id}
             handleBlur={onChangeSelect}
             handleChange={onChangeSelect}
-
+            value={data?.country}
             // helperText={"Country"}
             name="country"
             placeholder={"Select Country"}
@@ -146,7 +149,7 @@ const CompanyRight = ({ office,offices,data,id,setOffices }) => {
             id={id}
             handleBlur={onChangeSelect}
             handleChange={onChangeSelect}
-
+            value={data?.city}
             // helperText={"Country"}
             name="city"
             placeholder={"Select City"}

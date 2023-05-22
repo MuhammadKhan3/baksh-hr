@@ -120,7 +120,7 @@ export default function SelectLocalUi({
         name={name}
         displayEmpty
         onChange={handleChange}
-        value={value}
+        value={value+"-"+id}
         IconComponent={(props) => (
           <Box
             {...props}
