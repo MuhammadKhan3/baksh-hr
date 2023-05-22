@@ -178,11 +178,9 @@ const EditManager = () => {
                   authorization: `Bearer ${token}`,
                 },
               })
-            //   console.log(response)
-            //   console.log(response?.data?.flag,typeof(response?.data?.flag))
-            //   if(response?.data?.flag===true){
-            //     navigate('/manage-manager')
-            //   }
+              if(response?.data?.flag===true){
+                navigate('/manage-manager')
+              }
 
             }}          
         >

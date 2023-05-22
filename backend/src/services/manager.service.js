@@ -55,13 +55,31 @@ const createManager=async (req,res,photo,{name,phone,email,password,status,offic
 }
 
 
-const editManager=async ({name,phone,email,password,status,officeId,departmentId},{userId})=>{
+const editManager=async ({name,phone,email,password,status,officeId,departmentId},{userId},photo)=>{
     console.log(userId)
 
-    
-    User.findOne({where:{
-        id:userId
-    }})
+    const user=await User.findOne({where:{id:userId}})
+    user.name=name;
+    user.email=email;
+    user.status=status;
+    if(password!=='********'){
+        console.log('chnage password')
+        let hash =await bcrypt.hashSync(password, 8);
+        user.password=hash;
+    }
+    const manager=await Manager.findOne({where:{userId:userId}});
+    manager.phone=phone;
+    manager.status=status;
+    manager.email=email;
+    manager.name=name;
+    manager.departmentId=departmentId;
+    manager.officeId=officeId;
+    if(photo){
+        manager.photo=photo;
+    }    
+    manager.save();
+    user.save();
+
     //     let user={};
     //     const roles=await Role.findOne({where:{roleName:'manager'}});
     //     var uexist= await User.findOne({where:{[Op.and]:[{id:userId},{password:password}]}});
@@ -72,7 +90,6 @@ const editManager=async ({name,phone,email,password,status,officeId,departmentId
     //         user.password=password;
     //         user.status= status;
     //     }else{    
-    //         var hash =await bcrypt.hashSync(password, 8);
     //         user.email=email;
     //         user.password=hash;
     //         user.status= status;
@@ -90,9 +107,7 @@ const editManager=async ({name,phone,email,password,status,officeId,departmentId
     //         manager.email=email;
     //         manager.status=status;
     //         manager.phone=phone;
-    //         if(photo){
-    //             manager.photo=photo;
-    //         }
+
     //         await manager.save();
     // return manager ;
 }

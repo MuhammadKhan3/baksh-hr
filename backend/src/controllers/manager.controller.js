@@ -18,7 +18,7 @@ exports.createManager=async (req,res,next)=>{
 
 exports.editManager=async (req,res,next)=>{
     try {
-        const response=await Manager.editManager(req.body,req.params);
+        const response=await Manager.editManager(req.body,req.params,req.file);
         res.json({msg:"Manager Successfully Edit",flag:true,response:response})
     } catch (error) {
          return Error(req,res,error);

@@ -41,10 +41,10 @@ const managerDto=async (data)=>{
     console.log(data?.managerData?.phone,data?.managerData?.photo)
     return {
         id:data?.id,
-        name:data?.name,
+        name:data?.managerData?.name,
         phone:data?.managerData?.phone,
         email:data?.managerData?.email,
-        password:data?.password.slice(0,20),
+        password:'********',
         status:data?.managerData?.status,
         officeId:data?.managerData?.officeId,
         departmentId:data?.managerData?.departmentId,
