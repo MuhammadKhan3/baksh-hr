@@ -44,15 +44,56 @@ const createAttendance=(file,admin)=>{
 
 }
 
-const getAttendance=async()=>{
-
+const getAttendance=async({page=1,department=''})=>{
+    const limit=6
+    const where={
+        '$User.employeeData.employee_company.departmentId$':{[sequelize.Op.eq]:department}
+    };
+    console.log(department)
     let Attendace=await Attendance.findAll({
-        include:{model:User,as:'attendanceBy',attributes:['name']}
+        limit:limit,
+        offset:(page-1)*limit,
+        // where:where,
+        include:[
+        
+        {model:User,as:'attendanceBy',attributes:['name']},
+        {
+            model:User,
+            as:'attendances',
+            // include:        
+            // [
+            //         {
+            //             model:Employee,as:'employeeData',
+            //             include: {
+            //                         model:EmployeeCompany,
+    
+            //                     }
+            //         },
+            //         // {model:Manager,as:'managerData',where:{}}
+            // ]
+        // }
+        // {
+        //     model:User,include:
+
+        }
+    ],
+        
     });
+    let AttendancCount;
+    try {
+        AttendancCount=await Attendance.count({
+        //     where:{
+        //     '$User.employeeData.employee_company.departmentId$':{[sequelize.Op.eq]:department}
+        // },
+            include:{model:User,as:'attendanceBy',attributes:['name']}
+        })
+    } catch (error) {
+        console.log(error)
+    }
     Attendace=await Attendace.map((data)=>{
-        return {name:data['name'],email:data['email'],attendanceBy:data?.attendanceBy?.name,checkin:data?.checkin,checkout:data?.checkout,status:data?.status}
+        return {id:data?.id,name:data['name'],email:data['email'],attendanceBy:data?.attendanceBy?.name,checkin:data?.checkin,checkout:data?.checkout,status:data?.status,data:data}
     })
-    return Attendace;
+    return {attendance:Attendace,attendanceLength:AttendancCount};
 }
 
 const attencdanceReport=async(id,{department='',search='',startDate,endDate})=>{
@@ -231,5 +272,109 @@ const attendanceSchedule=async ()=>{
 }
   
 
+const attencdanceEmployee=async (userId,{department='',search='',startDate,endDate},req)=>{
+    const start = startDate==='null' ? date : startDate;
+    const end = endDate==='null' ? date : endDate;
+    const user=req.user
+    
+    
+    const month=moment(start).format('MM')
+    const  year=moment(start).format('YYYY')
+    const day=startDate==='null' ? moment(start).day(1).format('DD') : moment(start).format('DD')
+    console.log(startDate==='null',moment(start).day(1).format('DD'))
+    const endMonth=moment(end).format('MM')
+    const endYear=moment(end).format('YYYY')
+    const endDay=moment(end).format('DD')
 
-module.exports={createAttendance,getAttendance,editAttendance,deleteAttendance,attencdanceReport,attendanceSchedule};
+    const diffInDays = startDate=='null' ? endDay :moment(end).diff(moment(start), 'days')+1;    
+    let where={};
+    if(search.length>0){
+         where={
+            id:userId,
+            [sequelize.Op.or]: { 
+                '$employeeData.name$':{[sequelize.Op.like]:`%${search}%`},
+                '$managerData.name$':{[sequelize.Op.like]:`%${search}%`},
+                     
+            },
+        }
+    }else{
+        where={
+                id:userId,
+                [sequelize.Op.or]:{
+                    '$employeeData.employee_company.department.department$': {[sequelize.Op.like]:`%${department}%`},
+                    '$managerData.department.department$': {[sequelize.Op.like]:`%${department}%`},
+                }
+        }
+    }
+
+    try {
+        let Attendace=await User.findAll({
+            where:where,
+            include:[
+                {
+                    model:Manager,
+                    as:'managerData',
+                    include:[{model:Department}]
+                },
+                {
+                    model:Employee,
+                    as:'employeeData',
+                    include:[{model:EmployeeCompany,include:[{model:Department}]}]
+                },
+                {
+                    model:Role,
+                    where:{
+                        // roleName:'manager',
+                        [sequelize.Op.or]:[{roleName:'manager'},{roleName:'employee'}]
+                    }
+                },
+                {
+                    model:Attendance,
+                    required: false,
+                    as:'attendances',
+                    
+                    // attributes:[sequelize.fn("COUNT", sequelize.col("id"))],
+                    where:{
+                        // checkin:{
+                            [sequelize.Op.and]: [
+                                sequelize.where(sequelize.fn('MONTH', sequelize.col('checkin')), {
+                                    [sequelize.Op.gte]:month
+                                }),
+                                
+                                sequelize.where(sequelize.fn('YEAR', sequelize.col('checkin')), {
+                                    [sequelize.Op.gte]:year
+                                }),
+                                
+                                sequelize.where(sequelize.fn('DAY', sequelize.col('checkin')), {
+                                    [sequelize.Op.gte]: 01
+                                }),
+                                
+                                sequelize.where(sequelize.fn('MONTH', sequelize.col('checkin')), {
+                                    [sequelize.Op.lte]:endMonth
+                                }),
+                                
+                                sequelize.where(sequelize.fn('YEAR', sequelize.col('checkin')), {
+                                    [sequelize.Op.lte]:endYear 
+                                }),
+                                
+                                sequelize.where(sequelize.fn('DAY', sequelize.col('checkin')), {
+                                      [sequelize.Op.lte]: endDay
+                                }),
+                            ],        
+                        // }
+                    }
+        
+                }
+            ],
+
+        });
+    
+        return {Attendace:Attendace,days:diffInDays};
+    
+    } catch (error) {
+        console.log(error)        
+    }
+
+}
+
+module.exports={createAttendance,getAttendance,editAttendance,deleteAttendance,attencdanceReport,attendanceSchedule,attencdanceEmployee};

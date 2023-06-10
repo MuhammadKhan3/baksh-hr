@@ -66,18 +66,14 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     },
   }));
 
-const SearchBar = ({setemployeespay}) => {
+const SearchBar = ({setsearch}) => {
   const [cookies] = useCookies(['token']);
   const token=cookies.token;
 
   const searchHandler=async (e)=>{
     const value=e.target.value;
-    const response=await axios.post(adminApi+'/search-employees',{search:e.target.value},{
-      headers:{
-        authorization: `Bearer ${token}`,
-      }
-    });
-    setemployeespay(response?.data?.employees);
+    console.log(value)
+    setsearch(value);
   }
   return (
       <Search>

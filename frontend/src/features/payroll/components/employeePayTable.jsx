@@ -19,6 +19,8 @@ import axios from 'axios';
 import { adminApi, publicApi, url } from '../../../axios/axiosData';
 import { useCookies } from 'react-cookie';
 import { NavLink } from 'react-router-dom';
+import BlackButton from '../ui/button';
+import SalaryPDF from './pdf';
 
 
 //employeespay
@@ -145,7 +147,7 @@ const useStyles=makeStyles({
   checked: {},
 })
 
-const EmployeePayTable = ({employeespay,setemployeespay,handleOpen,setDelete}) => {
+const EmployeePayTable = ({payslips,search,setsearch,handleOpen,setDelete}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
 
@@ -159,22 +161,9 @@ const EmployeePayTable = ({employeespay,setemployeespay,handleOpen,setDelete}) =
   };
   const classes=useStyles();
   const [cookies] = useCookies(['token']);
-  const [search,setsearch]=useState('');
+  // const [search,setsearch]=useState('');
 
-  useEffect(()=>{
-    const fetchManager=async ()=>{
-      const token=cookies.token;
-      const response=await axios.get(adminApi+'/get-employeespay',{
-        headers:{
-          authorization: `Bearer ${token}`,
-        }
-      });
-      setemployeespay(response?.data?.employeespay)
-      // console.log('hit',)
 
-    }
-    fetchManager();
-  },[search])
 
 
   return (
@@ -191,7 +180,7 @@ const EmployeePayTable = ({employeespay,setemployeespay,handleOpen,setDelete}) =
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {payslips
               .map((row,index) => (
                 <TableRow key={row.id}>
                     <TableCell className={classes.tableCell}>
@@ -207,31 +196,27 @@ const EmployeePayTable = ({employeespay,setemployeespay,handleOpen,setDelete}) =
                        {row?.name}
                      </TableCell>
                      <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
-                       {row?.department}
+                       {row?.designation}
                      </TableCell>
                      <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
-                       {`${row?.basicpay} RS`}
+                       {`${row?.salary} RS`}
                      </TableCell>
-                     <TableCell className={classes.tableCell}>
+                     {row?.allowances?.slice(0,2)?.map((item)=>{
+                         return <>
+                          <TableCell className={classes.tableCell}>
                             <Typography variant='body1' className={classes.depdisContainer} sx={{textAlignLast:'justify'}}>
-                                {`House Rent: ${row?.houserent}`}
-                            </Typography>
-                            <Typography variant='body1' className={classes.depdisContainer} sx={{textAlignLast:'justify'}}>
-                            {`Travelling: ${row?.travelling}`}
-                            </Typography>
-                     </TableCell>
-                     <TableCell className={classes.tableCell}>
-                            <Typography variant='body1' className={classes.depdisContainer}  sx={{textAlignLast:'justify'}}>
-                                {`Taxes: ${row?.taxes}`}
+                              {item?.allowance}
                             </Typography>
                             <Typography variant='body1' className={classes.depdisContainer}  sx={{textAlignLast:'justify'}}>
-                            {`Loan: ${row?.loan}`}
-                            </Typography>
-                     </TableCell>
-                     
+                                  {item?.deduction}
+                                  </Typography>
+                          </TableCell>
+
+                         </>
+                     })}                     
                      <TableCell className={classes.tableCell}>
                         <Box className={classes.actionContainer}>
-                          <NavLink to={`/edit-employee/${row.id}`}>
+                          <NavLink to={`/edit/payscale/${row.id}`}>
                             <Box component='div' className={`${classes.iconDiv} ${classes.editIcon}`}>
                               <img src={edit} className={classes.icons} />
                             </Box>
@@ -255,7 +240,7 @@ const EmployeePayTable = ({employeespay,setemployeespay,handleOpen,setDelete}) =
         rowsPerPage={rowsPerPage}
         page={page}
         labelDisplayedRows={({ from, to, count }) => {
-                return `Showing ${from} to ${to} of ${count} entries`;
+                return `Showing ${from} to ${to} of ${3} entries`;
         }}
       />
     </div>
@@ -263,3 +248,96 @@ const EmployeePayTable = ({employeespay,setemployeespay,handleOpen,setDelete}) =
 };
 
 export default EmployeePayTable;
+
+
+
+
+export const EmployeePayslipTable = ({payslips,search,setsearch,handleOpen,setDelete}) => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const classes=useStyles();
+  const [cookies] = useCookies(['token']);
+  // const [search,setsearch]=useState('');
+  const salary = [{
+    name: 'John Doe',
+    amount: 5000,
+  }];
+  return (
+    <div className={classes.tableCotainer}>
+      <TableContainer  >
+        <Table>
+          <TableHead>
+            <TableRow className={classes.tableHeader} >
+              {columns
+              .map((column) => (
+                <TableCell className={`${classes.tableCell} ${classes.headerText}`}  key={column.id}>{column.label==='ID' ? <><Checkbox />{column.label}</> :column.label }</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {payslips
+              .map((row,index) => (
+                <TableRow key={row.id}>
+                    <TableCell className={classes.tableCell}>
+                      <Checkbox   color="primary" 
+                        classes={{
+                          root: classes.root,
+                          checked: classes.checked,
+                        }}
+                      />                      
+                         {index+1}
+                    </TableCell>
+                    <TableCell className={`${classes.tableCell} ${classes.nameContainer}`}>
+                       {row?.name}
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {row?.designation}
+                     </TableCell>
+                     <TableCell className={`${classes.tableCell} ${classes.depdisContainer}`}>
+                       {`${row?.salary} RS`}
+                     </TableCell>
+                     {row?.allowances?.map((item)=>{
+                         return <>
+                          <TableCell className={classes.tableCell}>
+                            <Typography variant='body1' className={classes.depdisContainer} sx={{textAlignLast:'justify'}}>
+                              {item?.allowance}
+                            </Typography>
+                            <Typography variant='body1' className={classes.depdisContainer}  sx={{textAlignLast:'justify'}}>
+                                  {item?.deduction}
+                                  </Typography>
+                          </TableCell>
+
+                         </>
+                     })}    
+                     <TableCell className={classes.tableCell}>
+                        <SalaryPDF data={row}/>
+                     </TableCell>
+
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[]}
+        component="div"
+        style={{display:'flex',flexDirection:'flex-start'}}
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        labelDisplayedRows={({ from, to, count }) => {
+                return `Showing ${from} to ${to} of ${2} entries`;
+        }}
+      />
+    </div>
+  );
+};

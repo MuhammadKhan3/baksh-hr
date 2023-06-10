@@ -22,7 +22,8 @@ const LoginDto=(data)=>{
         role:data?.role?.roleName,
         permission:data?.permission,
         managerId:data?.managerData?.id,
-        employeeId:data?.employeeData?.id
+        employeeId:data?.employeeData?.id,
+        profile:data?.employeeData?.profilePhoto?.filename
     }
 }
 
@@ -51,4 +52,21 @@ const managerDto=async (data)=>{
         picture:data?.managerData?.photo
     }
 }
-module.exports={insertRoleDto,signupDto,LoginDto,employeesDto,managerDto}
+
+const getPaySlipDto=async (data)=>{
+    return {
+        id:data?.id,
+        leaves:data?.leaves,
+        salary:data?.salary,
+        name:data?.employee?.name,
+        allowances:data?.allowances?.map((allowance)=>{
+            return {
+                "id": allowance?.id,
+                "deduction": allowance?.deduction,
+                "allowance":allowance?.allowance,
+            }
+        })
+    }
+
+}
+module.exports={insertRoleDto,signupDto,LoginDto,employeesDto,managerDto,getPaySlipDto}

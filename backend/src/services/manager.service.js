@@ -138,7 +138,7 @@ const getManagers=async (search='',req,page=1)=>{
             limit:limit
         })
         const users=response.map((data)=>{
-            return {id:data?.userData?.id,department:data?.department?.department,name:data?.name,email:data?.userData?.email,officeCode:data?.office?.officeCode,status:data?.userData?.status}
+            return {id:data?.userData?.id,department:data?.department?.department,name:data?.name,email:data?.userData?.email,officeCode:data?.office?.officeCode,status:data?.status}
         })
         return users
         

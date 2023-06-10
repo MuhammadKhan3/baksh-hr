@@ -1,5 +1,5 @@
 
-import React, { createRef, useEffect, useState } from 'react'
+import React, { createRef, useContext, useEffect, useState } from 'react'
 import Header from '../../../components/header/header'
 import Sidebar from '../../../components/sidebar/sidebar'
 import { makeStyles } from '@material-ui/core';
@@ -8,9 +8,10 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { adminApi } from '../../../axios/axiosData';
 import SearchBar from '../ui/seachBar';
-import EmployeePayTable from '../components/employeePayTable';
+import EmployeePayTable, { EmployeePayslipTable } from '../components/employeePayTable';
 import DeleteModal from '../../../components/ui/modals';
 import SearchandAddContainer from '../ui/Seacrhandbutton';
+import { UserContext } from '../../../App';
 
 
 const useStyles=makeStyles({
@@ -55,30 +56,60 @@ const useStyles=makeStyles({
 
 const PayrollScale = () => {
     const classes=useStyles();
-    const [employeespay,setemployeespay]=useState([])
+    const [search,setsearch]=useState('');
+    const [payslips,setPayslips]=useState([])
     const [open, setOpen] = React.useState(false);
+    const {role}=useContext(UserContext);
+    
     const [deleteId, setDeleteId] = React.useState(0);
     const [cookies] = useCookies(['token']);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const token=cookies.token;
 
-    const deleteHandler=()=>{
-      const token=cookies.token;
-
-      // api call by axios
+    const deleteHandler=async ()=>{
+      const response=await axios.delete(adminApi+`/payslip/${deleteId}`);
+      console.log(response?.data?.flag,typeof(response?.data?.flag))
+      if(response?.data?.flag===true){
+        window.location.reload();
+      }
     }
+
+    useEffect(()=>{
+      const fetchPayslips=async ()=>{
+        console.log(token)
+        const response=await axios.get(adminApi+`/get-payslips?search=${search}&role=${role}`,{
+          headers:{
+            authorization:'Bearer '+ token,
+          },
+          timeout: 2000
+        });
+        setPayslips(response?.data?.payslips)
+      }
+      const timer=setTimeout(fetchPayslips, 2000);
+      return ()=>{
+        clearTimeout(timer)
+      }      
+    },[search])
+
+    console.log(search)
+    console.log(payslips)
   return (
     <Box component='div' className={classes.mainContainer}>
         <Box component='div' className={classes.sidebar}>
             <Sidebar/>
         </Box>
         <Box component='div' className={classes.column}>
-            <DeleteModal handleClose={handleClose} submitHandler={deleteHandler} handleOpen={handleOpen} open={open}/>
+            <DeleteModal title={'Delete'} handleClose={handleClose} submitHandler={deleteHandler} handleOpen={handleOpen} open={open}/>
+            
             <Header heading={"PayScale"}/>
             <Box component='div' className={classes.searchContainer}>
-              <SearchandAddContainer setemployeespay={setemployeespay}/>
+              <SearchandAddContainer setsearch={setsearch}/>
             </Box>
-            <EmployeePayTable employeespay={employeespay} setDelete={setDeleteId} handleOpen={handleOpen} setemployeespay={setemployeespay}/>
+            {role==='hr' ?
+             <EmployeePayTable payslips={payslips} setDelete={setDeleteId} handleOpen={handleOpen} />
+            :role==='employee' && <EmployeePayslipTable payslips={payslips} setDelete={setDeleteId} handleOpen={handleOpen}/> 
+            }
         </Box>
     </Box>
   )

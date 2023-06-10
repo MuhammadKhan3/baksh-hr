@@ -11,6 +11,7 @@ import EmployeeTable from "../../employee/components/employeeTable";
 import AttendanceHeader from "../../attendance/ui/attendanceHeader";
 import { FetchManager} from "../../../helpers";
 import ManagerTable from "../compnents/managerTable";
+import Header from "../../../components/header/header";
 
 const useStyles = makeStyles({
   mainContainer: {
@@ -94,7 +95,7 @@ const ManageManager = () => {
           open={open}
           title={'Delete'}
         />
-        <AttendanceHeader
+        <Header
           heading={"Manage Manager"}
           width={"105%"}
           marginLeft={"0%"}

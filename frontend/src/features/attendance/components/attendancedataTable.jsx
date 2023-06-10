@@ -450,3 +450,161 @@ const AttendancedataTable = ({ attendance, setattendance }) => {
 };
 
 export default AttendancedataTable;
+
+
+
+
+export const AttendancedataEmployeeTable = ({ attendance, setattendance }) => {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(6);
+  // const [value, setValue] = React.useState();
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  console.log('hi,,,,,')
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const classes = useStyles();
+  const [cookies] = useCookies(["token"]);
+  const [search, setsearch] = React.useState("");
+  const [value, setValue] = React.useState(0);
+  useEffect(() => {
+    const fetchManager = async () => {
+      const token = cookies.token;
+      const response = await axios.get(adminApi + "/get-attendance-employee", {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      setattendance(response?.data?.attendance);
+      // console.log('hit',)
+    };
+    fetchManager();
+  }, [search]);
+
+  return (
+    <div className={classes.tableContainer}>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow className={classes.tableHeader}>
+              {columns.map((column) => (
+                <TableCell
+                  className={`${classes.tableCell} ${classes.headerText}`}
+                  key={column.id}
+                >
+                  {column.label === "ID" ? (
+                    <>
+                      <Checkbox />
+                      {column.label}
+                    </>
+                  ) : (
+                    column.label
+                  )}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {attendance
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => (
+                <TableRow key={row.id}>
+                  <TableCell className={classes.tableCell}>
+                    <Checkbox
+                      color="primary"
+                      classes={{
+                        root: classes.root,
+                        checked: classes.checked,
+                      }}
+                    />
+                    {index + 1}
+                  </TableCell>
+                  <TableCell className={classes.tableCell}>
+                    <Box className={classes.avatarContainer}>
+                      <Box sx={{ marginLeft: "8px" }}>
+                        <Typography
+                          variant="body1"
+                          className={classes.nameContainer}
+                        >
+                          {row?.name}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          className={classes.emailType}
+                        >
+                          {row?.email}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </TableCell>
+                  <TableCell
+                    className={`${classes.tableCell} ${classes.depdisContainer}`}
+                  >
+                    {row?.department}
+                  </TableCell>
+                  <TableCell
+                    className={`${classes.tableCell} ${classes.depdisContainer}`}
+                  >
+                    {row?.AttendanceBy}
+                  </TableCell>
+                  <TableCell className={classes.tableCell}>
+                    {row?.status?.trim() === "active" ? (
+                      <Box component="div" className={classes.statusContainer}>
+                        <Box className={classes.CheckIn}>{row.CheckIn}</Box>
+                      </Box>
+                    ) : (
+                      <Box
+                        component="div"
+                        className={classes.inActiveContainer}
+                      >
+                        <Box className={classes.CheckOut}>{row.CheckOut}</Box>
+                      </Box>
+                    )}
+                    <TimeField
+                      label="Controlled field"
+                      value={value}
+                      onChange={(newValue) => setValue(newValue)}
+                    />
+                  </TableCell>
+                  <TableCell className={classes.tableCell}>
+                    <Box className={classes.actionContainer}>
+                      <TableCell></TableCell>
+                      <TableCell>
+                        <Box className={classes.leave_box}>
+                          <Box className={classes.leave_L}>{row.Six}</Box>
+                        </Box>
+                      </TableCell>
+                      <Box className={classes.present_box}>
+                        <Box className={classes.present_P}>{row.Seven}</Box>
+                      </Box>
+                      <TableCell>
+                        <Box className={classes.absent_box}>
+                          <Box className={classes.absent_A}>{row.Eight}</Box>
+                        </Box>
+                      </TableCell>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[]}
+        component="div"
+        style={{ display: "flex", flexDirection: "flex-start" }}
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        labelDisplayedRows={({ from, to, count }) => {
+          return `Showing ${from} to ${to} of ${count} entries`;
+        }}
+      />
+    </div>
+  );
+};

@@ -3,11 +3,12 @@ import { Box } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import Sidebar from "../../../components/sidebar/sidebar";
 
-import AttendanceDate from "../components/attedanceData";
+import AttendanceData from "../components/attedanceData";
 import SimpleHeader from "../../Leave/header/simpleHeader";
 import AttendanceHeader from "../ui/attendanceHeader";
 import DepartmentDatePicker from "../components/departmentDatePicker";
 import { useSelector } from "react-redux";
+import Header from "../../../components/header/header";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -40,14 +41,14 @@ export default function Attendance() {
         <Sidebar />
       </Box>
       <Box component="div">
-        <AttendanceHeader heading={"Attendance Report"} />
+        <Header heading={"Attendance Report"} />
         <Box>
           <Box component="div" className={classes.employee}>
             <DepartmentDatePicker />
           </Box>
           <Box component="div" className={classes.employee}>
             {/* <DepartmentDatePicker /> */}
-            <AttendanceDate />
+            <AttendanceData/>
           </Box>
         </Box>
       </Box>

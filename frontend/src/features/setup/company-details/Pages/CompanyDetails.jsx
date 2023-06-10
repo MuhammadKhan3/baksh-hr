@@ -11,6 +11,7 @@ import * as Yup from 'yup';
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { adminApi } from "../../../../axios/axiosData";
+import Header from "../../../../components/header/header";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -145,7 +146,7 @@ export default function CompanyDetails() {
       </Box>
       <Box component="div">
         {/* <Header heading="Configuration" /> */}
-        <AttendanceHeader
+        <Header
           heading={"Configuration"}
           marginLeft={"0px"}
           width={"100%"}

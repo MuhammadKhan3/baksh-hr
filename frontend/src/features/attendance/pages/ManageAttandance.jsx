@@ -5,6 +5,7 @@ import Sidebar from "../../../components/sidebar/sidebar";
 import AttendanceHeader from "../ui/attendanceHeader";
 import DepartmentDatePicker from "../components/departmentDatePicker";
 import AttendanceData from "../components/attedanceData";
+import Header from "../../../components/header/header";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -37,8 +38,9 @@ export default function ManageAttandance() {
       </Box>
 
       <Box component="div">
-        <AttendanceHeader heading={"Manage Attendance"} />
-
+        <Box component='div' style={{position:'relative',left:'24%',width:'75%'}}>
+          <Header  heading={"Manage Attendance"} />
+        </Box>
         <Box>
           <Box component="div" className={classes.employee}>
             <DepartmentDatePicker />

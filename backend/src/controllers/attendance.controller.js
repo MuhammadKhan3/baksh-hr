@@ -15,9 +15,11 @@ const createAttendanceCsv= async (req,res,next)=>{
 }
 
 const getAttendance = async(req, res, next)=>{
+    console.log(req.query)
+  
     try {
-        const response=await Attendance.getAttendance();
-        res.json({msg:"Fetch  Attendance Succefully",flag:true,attendance:response})
+        const response=await Attendance.getAttendance(req.query);
+        res.json({msg:"Fetch  Attendance Succefully",flag:true,...response})
     } catch (error) {
         return Error(req,res,error);
     }
@@ -89,4 +91,15 @@ const AttendaceReport=async (req,res,next)=>{
     res.json({attencdance:attencdance})
   }
 
-  module.exports ={getAttendance,setAttendance,updateAttendance,deleteAttendnace,createAttendanceCsv,AttendaceReport,attendanceSchedule}
+  const AttencdanceEmployee=async (req,res,next)=>{
+    const {userId}=req.params;
+    console.log('server',userId)
+    try {
+      const response=await Attendance.attencdanceEmployee(userId,req.query,req);
+      res.json({msg:"Fetch  Attendance Report Succefully",flag:true,attendance:response})
+    } catch (error) {
+        return Error(req,res,error);
+    }  
+  }
+
+  module.exports ={getAttendance,AttencdanceEmployee,setAttendance,updateAttendance,deleteAttendnace,createAttendanceCsv,AttendaceReport,attendanceSchedule}

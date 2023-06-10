@@ -8,6 +8,9 @@ const bodyParser=require('body-parser');
 const Manager = require('./src/models/manager');
 const LeaveType=require('./src/models/leaveType')
 const Leave=require('./src/models/leave')
+const PaySlips=require('./src/models/paySlips');
+const AllowancePaylslip=require('./src/models/allowancePaylslip')
+
 const cron = require('node-cron');
 
 // .evn file get
@@ -24,6 +27,8 @@ const Designation = require('./src/models/designation');
 const EmployeeCompany = require('./src/models/empCompany');
 const EmployeeBank = require('./src/models/empBank');
 const Attendance  = require('./src/models/attendance');
+const Allowance  = require('./src/models/allowance');
+
 
 const Bank=require('./src/models/bank');
 const cors=require('cors')
@@ -53,7 +58,7 @@ app.use('/',express.static(path.join(__dirname,'uploads', 'managers')))
 
 
 app.use('/api/admin',adminRoutes)
-app.use('/api/admin', attendanceRoutes);
+// app.use('/api/admin', attendanceRoutes);
 app.use('/api',Api)
 
 app.use("*",function(req,res){
@@ -143,7 +148,7 @@ User.hasMany(Leave,{foreignKey:'createId',as:'creator'});
 Leave.belongsTo(User,{foreignKey:'createId'});
 
 User.hasMany(Attendance,{foreignKey:'userId',as:'attendances'});
-Attendance.belongsTo(User,{foreignKey:'userId'});
+Attendance.belongsTo(User,{foreignKey:'userId',as:'attendances'});
 
 
 User.hasMany(Attendance,{foreignKey:'attendanceById',as:'attendanceBy'});
@@ -158,10 +163,17 @@ Offices.belongsTo(User,{foreignKey:'userId'})
 Offices.hasOne(Manager,{foreignKey:'officeId'})
 Manager.belongsTo(Offices)
 
+User.hasMany(PaySlips,{foreignKey:'userId'});
+PaySlips.belongsTo(User,{foreignKey:'userId'});
+
+Allowance.belongsToMany(PaySlips, { through: AllowancePaylslip });
+PaySlips.belongsToMany(Allowance, { through: AllowancePaylslip });
+
+Employee.hasMany(PaySlips,{foreignKey:'employeeId',as:'paySlips'})
+PaySlips.belongsTo(Employee)
+
 
 cron.schedule('0 12 * * *',attendanceSchedule);
-
-
 
 sequelize
 .sync({alter:true})

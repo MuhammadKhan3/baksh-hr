@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "fronten",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,6 +16,7 @@
     "@mui/styles": "^5.11.13",
     "@mui/x-data-grid": "^6.0.3",
     "@mui/x-date-pickers": "^6.0.1",
+    "@react-pdf/renderer": "^3.1.10",
     "@reduxjs/toolkit": "^1.9.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

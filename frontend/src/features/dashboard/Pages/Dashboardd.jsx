@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core";
 import Sidebar from "../../../components/sidebar/sidebar";
 import AttendanceHeader from "../../attendance/ui/attendanceHeader";
 import RenderCards from "../components/renderCards";
+import Header from "../../../components/header/header";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -25,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     height: "auto",
     // margin: "0 5vw",
   },
+  bottomContainer:{
+    width:'75%',
+  }
 }));
 
 export default function Dashboardd() {
@@ -34,8 +38,8 @@ export default function Dashboardd() {
       <Box component="div" className={classes.sidebar}>
         <Sidebar />
       </Box>
-      <Box component="div">
-        <AttendanceHeader
+      <Box component="div" className={classes.bottomContainer}>
+        <Header
           heading={"Dashboard"}
           width={"120%"}
           marginLeft={"0%"}

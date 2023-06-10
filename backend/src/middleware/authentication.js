@@ -29,6 +29,7 @@ module.exports=async (req,res,next)=>{
           if (response===null) {
               res.status(401).json({msg:'You are not authenticate',flag:false})
           } else {
+            console.log(response)
             const user=await LoginDto(response)
             res.json({status:true,msg:'succefully Autheticate',...user})
           }

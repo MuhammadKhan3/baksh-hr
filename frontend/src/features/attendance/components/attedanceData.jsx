@@ -16,6 +16,7 @@ import { adminApi } from "../../../axios/axiosData";
 import { useDispatch, useSelector } from "react-redux";
 import DepartmentThunk from "../../../redux/thunk/departmentThunk";
 import { useCookies } from "react-cookie";
+import { UserContext } from "../../../App";
 
 const useStyles = makeStyles({
   id_box: {
@@ -369,6 +370,10 @@ const AttendanceCount=(status,data)=>{
   return count;
 
 }
+
+
+
+
 export default function AttendanceData() {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const classes = useStyles();
@@ -698,9 +703,281 @@ export default function AttendanceData() {
           rowsPerPage={rowsPerPage}
           page={page}
           labelDisplayedRows={({ from, to, count }) => {
-            return `Showing ${from} to ${to} of ${count} entries`;
+            return `Showing ${1} to ${to} of ${5} entries`;
           }}
         />
+      </TableContainer>
+    </Box>
+  );
+}
+
+
+
+
+
+
+export  function AttendanceDataEmployee() {
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
+  const classes = useStyles();
+  const [page, setPage] = React.useState(3);
+  const [days,setdays]=React.useState(0);
+  const [cookies] = useCookies(['token']);
+  const [attendance,setAttendance]=React.useState([]);
+  const [rowsPerPage, setRowsPerPage] = React.useState(6);
+  const departments=useSelector(state=>state.emp.departments);
+  const department=useSelector(state=>state.user.department);
+  const startDate=useSelector(state=>state.user.startDate);
+  const endDate=useSelector(state=>state.user.endDate);
+  const dateSearch=useSelector(state=>state.user.date);
+  const context=React.useContext(UserContext);
+      //  console.log('secret',secret,token)
+  const {userId}=context
+
+  const search=useSelector(state=>state.user.search);
+  const dispatch=useDispatch();
+  const date=new Date()
+
+  React.useEffect(()=>{
+    const {token}=cookies
+    dispatch(DepartmentThunk(token))
+    const attendanceHandler=async ()=>{
+      const response=await axios.get(adminApi+`/view-attendance-employee/${userId}?department=${department}&search=${search}&startDate=${startDate}&endDate=${endDate}`,{
+        headers:{
+          authorization:`Bearer ${token}`
+        }
+      })
+      console.log(response)
+
+      setAttendance(response?.data?.attendance?.Attendace)
+      setdays(response?.data?.attendance?.days)
+    }
+    attendanceHandler();
+  },[department,search,dateSearch])
+
+  const getDayName = (dayNum) => {
+    const dayName = moment().day(dayNum).format('dddd');
+    return dayName;
+  };
+
+
+
+  console.log(moment().format('d'))
+
+  return (
+    <Box>
+      <TableContainer
+        component={Paper}
+        sx={{
+          // border: "2px solid red",
+          marginLeft: "22.5%",
+          marginRight: "3%",
+          width: "75%",
+          overflow: 'auto' // Enable scrolling for overflow
+
+        }}
+      >
+        <Table
+          sx={{
+            overflow: 'auto',
+            tableLayout: "fixed",
+          }}
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.tableCell}>
+                <Checkbox label="ID" />
+              </TableCell>
+              <TableCell className={classes.tableCell}>
+                <Box className={classes.id_box}>ID</Box>
+              </TableCell>
+              <TableCell className={classes.tableCell}>
+                <Box className={classes.font_style}>Employee</Box>
+              </TableCell>
+              <TableCell className={classes.tableCell}></TableCell>
+              {console.log(days)}
+              {days>0 && Array(parseInt(days)).fill([1]).map((data,i)=>{
+                  {console.log('10')}
+                  return(
+                    <>
+                     {getDayName(i+1)==='Sunday' ?
+                      <TableCell
+                           className={`${classes.decreaseGap} ${classes.tableCell}`}
+                      >
+                        <Box
+                          className={`${classes.font_style} ${classes.sunday_style}`}
+                        >
+                          {i+1}
+                        </Box>
+                      </TableCell>
+                      :
+                      <TableCell className={classes.tableCell}>
+                        <Box className={classes.font_style}>{i+1}</Box>
+                      </TableCell>              
+                      }
+                    </>
+                  )
+                })
+              }
+
+              <TableCell className={classes.tableCell}>
+                <Box className={classes.font_style}>
+                  <Box className={classes.text_Present}>Present</Box>
+                </Box>
+              </TableCell>
+              <TableCell className={classes.tableCell}>
+                <Box className={classes.font_style}>
+                  <Box className={classes.text_Absent}>Absent</Box>
+                </Box>
+              </TableCell>
+              <TableCell className={classes.tableCell}>
+                <Box className={classes.font_style}>
+                  <Box className={classes.text_Leave}>Leaves</Box>
+                </Box>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {console.log(attendance)}
+            {attendance?.length>0 && attendance.map((row) => (
+              ///Row One Start
+              <TableRow key={row.id} sx={{overflow:'auto',width:'auto'}}>
+                <TableCell className={classes.tableCell}>
+                  <Checkbox label="ID" />
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.id_box}>{row.id}</Box>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.username}>{row.name}</Box>
+                </TableCell>
+
+                <TableCell></TableCell>
+
+                {console.log(row?.attendances?.length)}
+
+                {days>0 && row?.attendances?.length>0 && row?.attendances?.map(({status})=>{
+                  return  attendanceSplit(status,classes)
+                })} 
+                {console.log(days>0 && row?.attendances?.length &&  parseInt(days-row?.attendances?.length))}
+                {days>0 && Array(days-row?.attendances?.length).fill([1]).map((i)=>{
+                    return<TableCell className={classes.tableCell} key={i}>
+                      <Box className={classes.present_box}>
+                        <Box className={classes.present_P}>NA</Box>
+                      </Box>
+                    </TableCell>
+                })}
+                
+                {/*<TableCell className={classes.tableCell}>
+                  <Box className={classes.present_box}>
+                    <Box className={classes.present_P}>{row.One}</Box>
+                  </Box>
+                </TableCell>
+
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.absent_box}>
+                    <Box className={classes.absent_A}>{row.Three}</Box>
+                  </Box>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.present_box}>
+                    <Box className={classes.present_P}>{row.Four}</Box>
+                  </Box>
+                </TableCell>
+
+                <TableCell></TableCell>
+
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.present_box}>
+                    <Box className={classes.present_P}>{row.Five}</Box>
+                  </Box>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.leave_box}>
+                    <Box className={classes.leave_L}>{row.Six}</Box>
+                  </Box>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.present_box}>
+                    <Box className={classes.present_P}>{row.Seven}</Box>
+                  </Box>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.absent_box}>
+                    <Box className={classes.absent_A}>{row.Eight}</Box>
+                  </Box>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.present_box}>
+                    <Box className={classes.present_P}>{row.Nine}</Box>
+                  </Box>
+                </TableCell>
+
+                <TableCell></TableCell>
+
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.present_box}>
+                    <Box className={classes.present_P}>{row.Ten}</Box>
+                  </Box>
+                </TableCell>
+
+                <TableCell></TableCell>
+
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.present_box}>
+                    <Box className={classes.present_P}>{row.Eleven}</Box>
+                  </Box>
+                </TableCell>
+
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.leave_box}>
+                    <Box className={classes.leave_L}>{row.Twelve}</Box>
+                  </Box>
+                </TableCell>
+
+                <TableCell
+                  className={`${classes.tableCell} ${classes.decreaseGap}`}
+                ></TableCell>
+
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.present_box}>
+                    <Box className={classes.present_P}>{row.Fourteen}</Box>
+                  </Box>
+                </TableCell>
+
+                <TableCell></TableCell>*/}
+
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.AttendanceManager}>
+                    <Box className={classes.total_Present}>{AttendanceCount('present',row?.attendances)}</Box>
+                  </Box>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.AttendanceManager}>
+                    <Box className={classes.total_Absent}>{AttendanceCount('absent',row?.attendances)}</Box>
+                  </Box>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <Box className={classes.AttendanceManager}>
+                    <Box className={classes.total_Leaves}>{AttendanceCount('leave',row?.attendances)}</Box>
+                  </Box>
+                </TableCell>
+
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {/* <TablePagination
+          rowsPerPageOptions={[]}
+          component="div"
+          style={{ display: "flex", flexDirection: "flex-start" }}
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          labelDisplayedRows={({ from, to, count }) => {
+            return `Showing ${from} to ${to} of ${count} entries`;
+          }}
+        /> */}
       </TableContainer>
     </Box>
   );

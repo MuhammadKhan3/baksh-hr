@@ -3,16 +3,16 @@ import AddDepartmentButton from "./addDepartmentButton";
 import React from "react";
 
 
-const SearchandAddContainer = ({ setemployeespay }) => {
+const SearchandAddContainer = ({ setsearch }) => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ flexGrow: 1 }}>
-          <SearchBar setemployeespay={setemployeespay} />
+          <SearchBar setsearch={setsearch} />
         </div>
-        <div style={{marginLeft:'15px'}}>
+        {/* <div style={{marginLeft:'15px'}}>
           <AddDepartmentButton />
-        </div>
+        </div> */}
       </div>
     )
 

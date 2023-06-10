@@ -1,9 +1,10 @@
-import { makeStyles } from '@material-ui/core';
+import { Avatar, makeStyles } from '@material-ui/core';
 import { Box, Button, IconButton} from '@mui/material'
 import React from 'react'
 import msg from '../../images/msg.svg'
 import notification from '../../images/notification.svg'
 import Elipise from '../../images/Ellipse 8.svg'
+import BasicMenu from '../ui/menu';
 const useStyles=makeStyles({
     mainContainer:{
         backgroundColor:'#FFFFFF',
@@ -21,6 +22,7 @@ const useStyles=makeStyles({
         lineHeight: '42px',
         letterSpacing: '-0.02em',
         textAlign: 'left',
+        display:'flex'
     },
     msgIcon:{
         cursor:'pointer',
@@ -35,19 +37,22 @@ const useStyles=makeStyles({
       stroke:'#868B90',
       width:'18px',
       height:'18.46px'
-  }
+    },
+    menu:{
+
+    }
 })
 
-const Header = ({heading}) => {
+const Header = ({heading,width}) => {
     const classes=useStyles();
   return (
-    <Box component='div' className={classes.mainContainer}>
+    <Box component='div'  className={classes.mainContainer}>
       <Box component='div' className={classes.pageName}>
         {heading}
       </Box>
       <Box component='div' className={classes.pageName}>
          {/* <Button> */}
-            <IconButton
+            {/* <IconButton
              size="large"
               aria-label="show more"
               color="inherit"
@@ -56,12 +61,15 @@ const Header = ({heading}) => {
             //   onClick={handleMobileMenuOpen}
             >
                <Box component='img' src={msg} className={classes.msgIcon}/>
-            </IconButton>
+            </IconButton> */}
 
             <IconButton>
               {/* <Box component='img' src={Elipise} /> */}
               <Box component='img' src={notification} className={classes.notificationIcon}/>
             </IconButton>
+            <Box>
+              <BasicMenu/>
+            </Box>
          {/* </Button> */}
       </Box>
     </Box>

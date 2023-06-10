@@ -26,6 +26,10 @@ import AddManager from "./features/manager/Pages/AddManager";
 import ManageManager from "./features/manager/Pages/ManageManager";
 import EditManager from "./features/manager/Pages/editManager";
 import PayrollScale from "./features/payroll/pages/PayScale";
+import Allowance from "./features/setup/allowance/pages/allowance";
+import MonthlyPayScale from "./features/payroll/pages/monthly";
+import ManageAttandanceEmployee from "./features/attendance/pages/employee/attendanceManage";
+import EditPayrollScale from "./features/payroll/pages/editPayscale";
 
 const Dashboard = React.lazy(() => import("./features/dashboard"));
 const Employee = React.lazy(() => import("./features/employee"));
@@ -327,7 +331,7 @@ const RouterLink = () => {
             />
 
             <Route
-              path="/payroll"
+              path="/payscale"
               element={
                 <React.Suspense fallback={<>...</>}>
                   <PayrollScale/>
@@ -335,7 +339,32 @@ const RouterLink = () => {
               }
             />
 
+            <Route
+              path="/monthly"
+              element={
+                <React.Suspense fallback={<>...</>}>
+                  <MonthlyPayScale/>
+                </React.Suspense>
+              }
+            />
 
+            <Route
+              path="edit/payscale/:payslipId"
+              element={
+                <React.Suspense fallback={<>...</>}>
+                  <EditPayrollScale/>
+                </React.Suspense>
+              }
+            />
+
+            <Route
+                path="/setup/allowance"
+                element={
+                  <React.Suspense fallback={<>...</>}>
+                    <Allowance/>
+                  </React.Suspense>
+                }
+            />
 
             <Route
               path="/setup/add-leaveType"
@@ -353,6 +382,15 @@ const RouterLink = () => {
                 </React.Suspense>
               }
           />
+          <Route
+              path="/setup/allowance"
+              element={
+                <React.Suspense fallback={<>...</>}>
+                  <Allowance/>
+                </React.Suspense>
+              }
+          />
+
           </Routes>
         </ThemeProvider>
       </>
@@ -463,29 +501,31 @@ const RouterLink = () => {
               }
             />
               <Route
-                path="/attendance-report"
-                element={
-                  <React.Suspense fallback={<>...</>}>
-                    <Attendance />
-                  </React.Suspense>
-                }
-              />
-              <Route
-                path="/manage-attendance"
-                element={
-                  <React.Suspense fallback={<>...</>}>
-                    <ManageAttandance />
-                  </React.Suspense>
-                }
-              />
-              <Route
                 path="/setup/add-leaveType"
                 element={
                   <React.Suspense fallback={<>...</>}>
                     <LeaveType/>
                   </React.Suspense>
                 }
-            />
+               />
+
+              <Route
+                path="/view-payscale"
+                element={
+                  <React.Suspense fallback={<>...</>}>
+                    <PayrollScale/>
+                  </React.Suspense>
+                }
+              />
+              <Route
+                path="/view-attendance"
+                element={
+                  <React.Suspense fallback={<>...</>}>
+                    <ManageAttandanceEmployee />
+                  </React.Suspense>
+                }
+              />
+
             </Routes>
           </ThemeProvider>
         </>

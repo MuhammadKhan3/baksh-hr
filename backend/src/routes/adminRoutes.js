@@ -12,9 +12,11 @@ const {validRole,validUser,validManager, validEditManager, validEmployee, permis
 const { getDesignations } = require('../controllers/department.controller');
 const Permission= require('../validations/permissions');
 const { createLeaveType, getEmployees, LeaveTypes, createLeave, RemainingLeave, LeavesEmployee, LeavesManager, LeaveApproval, LeavesEmployeeHR, getLeave, editLeave } = require('../controllers/leave.controller');
-const { createAttendanceCsv, AttendaceReport, attendanceSchedule } = require('../controllers/attendance.controller');
+const { createAttendanceCsv, AttendaceReport, attendanceSchedule, AttencdanceEmployee } = require('../controllers/attendance.controller');
 const { getAttendance } = require('../controllers/attendance.controller');
 const companyController = require('../controllers/company.controller');
+const allowanceController=require('../controllers/allowance.controller');
+const payrollController=require('../controllers/payroll.controller')
 // const { createCompany } = require('../services/company.service');
 const {getHr,createCompany} =require('../controllers/company.controller')
 // Admin Controller
@@ -83,6 +85,8 @@ router.get('/salaryTypes',EmployeeController.salaryTypes);
 router.post('/create-attencdance-csv',CsvMulterUpload.single('file'),createAttendanceCsv);
 router.get('/get-attendances',getAttendance)
 router.get('/attendance-report',AttendaceReport)
+router.get('/view-attendance-employee/:userId',isAuth,AttencdanceEmployee)
+
 router.get('/attendance-schedule',attendanceSchedule)
 
 // router.put('/Employee/viewAttendance', adminController.viewAttendanceSheet);
@@ -102,10 +106,10 @@ router.get('/attendance-schedule',attendanceSchedule)
 
 
 //Payroll Controllers
-router.put('/edit-payroll:/id', payroll.updatePayroll);
-router.get('/get-payroll', payroll.getPayroll);
-router.post('/create-payroll', payroll.getPayroll);
-router.delete('/delete-payroll:/id', payroll.deletePayroll);
+// router.put('/edit-payroll:/id', payroll.updatePayroll);
+// router.get('/get-payroll', payroll.getPayroll);
+// router.post('/create-payroll', payroll.getPayroll);
+// router.delete('/delete-payroll:/id', payroll.deletePayroll);
 
 // Leave Controller
 router.post('/add-leave',isAuth,createLeave);
@@ -129,10 +133,24 @@ router.get('/leave/:id',isAuth,getLeave)
 // Edit Leave
 router.put('/edit-leave/:id',isAuth,editLeave)
 
+// Company Controller
 router.post('/create-company',companyUpload.single('picture'),createCompany);
 router.get('/get-Hr',getHr);
 router.get('/get-offices',companyController.GetOffices);
 router.get('/get-company',companyController.GetCompany);
+
+// Allowances Controller
+router.post('/allowances',allowanceController.createAllowance);
+router.get('/allowances',allowanceController.getAllowances);
+
+// Payroll Controller
+router.post('/create-payslips',payrollController.createPayslips)
+router.put('/edit/:payslipId',payrollController.editPayslip)
+
+router.get('/get-payslips',isAuth,payrollController.GetPaySlips)
+router.get('/payslip/:payslipId',payrollController.getPayslip)
+router.delete('/payslip/:payslipId',payrollController.deletePayslip);
+
 
 
 module.exports=router;

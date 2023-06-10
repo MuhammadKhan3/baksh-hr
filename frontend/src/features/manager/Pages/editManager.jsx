@@ -17,6 +17,7 @@ import DepartmentThunk from "../../../redux/thunk/departmentThunk";
 import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import axios from "axios";
+import Header from "../../../components/header/header";
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
     display: "flex",
@@ -152,7 +153,7 @@ const EditManager = () => {
         <Sidebar />
       </Box>
       <Box component="div">
-        <AttendanceHeader
+        <Header
           heading={"Edit Manager"}
           width={"100%"}
           marginLeft={"0%"}

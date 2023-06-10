@@ -15,6 +15,7 @@ import { adminApi } from "../../../axios/axiosData";
 import { useCookies } from "react-cookie";
 import DepartmentThunk from "../../../redux/thunk/departmentThunk";
 import { useNavigate } from "react-router-dom";
+import Header from "../../../components/header/header";
 
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
@@ -130,8 +131,8 @@ const AddManager = () => {
       <Box component="div" className={classes.sidebar}>
         <Sidebar />
       </Box>
-      <Box component="div">
-        <AttendanceHeader
+      <Box component="div" style={{width:'75%'}}>
+        <Header
           heading={"Add Manager"}
           width={"100%"}
           marginLeft={"0%"}

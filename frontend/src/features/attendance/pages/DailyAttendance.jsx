@@ -8,11 +8,17 @@ import { MobileTimePicker } from '@mui/x-date-pickers';
 import DepartmentDropdown from '../components/DepartmentsDropDown';
 import Sidebar from '../../../components/sidebar/sidebar';
 import axios from 'axios';
+import { TablePagination } from '@mui/material';
+import SelectUi from '../../payroll/ui/select';
+import DepartmentThunk from '../../../redux/thunk/departmentThunk';
+import { useDispatch, useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
+import Header from '../../../components/header/header';
 
 
 const useStyles = makeStyles({
   tableContainer: {
-    // maxHeight: 440,
+    marginTop:'2%'
   },
   presentBtn: {
     color: green[500],
@@ -60,6 +66,9 @@ const useStyles = makeStyles({
     justifyContent:'space-between',
     alignItems:'center',
     textAlign:'center'
+  },
+  selectFilter:{
+    width:'30%'
   }
 });
 
@@ -137,8 +146,6 @@ const statusIcon = (status) => {
 
 const CustomTableCell = ({ row, name, selectedRows, handleRowCheckboxChange }) => {
   const classes = useStyles();
-
-  console.log(row,name)
   return (
     <TableCell align="center">
       {name === 'status' ? (
@@ -154,14 +161,18 @@ const CustomTableCell = ({ row, name, selectedRows, handleRowCheckboxChange }) =
 
 const DailyAttendanceTable = () => {
   const classes = useStyles();
-  const [attendance,setAttendance]=useState([]);
-
+  const [attendance,setAttendance]=useState({attendance:[],attendanceLength:0});
+  const [page,setPage]=useState(1);
+  const [cookies]=useCookies(['token'])
+  const departments=useSelector(state=>state.emp.departments)
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const dispatch=useDispatch();
   const open = Boolean(anchorEl);
 
   const [checkIn, setCheckIn] = React.useState(new Date());
   const [checkOut, setCheckOut] = React.useState(new Date());
   const [selectedRows, setSelectedRows] = React.useState([]);
+  const [department,setDepartment]=React.useState('');
 
   const handleHeaderCheckboxChange = (event) => {
     if (event.target.checked) {
@@ -173,15 +184,19 @@ const DailyAttendanceTable = () => {
     }
   };
 
+  const pageHandler=(e,newPage)=>{
+    console.log(page,newPage)
+    setPage(newPage)
+  }
+
   useEffect(()=>{
     const fetchAttendance=async ()=>{
-       const response=await axios.get('http://localhost:8000/api/admin/get-attendances')
+       const response=await axios.get(`http://localhost:8000/api/admin/get-attendances?page=${page}&department=${department}`)
        console.log(response?.data)
-        setAttendance(response?.data?.attendance)
-
+        setAttendance({attendance:response?.data?.attendance,attendanceLength:response?.data?.attendanceLength})
     }
     fetchAttendance();
-  },[])
+  },[page,department])
 
   const handleRowCheckboxChange = (event, row) => {
 
@@ -216,15 +231,26 @@ const DailyAttendanceTable = () => {
       console.log(ex);
     }
   }
+
+  useEffect(()=>{
+    const {token}=cookies;
+    dispatch(DepartmentThunk(token))
+  },[])
+
   return (
     <div className={classes.mainContainer}>
       <Box component='div' className={classes.sidebar}>
             <Sidebar/>
       </Box>
       <div style={{margin:'auto'}}>
-      <Typography variant="h3">Daily Attendance</Typography>
+      
+      
+
+      <Header heading={'Daily Attendance'}/>
       <div className={classes.flexRow}>
-        <DepartmentDropdown></DepartmentDropdown>
+        <Box className={classes.selectFilter} placeholder='Select Department' component='div'>
+          <SelectUi handleChange={(e)=>{console.log(e.target.value);setDepartment(e.target.value)}} data={departments}/>
+        </Box>
         <label htmlFor='file'>
           <a type='button' className={classes.impBtn}>Import</a>
         </label>
@@ -248,7 +274,7 @@ const DailyAttendanceTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {attendance?.map((row,i) => (
+            {attendance?.attendance?.map((row,i) => (
               <TableRow key={row.id}>
                   <CustomTableCell
                       selectedRows={selectedRows}
@@ -256,7 +282,7 @@ const DailyAttendanceTable = () => {
                       row={row}
                       name="checkbox"
                   />
-                  <CustomTableCell row={{'id':i+1}} name="id" />
+                  <CustomTableCell row={{'id':row?.id}} name="id" />
                 {/* <CustomTableCell row={row} name="email" /> */}
                 <CustomTableCell row={row} name="name" />
                 <CustomTableCell row={row} name="attendanceBy" />
@@ -312,6 +338,18 @@ const DailyAttendanceTable = () => {
           </TableBody>
         </Table>
        </TableContainer>
+       <TablePagination
+        rowsPerPageOptions={[]}
+        component="div"
+        style={{display:'flex',flexDirection:'flex-start'}}
+        count={attendance.attendanceLength}
+        rowsPerPage={6}
+        onPageChange={pageHandler}
+        page={page}
+        labelDisplayedRows={({ from, to, count }) => {
+                return `Showing ${from} to ${to} of ${count} entries`;
+        }}
+      />
       </div>
     </div>
   

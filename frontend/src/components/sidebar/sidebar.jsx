@@ -301,7 +301,7 @@ const Sidebar = () => {
               droplabel={[
                 { label: "Company Details", path: "/setup/company-details" },
                 { label: "Department", path: "/department" },
-                { label: "Allowance & Deduction", path: "/allowance" },
+                { label: "Allowance & Deduction", path: "/setup/allowance" },
                 { label: "PayScale", path: "/payscale" },
                 { label: "Shift", path: "/shift" },
                 { label: "Asset", path: "/asset" },
@@ -340,6 +340,10 @@ const Sidebar = () => {
               label={"My Account"}
               droplabel={[
                 { label: "Profile", path: `/view-employee/${employeeId}` },
+                { label: "Payscale", path: `/view-payscale` },
+                { label: "Attendance", path: `/view-attendance` },
+
+
               ]}
               icon={employee}
               classes={classes}

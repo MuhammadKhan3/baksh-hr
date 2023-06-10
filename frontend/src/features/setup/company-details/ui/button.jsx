@@ -20,10 +20,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BlackButton = ({ label = "sample", clickHandler,onSubmit,type,onClick }) => {
+const BlackButton = ({ label = "sample",type, clickHandler,onSubmit,onClick }) => {
   const classes = useStyles();
   return (
-    <Button className={classes.btn}   variant="contained" type={"button"} onClick={onClick}>
+    <Button className={classes.btn}   variant="contained" type={type} onClick={onClick}>
       {label}
     </Button>
   );
