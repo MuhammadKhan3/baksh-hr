@@ -1,5 +1,5 @@
 <h1 align="center">#HRMS PROJECT ❤ </h1>
-
+<h1 alig="center">ScreenShot 📷</h1>
 
 Setup Page
 ![6](https://github.com/MuhammadKhan3/baksh-hr/assets/79418503/515e8480-8056-4483-9cfb-e1b8e3442f80)
