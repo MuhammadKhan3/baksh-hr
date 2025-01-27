@@ -36,7 +36,7 @@ const theme = createMuiTheme({
 });
 const RouterLink = () => {
   const context = useContext(UserContext);
-  let {role=''} = context;
+  let {role='admin'} = context;
   console.log(role)
   if(role==='admin'){
     return (
